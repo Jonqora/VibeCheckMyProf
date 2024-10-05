@@ -39,6 +39,14 @@ def scrape_and_save(url):
             f.write(str(soup.prettify()))
         print(f"Page saved as {filename}")
 
+        # Extract the professor name for later
+        title_text = soup.title.string
+        professor_name = title_text.split(' at ')[0]
+
+        print('------------------------------------')
+        print(professor_name)
+        print('------------------------------------')
+
         # Array to store scraped data
         scraped_data = []
 
