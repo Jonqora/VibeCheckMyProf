@@ -11,6 +11,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 import json
+import re
 
 # Function to check if class name starts with a specific prefix
 def class_starts_with(tag, class_prefix):
@@ -43,12 +44,35 @@ def scrape_and_save(url):
         title_text = soup.title.string
         professor_name = title_text.split(' at ')[0]
 
+        # Scrape quality, rating count, school, school_id, would_take_again and difficulty
+        overall_quality = soup.find('div', class_=lambda c: c and c.startswith('RatingValue__Numerator')).text.strip()
+        rating_count_text = soup.find('a', href="#ratingsList").text.strip()
+        rating_count = re.search(r'\d+', rating_count_text).group()
+        school_id = soup.find('a', href=lambda href: href and href.startswith('/school/')).get('href').split('/')[2]
+        school = soup.find('a', href=lambda href: href and href.startswith('/school/')).text.strip()
+        would_take_again = soup.find_all('div', class_=lambda c: c and c.startswith('FeedbackItem__FeedbackNumber'))[0].text.strip()
+        overall_difficulty = soup.find_all('div', class_=lambda c: c and c.startswith('FeedbackItem__FeedbackNumber'))[1].text.strip()
+
         print('------------------------------------')
         print(professor_name)
+        print("School:", school)
+        print("School ID:", school_id)
+        print("Rating count:", rating_count)
+        print("Overall quality:", overall_quality)
+        print("Overall difficulty:", overall_difficulty)
+        print("Would take again:", would_take_again)
         print('------------------------------------')
 
-        # Array to store scraped data
-        scraped_data = []
+        # Dictionary to store scraped data
+        scraped_data = {
+            'professor_name' : professor_name,
+            'school' : school,
+            'school_id': school_id,
+            'rating_count': rating_count,
+            'overall_quality': overall_quality,
+            'overall_difficulty': overall_difficulty,
+            'ratings_data' : []
+        }
 
         # Find the unordered list whose class starts with "RatingsList__RatingsUL"
         ratings_list = soup.find('ul', class_=lambda value: value and value.startswith('RatingsList__RatingsUL'))
@@ -79,7 +103,7 @@ def scrape_and_save(url):
                 }
 
                 # Add the dictionary to the scraped_data array
-                scraped_data.append(item_data)
+                scraped_data['ratings_data'].append(item_data)
 
                 # Print the data
                 print(f'course: {course}')
