@@ -12,12 +12,14 @@ body {
 .container {
     text-align: center;
     padding: 20px;
+    width: 100%;
+    max-width: 800px;
 }
 
 .logo {
-    width: 800px;
-    height: 100px;
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 20px auto;
 }
 
 .instructions {
@@ -67,9 +69,11 @@ body {
 }
 
 .response-field {
-    width: 300px; /* Width of the response field */
-    height: 100px; /* Height of the response field */
+    width: 100%; /* Width of the response field */
+    max-width: 800px;
+    height: 200px; /* Height of the response field */
     padding: 10px;
+    box-sizing: border-box;
     border: 2px solid #f9c5d1;
     background-color: transparent;
     color: #f9c5d1;
