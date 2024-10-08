@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Check My Professors</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <img src="img/vcmp_logo.png" alt="Logo" class="logo"> <!-- Updated path -->
+        <p class="instructions">Enter the Rate My Professors URL you want to check:</p>
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="https://ratemyprofessors.com/professor/..." class="input-field">
+            <button id="vibeCheckButton" class="button">VibeCheck</button>
+        </div>
+        <p id="error" class="error-message"></p>
+        <textarea id="responseField" class="response-field" readonly></textarea>
+    </div>
+
+    <!-- Load config.js first -->
+    <script src="config.js"></script>
+    <!-- Load app.js after config.js -->
+    <script src="app.js"></script>
+</body>
+</html>
