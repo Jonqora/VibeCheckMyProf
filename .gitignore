@@ -1,7 +1,8 @@
 # Project configuration files
 /web/config.js
 
-
+# Node.js modules
+node_modules/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
