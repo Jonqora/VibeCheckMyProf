@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/allisonml/VibeCheckMyProf/blob/main/scratch/image_files/vcmp_logo.png" />
+  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/main/scratch/image_files/vcmp_logo.png" />
 </p>
 
 VibeCheckMyProf is a service that performs sentiment analysis on reviews for professors on the site **ratemyprofessors.com**, providing users with an appealing visual summary of recent reviews without having to scroll and read all of them. Users can compare the VibeCheck score with numerical ratings on the ratemyprofessors site and can also view a visualization of VibeCheck comment scores over time.
@@ -85,6 +85,8 @@ Introductory text
 - paste the following into the file 
 ```
 // config.js
+
+// eslint-disable-next-line no-unused-vars
 const config = {
     apiUrl: 'https://your-api-gateway-url.amazonaws.com/prod/vibecheck' // Replace with your actual API Gateway URL
 };
