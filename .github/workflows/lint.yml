@@ -17,6 +17,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14' # or your desired version
+        
+      - name: Check Node.js version
+        run: node -v  # This will print the Node.js version in the workflow logs
 
       - name: Install JS dependencies
         run: npm install # or `yarn install` if using Yarn
