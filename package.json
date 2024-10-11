@@ -1,0 +1,10 @@
+{
+  "name": "vibe-check-my-prof",
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "eslint": "^9.12.0"
+  }
+}
