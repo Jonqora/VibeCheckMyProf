@@ -85,6 +85,8 @@ Introductory text
 - paste the following into the file 
 ```
 // config.js
+
+// eslint-disable-next-line no-unused-vars
 const config = {
     apiUrl: 'https://your-api-gateway-url.amazonaws.com/prod/vibecheck' // Replace with your actual API Gateway URL
 };

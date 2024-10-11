@@ -5,6 +5,7 @@
     "lint": "eslint ."
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.8.1",
     "eslint": "^8.0.0"
   }
 }
