@@ -6,6 +6,8 @@ RateMyProfessorAPI
 
 # database.py
 boto3
+mysql-connector-python
+pymysql
 
 # sentiment.py
 torch == 2.4.1
