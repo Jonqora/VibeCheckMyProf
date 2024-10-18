@@ -215,4 +215,5 @@ You may need to grant exec permissions to the providers with something similar t
 ```bash
 chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/5.72.1/darwin_amd64/terraform-provider-aws_v5.72.1_x5
 ```
-I found this [stackoverflow](https://stackoverflow.com/questions/70407525/terraform-gives-errors-failed-to-load-plugin-schemas)
+This [stackoverflow](https://stackoverflow.com/questions/70407525/terraform-gives-errors-failed-to-load-plugin-schemas)
+QA may be helpful to resolve the issue.
