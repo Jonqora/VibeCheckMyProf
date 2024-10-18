@@ -180,7 +180,7 @@ provide values for the following variables:**
 - `database_password`: Master password you want to set for authenticating to the database. 
   - Minimum constraints: At least 8 printable ASCII characters. Can't contain any of the following symbols: / ' " @
 
-These variables values will be automatically applied to the instance configuration upon execution.
+These variable values will be automatically applied to the instance configuration upon execution.
 
 #### 3. Apply the Terraform Configuration
 To create the RDS instance, run:
@@ -190,7 +190,7 @@ terraform apply
 See the above information about the prompted variable values. Terraform will ask for confirmation before applying the changes. Type `yes` to proceed.
 
 Once Terraform has finished applying the configuration, it will output the **RDS endpoint**. You can use this endpoint 
-to connect to the database. Note: it may take a few minutes for this to complete.
+to connect to the database. Note: it may take a few minutes for this step to complete.
 
 ### Cleanup (Optional)
 If you want to destroy the RDS instance, you can use:
