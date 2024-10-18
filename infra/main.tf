@@ -14,7 +14,7 @@ provider "aws" {
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "rds_subnet_group"
   subnet_ids = ["subnet-01326c48a15781a87", "subnet-05247d8d4578e61d3", "subnet-065f135448f443d0e",
-    "subnet-0d133c7f3ebeca3a6", "subnet-0ceed7babb2e1347e", "subnet-00582fbe1f26f8f74"]
+                "subnet-0d133c7f3ebeca3a6", "subnet-0ceed7babb2e1347e", "subnet-00582fbe1f26f8f74"]
   description = "Subnet group for the RDS instance"
 
   tags = {
@@ -47,22 +47,22 @@ resource "aws_security_group" "rds_sg" {
 
 # Create a MySQL RDS instance using Free Tier Configuration
 resource "aws_db_instance" "mysql-rds" {
-  allocated_storage       = 20                             # Storage size in GB
-  storage_type            = "gp2"                          # General Purpose SSD
-  engine                  = "mysql"                        # Database engine
-  engine_version          = "8.0"                          # MySQL version
-  instance_class          = "db.t4g.micro"                 # Instance type
-  identifier              = var.database_name              # DB Instance ID
-  db_name                 = var.database_name              # Name of the database
-  username                = var.database_user              # Master username
-  password                = var.database_password          # Master password
-  parameter_group_name    = "default.mysql8.0"             # MySQL parameter group
-  skip_final_snapshot     = true                           # Skip final snapshot on deletion
-  publicly_accessible     = true                           # Whether the DB is publicly accessible
-  port                    = 3306                           # MySQL port
-  backup_retention_period = 7                              # Backup retention in days
-  vpc_security_group_ids  = [aws_security_group.rds_sg.id] # Attach the Security Group defined above
-  db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name  # Reference the DB subnet group
+  allocated_storage       = 20                                         # Storage size in GB
+  storage_type            = "gp2"                                      # General Purpose SSD
+  engine                  = "mysql"                                    # Database engine
+  engine_version          = "8.0"                                      # MySQL version
+  instance_class          = "db.t4g.micro"                             # Instance type
+  identifier              = var.database_name                          # DB Instance ID
+  db_name                 = var.database_name                          # Name of the database
+  username                = var.database_user                          # Master username
+  password                = var.database_password                      # Master password
+  parameter_group_name    = "default.mysql8.0"                         # MySQL parameter group
+  skip_final_snapshot     = true                                       # Skip final snapshot on deletion
+  publicly_accessible     = true                                       # Whether the DB is publicly accessible
+  port                    = 3306                                       # MySQL port
+  backup_retention_period = 7                                          # Backup retention in days
+  vpc_security_group_ids  = [aws_security_group.rds_sg.id]             # Attach the Security Group defined above
+  db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name  # Reference the DB subnet group
 
 }
 
