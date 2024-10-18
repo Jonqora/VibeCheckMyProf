@@ -133,6 +133,92 @@ http://your-bucket-name.s3-website-region.amazonaws.com
 ## Web Hosting: EC2 Option
 ### Prerequisites
 - know the Invoke URL of the first API gateway you are using for the project 
-
 ### Next steps
 Steps here...
+
+## Database: AWS RDS Database
+The `infra` directory contains Terraform scripts that will create an AWS RDS Database. For more information about the 
+configuration variables used in the scripts, see Terraform's [documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance)
+on the `aws_db_instance` resource.
+
+### Prerequisites
+1. Install [Terraform](https://developer.hashicorp.com/terraform/install) version 1.9.8.
+   - **macOS**: Install via `brew install terraform`
+   - **Windows**: Install via `chocolatey install terraform`
+   - **Linux**: Download the binary from Terraform's [official site](https://developer.hashicorp.com/terraform/install#linux).
+
+2. Ensure AWS credentials are configured:
+   - Via your AWS credentials file `~/.aws/credentials`
+   - Or by exporting the following environment variables by running these commands in your terminal (for Linux/macOS):
+```bash
+export AWS_ACCESS_KEY_ID="your-access-key"
+export AWS_SECRET_ACCESS_KEY="your-secret-key"
+export AWS_SESSION_TOKEN="your-access-token"
+```
+
+### Create the DB Instance with Terraform
+Now you're ready to use Terraform!
+
+#### 1. Initialize Terraform
+In the directory containing the `main.tf` file, run the following command to initialize Terraform:
+```bash
+terraform init
+```
+This will download the AWS provider and set up your working directory.
+
+#### 2. Plan the Terraform Execution
+You can see what Terraform will do _before_ making changes by running:
+```bash
+terraform plan
+```
+This will output all the actions Terraform will take to create the RDS instance. Upon execution, you will be prompted to 
+provide values for the following variables:
+- `cidr_block`: Your IP address so your local machine can communicate with the created database. 
+  - e.g. `38.13.78.95/32`
+- `database_name`: Name of the database to create.
+  - e.g. `vibe-check-my-prof-db`
+- `database_password`: Master password you want to set for authenticating to the database. 
+  - Minimum constraints: At least 8 printable ASCII characters. Can't contain any of the following symbols: / ' " @
+
+These variables will be automatically applied to the instance configuration upon plan application.
+
+#### 3. Apply the Terraform Configuration
+To create the RDS instance, run:
+```bash
+terraform apply
+```
+See the above information about the prompted variable values. Terraform will ask for confirmation before applying the changes. Type `yes` to proceed.
+
+Once Terraform has finished applying the configuration, it will output the **RDS endpoint**. You can use this endpoint 
+to connect to the database.
+
+### Cleanup (Optional)
+If you want to destroy the RDS instance, you can use:
+```bash
+terraform destroy
+```
+This will remove **all** the resources created by Terraform, including the RDS instance and security group.
+
+### FAQ
+[This documentation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build) provides more 
+information about the aws resource build executed by Terraform. It also contains helpful commands you can use to debug or 
+leverage more of Terraform's available tooling.
+
+#### Terraform is getting frozen with no output
+You can enable detailed logs to appear on stderr which is helpful for debugging by setting the following environment variable:
+```bash
+export TF_LOG=trace
+```
+
+You can then use the following command to disable the log when you are done debugging:
+```bash
+export TF_LOG=off
+```
+
+#### Error: Failed to load plugin schemas
+I had to grant exec permissions to the providers with the following command (for example):
+```bash
+chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/5.72.1/darwin_amd64/terraform-provider-aws_v5.72.1_x5
+```
+I found this [stackoverflow](https://stackoverflow.com/questions/70407525/terraform-gives-errors-failed-to-load-plugin-schemas)
+QA helpful to resolve the issue.
