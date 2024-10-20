@@ -1,76 +1,92 @@
+import subprocess
+import warnings
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import json
-from collections import defaultdict
+from textblob import TextBlob
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+class SentimentAnalysis:
+    def __init__(self, json_file_path):
+        self.json_file_path = json_file_path
+        self.vader_analyzer = SentimentIntensityAnalyzer()
+        self.tokenizer = AutoTokenizer.from_pretrained("monologg/bert-base-cased-goemotions-original")
+        self.model = AutoModelForSequenceClassification.from_pretrained("monologg/bert-base-cased-goemotions-original")
+        self.emotion_labels = self.model.config.id2label
+        self.data_json = self.load_json()
+        self.tool = self.initialize_language_tool()
 
-def analyze_emotion(text, tokenizer, model, emotion_labels):
-    inputs = tokenizer(text, return_tensors="pt")
-    outputs = model(**inputs)
+    def load_json(self):
+        with open(self.json_file_path, "r") as file:
+            return json.load(file)
 
-    predictions = torch.softmax(outputs.logits, dim=-1)
-    predicted_class = torch.argmax(predictions, dim=-1)
-    predicted_emotion = emotion_labels[predicted_class.item()]
-    confidence_score = predictions[0][predicted_class.item()].item()
+    def initialize_language_tool(self):
+        try:
+            subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT)
+            import language_tool_python
+            return language_tool_python.LanguageTool('en-US')
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            warnings.warn("Java is not installed or not found. Spelling and grammar analysis will be skipped.")
+            return None
 
-    return predicted_emotion, confidence_score
+    def analyze_sentiment_textblob(self, text):
+        blob = TextBlob(text)
+        polarity = blob.sentiment.polarity
+        subjectivity = blob.sentiment.subjectivity
+        return polarity, subjectivity
 
+    def analyze_sentiment_vader(self, text):
+        scores = self.vader_analyzer.polarity_scores(text)
+        return scores['compound'], scores['pos'], scores['neu'], scores['neg']
 
-def run_analysis(file_path):
-    """
-    Load test data:
-    """
-    with open(file_path, "r") as file:
-        data_json = json.load(file)
+    def analyze_emotion_goemotions(self, text):
+        inputs = self.tokenizer(text, return_tensors="pt")
+        outputs = self.model(**inputs)
+        predictions = torch.softmax(outputs.logits, dim=-1)
+        predicted_class = torch.argmax(predictions, dim=-1).item()
+        predicted_emotion = self.emotion_labels[predicted_class]
+        confidence_score = predictions[0][predicted_class].item()
+        return predicted_emotion, confidence_score
 
-    """
-    Load emotion detection model:
-    """
-    tokenizer = AutoTokenizer.from_pretrained("monologg/bert-base-cased-goemotions-original")
-    model = AutoModelForSequenceClassification.from_pretrained("monologg/bert-base-cased-goemotions-original")
-    model_config = model.config
-    emotion_labels = model_config.id2label
+    def analyze_spelling_and_grammar(self, text):
+        if self.tool is None:
+            return 1, 0, []
+        matches = self.tool.check(text)
+        misspelled_words = []
+        for match in matches:
+            if len(match.replacements) > 0:
+                misspelled_words.append((text[match.offset: match.offset + match.errorLength], match.replacements[0]))
+        seriousness = 1 - (len(misspelled_words) / len(text.split())) if len(text.split()) > 0 else 1
+        return seriousness, len(misspelled_words), misspelled_words
 
+    def process_data(self):
+        for entry in self.data_json['ratings_data']:
+            comment = entry['comments']
 
-    """
-Analyze emotion for each comment in the data:
-"""
-    for entry in data_json['ratings_data']:
-        comment = entry['comments']
-        emotion, score = analyze_emotion(comment, tokenizer, model, emotion_labels)
+            tb_polarity, tb_subjectivity = self.analyze_sentiment_textblob(comment)
+            vader_polarity, vader_pos, vader_neu, vader_neg = self.analyze_sentiment_vader(comment)
+            emotion, confidence = self.analyze_emotion_goemotions(comment)
+            seriousness, misspelled_count, incorrect_words = self.analyze_spelling_and_grammar(comment)
 
-        entry['emotion'] = emotion
-        entry['confidence_score'] = score
+            entry['textblob_polarity'] = tb_polarity
+            entry['textblob_subjectivity'] = tb_subjectivity
+            entry['vader_polarity'] = vader_polarity
+            entry['vader_positive'] = vader_pos
+            entry['vader_neutral'] = vader_neu
+            entry['vader_negative'] = vader_neg
+            entry['goemotions_emotion'] = emotion
+            entry['goemotions_confidence'] = confidence
+            entry['spelling_seriousness'] = seriousness
 
-    summary = defaultdict(
-        lambda: {'total_reviews': 0, 'total_quality': 0, 'total_difficulty': 0, 'emotion_counts': defaultdict(int),
-             'total_confidence': 0})
+        for entry in self.data_json['ratings_data']:
+            print(entry)
 
-    for entry in data_json['ratings_data']:
-        key = data_json['professor_name']  # Only consider professor's name
-        summary[key]['total_reviews'] += 1
-        summary[key]['total_quality'] += float(entry['quality'])
-        summary[key]['total_difficulty'] += float(entry['difficulty'])
-        summary[key]['emotion_counts'][entry['emotion']] += 1
-        summary[key]['total_confidence'] += entry['confidence_score']
-
-    for key, value in summary.items():
-        total_reviews = value['total_reviews']
-        avg_quality = value['total_quality'] / total_reviews
-        avg_difficulty = value['total_difficulty'] / total_reviews
-        avg_confidence = value['total_confidence'] / total_reviews
-        emotion_distribution = dict(value['emotion_counts'])
-
-        print(f"Professor: {key}")
-        print(f"  Total Reviews: {total_reviews}")
-        print(f"  Average Quality: {avg_quality:.2f}")
-        print(f"  Average Difficulty: {avg_difficulty:.2f}")
-        print(f"  Average Confidence Score: {avg_confidence:.4f}")
-        print(f"  Emotion Distribution: {emotion_distribution}")
-        print()
+def main():
+    json_file_path = '../web_scraping/prof2302527scrape.json'
+    sentiment_analysis = SentimentAnalysis(json_file_path)
+    sentiment_analysis.process_data()
 
 if __name__ == "__main__":
-    file_path = "../web_scraping/prof2302527scrape.json"
-    with open(file_path, "r") as file:
-        data_json = json.load(file)
-    run_analysis(file_path)
+    main()
+
+
