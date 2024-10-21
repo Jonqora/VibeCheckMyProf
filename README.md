@@ -134,5 +134,66 @@ http://your-bucket-name.s3-website-region.amazonaws.com
 ### Prerequisites
 - know the Invoke URL of the first API gateway you are using for the project 
 
-### Next steps
-Steps here...
+### Creating the EC2 Instance
+Launch a new EC2 instance through AWS. These is the setup I used:
+
+- Name: VibeCheckMyProfSite
+- AMI: Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD
+- Instance type: t3.micro
+- Create a Key Pair to use if you don’t have one already (I use .ppk so I can SSH using PuTTy, I find it's easier)
+- Network settings
+  - Allow SSH traffic from My IP
+  - Allow HTTPS traffic from internet
+  - Allow HTTP traffic from the internet
+
+
+### Connecting to the instance
+
+If you used a .pem file:
+- ssh directly from the command line, in the location of the .pem file using the command on the "Connect > SSH client" page of the instance. It should look something like:
+
+`ssh -i "yourKeyPairLogin.pem" ec2-user@ec2-89-182-37-39.ca-central-1.compute.amazonaws.com`
+
+If you used a .ppk file:
+
+- Ensure you have PuTTy installed (You can get it from https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html if you haven't used it before)
+- Within PuTTY...
+  - On the main Session page, fill **Host Name** which should look something like *ec2-89-182-37-39.ca-central-1.compute.amazonaws.com*
+  - Under "Connection > Data" in the left sidepanel, set Auto-login username to "ec2-user"
+  - Under "Connection > SSH > Auth > Credentials" under **Private key file for authentication** select "Browse..." and choose the .ppk file downloaded when you created the key pair.
+  - From the Session page, under **Saved Sessions** give a name for these SSH configurations. Then click "Save" to be able to use these session settings automatically later (by clicking "Load").
+  - At the bottom of the Session page, click "Open" to start the SSH session.
+
+
+### Setting up the environment
+
+To setup git, clone the repo, and install httpd (for hosting the site files) run the following commands, inputting your name and email in place of *\<name>* and *\<email>*: 
+
+```sudo yum update -y
+sudo yum install git -y
+git — version
+git config — global user.name "<name>"
+git config — global user.email "<email>"
+git clone https://github.com/Jonqora/VibeCheckMyProf.git
+
+sudo yum install -y httpd
+systemctl status httpd
+```
+
+**Note:** When authenticating as you call `git clone`, you will need to use a Personal Access token setup on GitHub instead of your password.
+
+### Hosting the files
+
+```
+cd ~/VibeCheckMyProf/web
+cp -r  * /var/www/html   # Copy files to location where they are hosted from
+systemctl enable httpd
+systemctl start httpd
+systemctl status httpd # Check HTTPD is now running
+```
+
+### Accessing the website from browser
+
+From the AWS page of the EC2 instance, copy the Public IPv4 address and paste it into your browser.
+
+## ❗REMINDER: Stop or delete EC2 instance when possible to prevent excess charges to your account
