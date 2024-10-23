@@ -2,8 +2,8 @@ import os
 from database import Database
 
 # Database connection details
-db_endpoint = "vibe-check-my-prof.c38g806w4spe.ca-central-1.rds.amazonaws.com"
-db_name = "vibe-check-my-prof"
+db_endpoint = "vibecheckmyprofdb.c38g806w4spe.ca-central-1.rds.amazonaws.com"
+db_name = "vibecheckmyprofdb"
 db_user = os.environ["DB_USER"]
 db_password = os.environ["DB_PASSWORD"]
 db_port = 3306
