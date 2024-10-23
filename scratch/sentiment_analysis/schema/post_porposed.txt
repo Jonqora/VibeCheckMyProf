@@ -1,0 +1,25 @@
+CREATE TABLE Professors (
+                            professor_name VARCHAR(255),          -- Name of the professor
+                            school_id VARCHAR(50),                -- School ID
+                            school VARCHAR(255),                  -- School name
+                            rating_count INT,                     -- Number of ratings
+                            overall_quality FLOAT,                -- Average quality rating
+                            overall_difficulty FLOAT,             -- Average difficulty rating
+                            PRIMARY KEY (professor_name, school_id)  -- Composite primary key
+);
+
+
+CREATE TABLE SentimentAggregation (
+                                      professor_name VARCHAR(255),          -- Professor name
+                                      school_id VARCHAR(50),                -- School ID
+                                      average_sentiment VARCHAR(50),        -- Aggregated sentiment (e.g., "positive", "negative" etc)
+                                      positive_percentage FLOAT,            -- Percentage of positive sentiment reviews
+                                      negative_percentage FLOAT,
+                                      neutral_percentage FLOAT,
+                                      mixed_percentage FLOAT,
+                                      dominant_emotion VARCHAR(50),         -- Dominant emotion (e.g., "joy", "anger", "sadness" etc.)
+                                      PRIMARY KEY (professor_name, school_id),  -- Composite primary key
+                                      FOREIGN KEY (professor_name, school_id) REFERENCES Professors(professor_name, school_id)  -- Composite foreign key constraint
+);
+
+

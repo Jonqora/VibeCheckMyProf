@@ -1,0 +1,17 @@
+{
+  "professor_name": "string",
+  "school": "string",
+  "school_id": "string",
+  "rating_count": "integer",
+  "overall_quality": "float",
+  "overall_difficulty": "float",
+  "ratings_data": [
+    {
+      "course": "string",
+      "timestamp": "string",
+      "quality": "float",
+      "difficulty": "float",
+      "comments": "string"
+    }
+  ]
+}
