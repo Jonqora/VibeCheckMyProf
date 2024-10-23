@@ -143,7 +143,7 @@ on the `aws_db_instance` resource.
 
 ### Prerequisites
 1. Install [Terraform](https://developer.hashicorp.com/terraform/install) version 1.9.8.
-   - **macOS**: Install via `brew install terraform`
+   - **macOS**: Install via `brew tap hashicorp/tap | brew install hashicorp/tap/terraform`
    - **Windows**: Install via `chocolatey install terraform`
    - **Linux**: Download the binary from Terraform's [official site](https://developer.hashicorp.com/terraform/install#linux).
 
@@ -175,8 +175,6 @@ This will output all the actions Terraform will take to create the RDS instance.
 provide values for the following variables:**
 - `cidr_block`: Your IP address so your local machine can communicate with the created database. 
   - e.g. `38.13.78.95/32`
-- `database_name`: Name of the database.
-  - e.g. `vibe-check-my-prof-db`
 - `database_password`: Master password you want to set for authenticating to the database. 
   - Minimum constraints: At least 8 printable ASCII characters. Can't contain any of the following symbols: / ' " @
 
@@ -213,7 +211,14 @@ export TF_LOG=trace
 #### Error: Failed to load plugin schemas
 You may need to grant exec permissions to the providers with something similar to the following command (for example):
 ```bash
-chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/5.72.1/darwin_amd64/terraform-provider-aws_v5.72.1_x5
+chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/5.32.1/darwin_amd64/terraform-provider-aws_v5.32.1_x5
 ```
 This [stackoverflow](https://stackoverflow.com/questions/70407525/terraform-gives-errors-failed-to-load-plugin-schemas)
 QA may be helpful to resolve the issue.
+
+#### Error: timeout while waiting for plugin to start
+This could be due to the Terraform plugin cache becoming full or corrupted. 
+Try clearing the plugin cache and forcing Terraform to download the specified version of the plugins by running:
+```bash
+terraform init -upgrade
+```
