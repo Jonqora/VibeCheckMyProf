@@ -167,20 +167,44 @@ If you used a .ppk file:
 
 ### Setting up the environment
 
-To setup git, clone the repo, and install httpd (for hosting the site files) run the following commands, inputting your name and email in place of *\<name>* and *\<email>*: 
+To setup git and clone the repo, inputting your name and email in place of *\<name>* and *\<email>*, run these commands: 
 
-```sudo yum update -y
-sudo yum install git -y
-git — version
-git config — global user.name "<name>"
-git config — global user.email "<email>"
+```
+sudo -i
+yum update -y
+yum install git -y
+git --version
+git config --global user.name "<name>"
+git config --global user.email "<email>"
 git clone https://github.com/Jonqora/VibeCheckMyProf.git
-
-sudo yum install -y httpd
-systemctl status httpd
 ```
 
 **Note:** When authenticating as you call `git clone`, you will need to use a Personal Access token setup on GitHub instead of your password.
+
+
+To recreate the config.js file, run the following commands:
+```
+cd /var/www/html
+vi config.js # Into this file, insert the contents below:
+```
+
+config.js:
+```
+// config.js
+
+// eslint-disable-next-line no-unused-vars
+const config = {
+    apiUrl: 'https://your-api-gateway-url.amazonaws.com/prod/vibecheck' // Replace with your actual API Gateway URL
+};
+```
+You can use `:wq` to save the file and exit vi.
+
+To install httpd (for hosting the site files), run these commands:
+
+```
+yum install -y httpd
+systemctl status httpd
+```
 
 ### Hosting the files
 
