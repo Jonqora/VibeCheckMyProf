@@ -1,0 +1,18 @@
+{
+  "professor_info": {
+    "professor_name": "Ben Williams",
+    "school_id": "1413",
+    "school": "University of British Columbia",
+    "rating_count": 26,
+    "overall_quality": 3.6,
+    "overall_difficulty": 3.7
+  },
+  "sentiment_info": {
+    "average_sentiment": "positive",
+    "positive_percentage": 65.38,
+    "negative_percentage": 19.23,
+    "neutral_percentage": 15.39,
+    "mixed_percentage": 0.00,
+    "dominant_emotion": "joy"
+  }
+}
