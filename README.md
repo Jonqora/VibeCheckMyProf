@@ -174,9 +174,9 @@ sudo -i
 yum update -y
 yum install git -y
 git --version
+git clone https://github.com/Jonqora/VibeCheckMyProf.git
 git config --global user.name "<name>"
 git config --global user.email "<email>"
-git clone https://github.com/Jonqora/VibeCheckMyProf.git
 ```
 
 **Note:** When authenticating as you call `git clone`, you will need to use a Personal Access token setup on GitHub instead of your password.
