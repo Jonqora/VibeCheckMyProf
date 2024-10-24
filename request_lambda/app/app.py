@@ -49,7 +49,7 @@ def lambda_handler(event, context):
         # Get prof and ratings data using RateMyProfessorAPI
         try:
             professor_json = rmp_api.get_prof_data(professor_id)
-        except ValueError as e:
+        except ValueError:
             return {
                 'statusCode': 400,
                 'body': json.dumps({"error": "ID {professor_id} not found."})

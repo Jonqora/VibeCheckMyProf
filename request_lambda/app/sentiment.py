@@ -12,8 +12,8 @@ from typing import Dict, Any
 
 # Compute and add sentiment fields into every professor rating. The only
 # changes to the json input should be the addition of new fields on each of
-# the ratings objects with associated values from analysis. 
-# NOTE: please preface all new fields with "vcmp_" in order to better 
+# the ratings objects with associated values from analysis.
+# NOTE: please preface all new fields with "vcmp_" in order to better
 # distingish the original data from the data we are adding.
 def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     # TODO # for example...
