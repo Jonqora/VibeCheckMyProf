@@ -1,6 +1,9 @@
 # Project configuration files
 /web/config.js
 
+# Permissions key files
+*.pem
+
 # Node.js modules
 node_modules/
 
