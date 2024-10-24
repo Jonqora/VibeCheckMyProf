@@ -4,7 +4,7 @@ flake8
 # rmp_api.py
 RateMyProfessorAPI 
 
-# database.py
+# Database
 boto3
 mysql-connector-python
 pymysql

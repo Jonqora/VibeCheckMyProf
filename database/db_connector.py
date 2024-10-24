@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 
 
-class Database:
+class DatabaseConnector:
     def __init__(self):
         print("Database object initialized.")
 

@@ -1,5 +1,5 @@
 import os
-from database import Database
+from db_connector import DatabaseConnector
 
 # Database connection details
 db_endpoint = "vibecheckmyprofdb.c38g806w4spe.ca-central-1.rds.amazonaws.com"
@@ -7,7 +7,7 @@ db_name = "vibecheckmyprofdb"
 db_user = os.environ["DB_USER"]
 db_password = os.environ["DB_PASSWORD"]
 db_port = 3306
-db = Database()
+db = DatabaseConnector()
 
 # Create connection
 connection = db.create_connection(host_name=db_endpoint, user_name=db_user, user_password=db_password,
