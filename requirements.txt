@@ -4,8 +4,10 @@ flake8
 # rmp_api.py
 RateMyProfessorAPI 
 
-# database.py
+# Database
 boto3
+mysql-connector-python
+pymysql
 
 # sentiment.py
 torch == 2.4.1
