@@ -52,7 +52,7 @@ def lambda_handler(event, context):
         except ValueError:
             return {
                 'statusCode': 400,
-                'body': json.dumps({"error": "ID {professor_id} not found."})
+                'body': json.dumps({"error": f"ID {professor_id} not found."})
             }
 
         # Process data and have sentiment analysis added to it
