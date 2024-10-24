@@ -1,7 +1,8 @@
 # Project configuration files
 /web/config.js
 
-
+# Permissions key files
+*.pem
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
