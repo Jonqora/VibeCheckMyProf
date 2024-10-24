@@ -1,0 +1,16 @@
+# Overall project
+flake8
+
+# rmp_api.py
+RateMyProfessorAPI 
+
+# Database
+boto3
+mysql-connector-python
+pymysql
+
+# sentiment.py
+torch == 2.4.1
+transformers == 4.45.2
+
+# frontend.py
