@@ -28,3 +28,9 @@ output "rds_endpoint" {
   description = "The endpoint of the RDS instance"
   value       = aws_db_instance.mysql-rds-db.endpoint
 }
+
+# Output the RDS arn
+output "rds_arn" {
+  description = "The arn of the RDS instance"
+  value       = aws_db_instance.mysql-rds-db.arn
+}
