@@ -9,8 +9,8 @@
 import json
 import os
 
-from .. import frontend
-from .. import sentiment
+from app import frontend
+from app import sentiment
 
 
 def dummy_prof_data():

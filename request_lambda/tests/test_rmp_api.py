@@ -6,7 +6,7 @@
 # to test smaller functions and helper functions where you can.
 # ----------------------------------------------------------------------------#
 
-from .. import rmp_api
+from app import rmp_api
 
 
 def test_get_prof_data():

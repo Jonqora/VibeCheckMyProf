@@ -6,7 +6,7 @@
 # to test smaller functions and helper functions where you can.
 # ----------------------------------------------------------------------------#
 
-from .. import database
+from app import database
 
 
 def test_get_recent_data():

@@ -15,10 +15,10 @@
 import json
 import re
 
-from request_lambda import database
-from request_lambda import frontend
-from request_lambda import rmp_api
-from request_lambda import sentiment
+from . import database
+from . import frontend
+from . import rmp_api
+from . import sentiment
 
 
 def lambda_handler(event, context):
