@@ -2,14 +2,14 @@
 
 variable "application_name" {
   description = "Application name to add to AWS resource tags"
-  type = string
-  default = "vibe-check-my-prof"
+  type        = string
+  default     = "vibe-check-my-prof"
 }
 
 variable "database_name" {
   description = "Application database name"
-  type = string
-  default = "vibecheckmyprofdb"
+  type        = string
+  default     = "vibecheckmyprofdb"
 }
 
 variable "cidr_block" {
@@ -27,6 +27,12 @@ variable "database_password" {
   description = "The database master password (save for authenticating to the database later)"
   type        = string
   sensitive   = true # This variable is marked as sensitive so it's not displayed in logs
+}
+
+variable "database_secret_name" {
+  description = "Name of the secret to authenticate to the RDS database instance"
+  type        = string
+  default     = "my-super-db-secret"
 }
 
 variable "aws_region" {
