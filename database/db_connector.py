@@ -7,7 +7,8 @@ class DatabaseConnector:
         print("Database object initialized.")
 
     # Function to create a connection to the database
-    def create_connection(self, host_name, user_name, user_password, db_name, port):
+    def create_connection(self, host_name, user_name, user_password,
+                          db_name, port):
         print("Creating connection.")
         connection = None
         try:

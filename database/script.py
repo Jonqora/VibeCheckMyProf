@@ -10,8 +10,11 @@ db_port = 3306
 db = DatabaseConnector()
 
 # Create connection
-connection = db.create_connection(host_name=db_endpoint, user_name=db_user, user_password=db_password,
-                                  db_name=db_name, port=db_port)
+connection = db.create_connection(host_name=db_endpoint,
+                                  user_name=db_user,
+                                  user_password=db_password,
+                                  db_name=db_name,
+                                  port=db_port)
 
 if connection:
     # Example: Create a table (if it doesn't exist already)
