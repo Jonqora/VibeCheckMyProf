@@ -1,3 +1,6 @@
+# flake8: noqa
+# TODO: Ignore SQL-formatting lint issues in this scripting file for now
+
 import os
 from db_connector import DatabaseConnector
 
@@ -18,7 +21,7 @@ connection = db.create_connection(host_name=db_endpoint,
 
 if connection:
     # Example: Create a table (if it doesn't exist already)
-    create_table_query = """
+    create_table_query = """ 
     CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT, 
         name VARCHAR(100) NOT NULL, 
