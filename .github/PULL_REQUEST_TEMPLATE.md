@@ -14,5 +14,5 @@ Describe steps you have taken to make sure your changes are correct and will wor
 Tell your reviewers what you would like them to look at and comment on. What feedback would be most helpful?
 
 ### Checklist
-- [ ] I have rebuilt and tested the lambda container (if these changes affect `request_lambda` files)
+- [ ] I have rebuilt and tested the lambda container (if these changes affect `/request_lambda` files)
 - [ ] I have re-uploaded to S3 bucket and tested the VibeCheck button response (if these changes affect `/web` files)
