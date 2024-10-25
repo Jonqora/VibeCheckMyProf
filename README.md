@@ -11,8 +11,7 @@
 - A student in their final year realizes they need an elective outside of their major, with limited time and familiarity with other department's professors, they use VibeCheckMyProf to compare overall scores of potential professors, making quick decisions without having to read individual comments.
 
 
-[Visual Guide](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WebGuide.md):
-* This visual guide features images to walk you through the final application usage.
+[Visual Guide](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WebGuide.md): This visual guide features images to walk you through the final application usage.
 
 
 ## Team Members
@@ -46,19 +45,15 @@ Before you begin, ensure of the following:
 
 
 ## Steps
-**Provision AWS Resources**: Create the necessary AWS services such as Lambda, S3, and RDS.
-
-**Set Up Database**: Follow the instructions in [DATABASE.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md).
+1. Provision AWS Resources: Create the necessary AWS services such as Lambda, S3, and RDS.
+2. Set Up Database: Follow the instructions in [DATABASE.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md).
     * Documentation related to the database setup and management
-    
-**Deploy Lambda Functions**: Refer to [LAMBDA.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md)
+3. Deploy Lambda Functions: Refer to [LAMBDA.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md)
     * Instructions for setting up and deploying AWS Lambda functions.
-
-**Frontend Setup**: See [WEB.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md)
+4. Frontend Setup: See [WEB.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md)
     * Instructions on how to set up the frontend and usage.
 
 
 After successfully following the set-up steps outlined, you will have a similar fully functional application. We encourage you to explore VibeCheckMyProf, understand its features, and utilize its insights to enhance your own academic experience.
-
 
 
