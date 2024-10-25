@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/s3.png" width="50" height="50" />
+</p> 
+
 ## Web Hosting: S3 Option
 
 The following steps ensure the correct web hosting set up for the application.
