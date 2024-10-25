@@ -68,7 +68,7 @@ def lambda_handler(event, context):
     """
 
     # Open the JSON file and read it as a dictionary
-    filename = 'dummy_response.json'
+    filename = 'app/dummy_response.json'
     with open(filename, 'r') as file:
         response = json.load(file)
 
