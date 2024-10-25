@@ -1,6 +1,6 @@
 <p align="left">
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="50" height="50" style="vertical-align: middle; margin-right: 10px;" />
-  <span style="vertical-align: middle;">## Database: AWS RDS Database</span>
+  <strong style="vertical-align: middle;">Database: AWS RDS Database</strong>
 </p>
 
 
