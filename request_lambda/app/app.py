@@ -15,10 +15,10 @@
 import json
 import re
 
-from . import database
-from . import frontend
-from . import rmp_api
-from . import sentiment
+# from . import database
+# from . import frontend
+# from . import rmp_api
+# from . import sentiment
 
 
 def lambda_handler(event, context):
@@ -39,6 +39,7 @@ def lambda_handler(event, context):
                                 "RateMyProfessors professor URL."})
         }
 
+    """
     # Get the professor id
     professor_id = int(url.split('/')[-1])
 
@@ -64,17 +65,12 @@ def lambda_handler(event, context):
     # Format the data for the response to the front end
     response = frontend.format(professor_json)  # TODO
 
-    # # # # # # # # # dummy code is below # # # # # # # # #
-    # # #  remove when sentiment & frontend complete  # # #
-    scores = [0.52, 0.13, -0.22, 0.05, -0.43, 0.19, 0.21, -0.09, -0.27, 0.31]
-    average = sum(scores) / len(scores)
-    response = {
-        "scores": scores,
-        "average": round(average, 3),
-        "professor_name": "Gregor Kiczales",
-        "professor_id": 38077
-    }
-    # # # # # # # # #  end of dummy code  # # # # # # # # #
+    """
+
+    # Open the JSON file and read it as a dictionary
+    filename = 'dummy_response.json'
+    with open(filename, 'r') as file:
+        response = json.load(file)
 
     # Return a 200 OK response with the data
     return {
