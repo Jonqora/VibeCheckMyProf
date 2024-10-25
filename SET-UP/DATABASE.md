@@ -1,3 +1,7 @@
+<p align="left">
+  <img src="https://www.gliffy.com/sites/default/files/image/2020-06/Amazon-RDS_dark-bg.png" />
+</p>
+
 The following steps ensure the correct set up for your AWS RDS Database.
 
 ## Database: AWS RDS Database
