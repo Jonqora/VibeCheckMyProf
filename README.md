@@ -2,16 +2,17 @@
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/main/scratch/image_files/vcmp_logo.png" />
 </p>
 
-VibeCheckMyProf is a service that performs sentiment analysis on reviews for professors on the site **ratemyprofessors.com**, providing users with an appealing visual summary of recent reviews without having to scroll and read all of them. Users can compare the VibeCheck score with numerical ratings on the ratemyprofessors site and can also view a visualization of VibeCheck comment scores over time.
+**VibeCheckMyProf** is a service that performs sentiment analysis on reviews for professors on the site **ratemyprofessors.com**, providing users with an appealing visual summary of recent reviews without having to scroll and read all of them. Users can compare the VibeCheck score with numerical ratings on the ratemyprofessors site and can also view a visualization of VibeCheck comment scores over time.
 
 
-Use Cases:
-1. A first year anxious student cannot decide which Math Professor to take a math course with, they learn about VibeCheckMyProf to get an overview of each professor’s reviews without having to read any comments.
-2. A CPSC professor wants to know what recent students think of them, so they use VibeCheckMyProf at the beginning of the semester and at the end to track how feedback has shifted over time.
-3. A student in their final year realizes they need an elective outside of their major, with limited time and familiarity with other department's professors, they use VibeCheckMyProf to compare overall scores of potential professors, making quick decisions without having to read individual comments.
+### Use Cases:
+- A first year anxious student cannot decide which Math Professor to take a math course with, they learn about VibeCheckMyProf to get an overview of each professor’s reviews without having to read any comments.
+- A CPSC professor wants to know what recent students think of them, so they use VibeCheckMyProf at the beginning of the semester and at the end to track how feedback has shifted over time.
+- A student in their final year realizes they need an elective outside of their major, with limited time and familiarity with other department's professors, they use VibeCheckMyProf to compare overall scores of potential professors, making quick decisions without having to read individual comments.
 
 
-Visual Guide: link...
+[Visual Guide](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WebGuide.md):
+* This visual guide features images to walk you through the final application usage.
 
 
 ## Team Members
@@ -34,31 +35,28 @@ Visual Guide: link...
 
 
 # VibeCheckMyProf Setup
-
 This section provides step-by-step instructions to setting up VibeCheckMyProf. It outlines the prerequisites, the necessary AWS services, and the steps to get everything up and running smoothly. Follow the instructions carefully to ensure successful deployment of the application.
 
 
 ## Prerequisites
-Before beginning, ensure of the following:
+Before you begin, ensure of the following:
 - You will require an AWS account
-- You will require access to the following AWS Services: Lambda, S3, RDS, ...
-- You will require a minimum budget of $ $ $ to cover AWS costs  
+- Access to the following AWS Services: Lambda, S3, RDS, ...
+- A minimum budget of $ $ ... to cover AWS costs  
+
 
 ## Steps
-- Steps go here, provision AWS resources, use files, etc.
-
-## Links to Specific Set-Up Documentation
-- [DATABASE.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md) : 
-    * Documentation related to the database setup and management.
-- [LAMBDA.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md) : 
+1. **Provision AWS Resources**: Create the necessary AWS services such as Lambda, S3, and RDS.
+2. **Set Up Database**: Follow the instructions in [DATABASE.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md).
+    * Documentation related to the database setup and management
+3. **Deploy Lambda Functions**: Refer to [LAMBDA.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md)
     * Instructions for setting up and deploying AWS Lambda functions.
-- [WEB.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md): 
-    * Information about the frontend setup and usage
-- [WebGuide.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WebGuide.md) :
-    * Visual guide about the final project.
+
+4. **Frontend Setup**: See [WEB.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md)
+    * Instructions on how to set up the frontend and usage.
 
 
-After successfully following along the set-up steps outlined, you will have a similar fully functional application. We encourage you to explore VibeCheckMyProf, understand its features, and utilize its insights to enhance your own academic experience.
+After successfully following the set-up steps outlined, you will have a similar fully functional application. We encourage you to explore VibeCheckMyProf, understand its features, and utilize its insights to enhance your own academic experience.
 
 
 
