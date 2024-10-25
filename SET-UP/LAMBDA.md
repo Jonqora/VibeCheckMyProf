@@ -1,9 +1,6 @@
 <p align="left">
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/lambda.png" width="50" height="50" />
-</p>
-
-
-The following steps ensure the correct lambda functionality of the project.
+</p> The following steps ensure the correct lambda functionality of the project.
 
 ## Sentiment Lambda
 ### Dummy function set up

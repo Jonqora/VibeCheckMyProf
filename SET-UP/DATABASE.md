@@ -1,9 +1,6 @@
 <p align="left">
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="50" height="50" />
-</p>
-
-
-The following steps ensure the correct set up for your AWS RDS Database.
+</p> The following steps ensure the correct set up for your AWS RDS Database.
 
 ## Database: AWS RDS Database
 The `infra` directory contains Terraform scripts that will create an AWS RDS Database. For more information about the 
