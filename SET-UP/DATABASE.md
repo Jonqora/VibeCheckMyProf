@@ -1,8 +1,9 @@
-<p align="left">
-  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="50" height="50" style="vertical-align: middle; margin-right: 10px;" />
-  <strong style="vertical-align: middle;">Database: AWS RDS Database</strong>
-</p>
+<p align="center">
+    <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="50" height="50" />
+</p> 
 
+
+## Database: AWS RDS Database
 
 The following steps ensure the correct set up for your AWS RDS Database.
 

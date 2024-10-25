@@ -1,8 +1,11 @@
-<p align="left">
+<p align="center">
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/lambda.png" width="50" height="50" />
-</p> The following steps ensure the correct lambda functionality of the project.
+</p> 
 
 ## Sentiment Lambda
+
+The following steps ensure the correct lambda functionality of the project.
+
 ### Dummy function set up
 - create a new Lambda
 - in Code source, copy and paste the contents of `/lambda_sentiment/dummy.py`
