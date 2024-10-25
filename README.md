@@ -46,13 +46,15 @@ Before you begin, ensure of the following:
 
 
 ## Steps
-1. **Provision AWS Resources**: Create the necessary AWS services such as Lambda, S3, and RDS.
-2. **Set Up Database**: Follow the instructions in [DATABASE.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md).
+**Provision AWS Resources**: Create the necessary AWS services such as Lambda, S3, and RDS.
+
+**Set Up Database**: Follow the instructions in [DATABASE.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md).
     * Documentation related to the database setup and management
-3. **Deploy Lambda Functions**: Refer to [LAMBDA.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md)
+    
+**Deploy Lambda Functions**: Refer to [LAMBDA.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md)
     * Instructions for setting up and deploying AWS Lambda functions.
 
-4. **Frontend Setup**: See [WEB.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md)
+**Frontend Setup**: See [WEB.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md)
     * Instructions on how to set up the frontend and usage.
 
 

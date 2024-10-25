@@ -1,6 +1,6 @@
 ## Web Hosting: S3 Option
 
-The following steps ensure the correct set up for we application.
+The following steps ensure the correct web hosting set up for the application.
 
 ### Prerequisites
 - know the Invoke URL of the first API gateway you are using for the project 
