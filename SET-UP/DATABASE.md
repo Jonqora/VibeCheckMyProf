@@ -1,8 +1,11 @@
 <p align="left">
-  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="50" height="50" />
-</p> The following steps ensure the correct set up for your AWS RDS Database.
+  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="50" height="50" style="vertical-align: middle; margin-right: 10px;" />
+  <span style="vertical-align: middle;">## Database: AWS RDS Database</span>
+</p>
 
-## Database: AWS RDS Database
+
+The following steps ensure the correct set up for your AWS RDS Database.
+
 The `infra` directory contains Terraform scripts that will create an AWS RDS Database. For more information about the 
 configuration variables used in the scripts, see Terraform's [documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance)
 on the `aws_db_instance` resource.
