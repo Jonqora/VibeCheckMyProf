@@ -1,6 +1,11 @@
 <p align="left">
-  <img src="https://www.gliffy.com/sites/default/files/image/2020-06/Amazon-RDS_dark-bg.png" />
+  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" />
 </p>
+
+<p align="left">
+  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="200" height="200" />
+</p>
+
 
 The following steps ensure the correct set up for your AWS RDS Database.
 
