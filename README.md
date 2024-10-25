@@ -34,9 +34,8 @@ Visual Guide: link...
 
 
 # VibeCheckMyProf Setup
-Introductory text
 
-This section provides a step-by-step instructions to setting up VibeCheckMyProf. It outlines the prerequisites, the necessary AWS services, and the steps to get everything up and running smoothly. Follow the instructions carefully to ensure successful deployment of the service.
+This section provides step-by-step instructions to setting up VibeCheckMyProf. It outlines the prerequisites, the necessary AWS services, and the steps to get everything up and running smoothly. Follow the instructions carefully to ensure successful deployment of the application.
 
 
 ## Prerequisites
@@ -49,13 +48,13 @@ Before beginning, ensure of the following:
 - Steps go here, provision AWS resources, use files, etc.
 
 ## Links to Specific Set-Up Documentation
-- DATABASE.md : 
+- [DATABASE.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md) : 
     * Documentation related to the database setup and management.
-- LAMBDA.md : 
+- [LAMBDA.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md) : 
     * Instructions for setting up and deploying AWS Lambda functions.
-- WEB.md : 
+- [WEB.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md): 
     * Information about the frontend setup and usage
-- WebGuide.md :
+- [WebGuide.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WebGuide.md) :
     * Visual guide about the final project.
 
 
