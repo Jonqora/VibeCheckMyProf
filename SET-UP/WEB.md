@@ -24,7 +24,7 @@ const config = {
     apiUrl: 'https://your-api-gateway-url.amazonaws.com/prod/vibecheck' // Replace with your actual API Gateway URL
 };
 ```
-4. change the URL to match the API gateway used for the project. It should look like (for example) https://mr3pw5hn93.execute-api.ca-central-1.amazonaws.com/dev/sentiment
+4. change the URL to match the API gateway used for the project. It should look like (for example) https://mr1pw4hn93.execute-api.ca-central-1.amazonaws.com/dev/sentiment
 5. **IMPORTANT** (common error alert!) the invoke url must include the stage (e.g. dev or prod) and the name of the resource (e.g. vibecheck) you created for your API gateway.
 
 ## S3 Hosting

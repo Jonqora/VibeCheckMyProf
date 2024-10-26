@@ -73,7 +73,7 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
 2. choose \[New Stage\] and name the stage (e.g. dev or prod)
 3. click Deploy
 4. Note the Invoke URL shown on the page after deploying.
-5. **IMPORTANT** the Invoke URL displayed after deploying is incomplete. You will need to add a slash and the dame of your resource at the end. For example:
-    - displayed Invoke URL: https://1x71oeu2ye.execute-api.ca-central-1.amazonaws.com/dev
-    - complete: https://1x71oeu2ye.execute-api.ca-central-1.amazonaws.com/dev/vibecheck
+5. **IMPORTANT** the Invoke URL displayed after deploying is incomplete. You will need to add a slash and the name of your resource at the end. For example:
+    - displayed Invoke URL: https://1x34oeu2ye.execute-api.ca-central-1.amazonaws.com/dev
+    - complete: https://1x34oeu2ye.execute-api.ca-central-1.amazonaws.com/dev/vibecheck
 6. Note the **complete** Invoke URL and save it somewhere. You will use it for next steps in [WEB.md](WEB.md).
