@@ -2,6 +2,10 @@
     <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="50" height="50" />
 </p> 
 
+##  Database and Security
+
+If you encounter any problems with the steps in this document, reach out to `Colleen` with questions. 
+
 
 ## Database: AWS RDS Database
 

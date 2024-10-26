@@ -2,9 +2,9 @@
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/lambda.png" width="50" height="50" />
 </p> 
 
-## Sentiment Lambda
+## Lambda and API Gateway
 
-The following steps ensure correct setup of the containerized lambda that serves as the backend computing layer of the project.
+The following steps ensure correct setup of the containerized lambda that serves as the backend computing layer of the project. If you encounter any problems with these steps, reach out to `Ellen` with questions. 
 
 ## Containerized Lambda
 

@@ -2,7 +2,7 @@
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/s3.png" width="50" height="50" />
 </p> 
 
-## Web Hosting: S3 Option
+## Web Hosting (S3) and CloudFront
 
 The following steps ensure the correct web hosting set up for the application.
 If you encounter any problems with these steps, reach out to `Ellen` or `Allison` with questions. 
@@ -65,3 +65,8 @@ http://your-bucket-name.s3-website-region.amazonaws.com
 4. verify that the website loads and responds correctly when the button is pressed
 
 ### Done!
+
+
+## CloudFront
+
+TODO (Allison to write)
