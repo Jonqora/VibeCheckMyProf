@@ -34,6 +34,18 @@
 8. `report writing` Sadia, Allison
 
 
+# Architecture
+
+<img src="./436Carchitecture.drawio.png" alt="My Image" style="border: 10px solid white;">
+
+### AWS offerings used:
+- **RDS** for the database layer
+- **Lambda** for backend computation (containerized) 
+- **API Gateway** to connect frontend and backend
+- **S3** storage to host the frontend web files
+- **CloudFront** to enhance security and performance 
+
+
 # VibeCheckMyProf Setup
 This section provides step-by-step instructions to setting up VibeCheckMyProf. It outlines the prerequisites, the necessary AWS services, and the steps to get everything up and running smoothly. Follow the instructions carefully to ensure successful deployment of the application.
 
