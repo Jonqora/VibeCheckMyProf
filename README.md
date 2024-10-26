@@ -34,9 +34,9 @@
 8. `report writing` Sadia, Allison
 
 
-# Architecture
+## Architecture
 
-<img src="./436Carchitecture.drawio.png" alt="My Image" style="border: 10px solid white;">
+<img src="./436Carchitecture.drawio.png" alt="Project Architecture" style="border: 10px solid white;">
 
 ### AWS offerings used:
 - **RDS** for the database layer
@@ -53,7 +53,7 @@ This section provides step-by-step instructions to setting up VibeCheckMyProf. I
 ## Prerequisites
 Before you begin, ensure of the following:
 - You will require an AWS account
-- Access to the following AWS Services: Lambda, S3, RDS, ECR, CloudFront, ...
+- Access to the following AWS Services: RDS, Lambda, ECR, API Gateway, S3, CloudFront, ...
 - A minimum budget of $ $ ... to cover AWS costs  
 
 
@@ -66,6 +66,6 @@ Before you begin, ensure of the following:
     * Instructions on how to set up and host the frontend web files.
 
 
-After successfully following the set-up steps outlined, you will have a fully-functional copy of the application. We encourage you to explore VibeCheckMyProf, understand its features, and utilize its insights to enhance your own academic experience.
+After successfully following the set-up steps outlined, you will have a fully-functioning copy of the application. We encourage you to explore VibeCheckMyProf, understand its features, and utilize its insights to enhance your own academic experience.
 
 
