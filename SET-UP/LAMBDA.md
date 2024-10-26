@@ -18,19 +18,26 @@ docker build -t vibe-check-my-prof .
 ```
 
 ### Store in ECR
-1. Navigate to ECR console and create a repository called `vibe-check-my-prof`.
+1. Navigate to ECR console and create a repository called `vibe-check-my-prof` with default settings.
 2. Use the URI from the repository, tag your container and push. E.g.
 ```
 docker tag vibe-check-my-prof 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:latest
 
 docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:latest
 ```
+3. You may need to set an access token and/or run the authentication token from "View push commands" before pushing the image.
 
 ### Create Lambda
 1. Create a new Lambda and choose Container image option
-2. Name it and choose the container image you just uploaded, then create function
+2. Name it and choose the container image you just uploaded
+3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on 86_64. Now create the function.
 3. Deploy
 4. You can test the Lambda with the following test events:
+```
+{
+  "url": "https://ratemyprofessors.com/professor/1835982"
+}
+```
 ```
 {
   "url": "https://www.ratemyprofessors.com/professor/12345"
@@ -38,7 +45,7 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
 ```
 ```
 {
-  "url": "https://www.NOTratemyprof.com/professor/12345"
+  "url": "https://www.NOTratemyprof.com/professor/1835982"
 }
 ```
 
