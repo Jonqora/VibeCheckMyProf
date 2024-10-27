@@ -44,7 +44,6 @@ body {
     background-color: transparent;
     color: #f9c5d1;
     outline: none;
-    text-align: right;
 }
 
 .input-field::placeholder {
@@ -109,9 +108,24 @@ body {
 .response-prof, .course {
     border: 0.25rem solid transparent;
     border-radius: 1rem;
-    background-color: #f9c5d1;
-    margin-top: 1em;
+    margin-top: 1rem;
     padding: 1rem;
+}
+
+.response-prof {
+    background-color: #181818;
+    color: #eeeeee;
+    font-weight: bold;
+}
+
+.response-prof .stats-box {
+    color: #000;
+}
+
+.course {
+    background-color: #f9c5d1;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 .stats-prof, .stats-reviews {
@@ -126,8 +140,17 @@ body {
 .stats-box {
     width: 100px;
     height: 90px;
-    background-color: #ff41b5;
     margin: 0 0.25rem 0 0.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.response-prof .stats-box {
+    background-color: #ff41b5;
+}
+.course .stats-box {
+    background-color: #ff41b5;
 }
 
 .stats-prof, .stats-reviews {
@@ -142,7 +165,7 @@ body {
 .stats-stat {
     font-size: 3rem;
     font-weight: bold;
-    margin-bottom: -0.8rem;
+    margin-bottom: -0.25rem;
 }
 
 .stats-text {
