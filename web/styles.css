@@ -10,6 +10,14 @@ body {
     /* border: 1px solid black; */
 }
 
+.response-field {
+    display: none;
+}
+
+.input-group {
+    padding-bottom: 3rem;
+}
+
 .container {
     text-align: center;
     padding: 20px;
