@@ -11,7 +11,8 @@
 - A student in their final year realizes they need an elective outside of their major, with limited time and familiarity with other department's professors, they use VibeCheckMyProf to compare overall scores of potential professors, making quick decisions without having to read individual comments.
 
 
-[Visual Guide](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WebGuide.md): This visual guide features images to walk you through the final application usage.
+## User Guide
+[**WebGuide.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WebGuide.md): This visual guide features images to walk you through using the application once it has been set up. For setup instructions from scratch, scroll down to [VibeCheckMyProf Setup](#vibecheckmyprof-setup).
 
 
 ## Team Members
@@ -33,6 +34,18 @@
 8. `report writing` Sadia, Allison
 
 
+## Architecture
+
+<img src="./436Carchitecture.drawio.png" alt="Project Architecture" style="border: 10px solid white;">
+
+### AWS offerings used:
+- **RDS** for the database layer
+- **Lambda** for backend computation (containerized) 
+- **API Gateway** to connect frontend and backend
+- **S3** storage to host the frontend web files
+- **CloudFront** to enhance security and performance 
+
+
 # VibeCheckMyProf Setup
 This section provides step-by-step instructions to setting up VibeCheckMyProf. It outlines the prerequisites, the necessary AWS services, and the steps to get everything up and running smoothly. Follow the instructions carefully to ensure successful deployment of the application.
 
@@ -40,20 +53,19 @@ This section provides step-by-step instructions to setting up VibeCheckMyProf. I
 ## Prerequisites
 Before you begin, ensure of the following:
 - You will require an AWS account
-- Access to the following AWS Services: Lambda, S3, RDS, ...
+- Access to the following AWS Services: RDS, Lambda, ECR, API Gateway, S3, CloudFront, ...
 - A minimum budget of $ $ ... to cover AWS costs  
 
 
 ## Steps
-1. Provision AWS Resources: Create the necessary AWS services such as Lambda, S3, and RDS.
-2. Set Up Database: Follow the instructions in [DATABASE.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md).
+1. Set Up Database: Follow the instructions in [**DATABASE.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md).
     * Documentation related to the database setup and management
-3. Deploy Lambda Functions: Refer to [LAMBDA.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md)
-    * Instructions for setting up and deploying AWS Lambda functions.
-4. Frontend Setup: See [WEB.md](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md)
-    * Instructions on how to set up the frontend and usage.
+2. Deploy Lambda Function: Refer to [**LAMBDA.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md)
+    * Instructions for setting up and deploying the backend AWS Lambda function.
+3. Host frontend web files: See [**WEB.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md)
+    * Instructions on how to set up and host the frontend web files.
 
 
-After successfully following the set-up steps outlined, you will have a similar fully functional application. We encourage you to explore VibeCheckMyProf, understand its features, and utilize its insights to enhance your own academic experience.
+After successfully following the set-up steps outlined, you will have a fully-functioning copy of the application. We encourage you to explore VibeCheckMyProf, understand its features, and utilize its insights to enhance your own academic experience.
 
 

@@ -2,16 +2,20 @@
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/s3.png" width="50" height="50" />
 </p> 
 
-## Web Hosting: S3 Option
+## Web Hosting (S3) and CloudFront
 
 The following steps ensure the correct web hosting set up for the application.
+If you encounter any problems with these steps, reach out to `Ellen` or `Allison` with questions. 
 
 ### Prerequisites
-- know the Invoke URL of the first API gateway you are using for the project 
+- know the Invoke URL of the API gateway you are using for the project (created from instructions in [LAMBDA.md](LAMBDA.md))
+
+## Config File
 
 ### Set up web files
-- create a file called config.js inside the /web folder
-- paste the following into the file 
+1. Make sure you are on `main` branch and have pulled recent changes.
+2. create a file called `config.js` inside the /web folder
+3. paste the following into the file 
 ```
 // config.js
 
@@ -20,22 +24,23 @@ const config = {
     apiUrl: 'https://your-api-gateway-url.amazonaws.com/prod/vibecheck' // Replace with your actual API Gateway URL
 };
 ```
-- change the URL to match the first API gateway used for the project. Don't forget the Stage and Resource
-- it should look like (for example) https://mr3pw5hn93.execute-api.ca-central-1.amazonaws.com/dev/sentiment
+4. change the URL to match the API gateway used for the project. It should look like (for example) https://mr1pw4hn93.execute-api.ca-central-1.amazonaws.com/dev/sentiment
+5. **IMPORTANT** (common error alert!) the invoke url must include the stage (e.g. dev or prod) and the name of the resource (e.g. vibecheck) you created for your API gateway.
 
+## S3 Hosting
 
 ### Configure S3 bucket
-- create a new S3 bucket
-- turn off "Block public access" on the bucket permissions 
-- upload all files in /web into the bucket
-- go to the bucket, click on Properties and scroll down to the Static Website Hosting section. Click Edit
-- Enable and enter 'index.html` under Index document. 
-- Click Save changes.
+1. create a new S3 bucket
+2. turn off "Block all public access" on the bucket permissions and acknowledge the warning
+3. upload all files in /web into the bucket
+4. go to the bucket, click on Properties and scroll down to the Static Website Hosting section. Click Edit
+5. Enable and enter 'index.html` under Index document. 
+6. Click Save changes.
 
 ### Make files public
-- go to S3 bucket permissions tab
-- Scroll to Bucket Policy and click Edit
-- add the following policy (replace `your-bucket-name` with the S3 bucket name)
+1. go to S3 bucket permissions tab
+2. Scroll to Bucket Policy and click Edit
+3. add the following policy (replace `your-bucket-name` with the S3 bucket name)
 ```
 {
   "Version": "2012-10-17",
@@ -51,17 +56,17 @@ const config = {
 ```
 
 ### Get the S3 website URL
-- go to Properties tab of the S3 bucket
-- Under Static Website Hosting, find the endpoint URL. It should look something like
+1. go to Properties tab of the S3 bucket
+2. Under Static Website Hosting, find the endpoint URL. It should look something like
 ```
 http://your-bucket-name.s3-website-region.amazonaws.com
 ```
-- copy this URL and paste it into the browser to visit the website
-- verify that the website loads and responds when the button is pressed
+3. copy this URL and paste it into the browser to visit the website
+4. verify that the website loads and responds correctly when the button is pressed
 
-## Web Hosting: EC2 Option
-### Prerequisites
-- know the Invoke URL of the first API gateway you are using for the project 
+### Done!
 
-### Next steps
-Steps here...
+
+## CloudFront
+
+TODO (Allison to write)

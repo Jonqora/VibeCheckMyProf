@@ -2,15 +2,42 @@
   <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/lambda.png" width="50" height="50" />
 </p> 
 
-## Sentiment Lambda
+## Lambda and API Gateway
 
-The following steps ensure the correct lambda functionality of the project.
+The following steps ensure correct setup of the containerized lambda that serves as the backend computing layer of the project. If you encounter any problems with these steps, reach out to `Ellen` with questions. 
 
-### Dummy function set up
-- create a new Lambda
-- in Code source, copy and paste the contents of `/lambda_sentiment/dummy.py`
-- Deploy
-- you can test the Lambda with the following test events:
+## Containerized Lambda
+
+### Build Container
+
+1. Make sure you are on main branch and have pulled recent changes.
+2. Navigate to the `/request_lambda` directory and make sure Docker is running
+3. Build the container
+```
+docker build -t vibe-check-my-prof .
+```
+
+### Store in ECR
+1. Navigate to ECR console and create a repository called `vibe-check-my-prof` with default settings.
+2. Use the URI from the repository, tag your container and push. E.g.
+```
+docker tag vibe-check-my-prof 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:latest
+
+docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:latest
+```
+3. You may need to set an access token and/or run the authentication token from "View push commands" before pushing the image.
+
+### Create Lambda
+1. Create a new Lambda and choose Container image option
+2. Name it and choose the container image you just uploaded
+3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on 86_64. Now create the function.
+3. Deploy
+4. You can test the Lambda with the following test events:
+```
+{
+  "url": "https://ratemyprofessors.com/professor/1835982"
+}
+```
 ```
 {
   "url": "https://www.ratemyprofessors.com/professor/12345"
@@ -18,23 +45,35 @@ The following steps ensure the correct lambda functionality of the project.
 ```
 ```
 {
-  "url": "https://www.NOTratemyprof.com/professor/12345"
+  "url": "https://www.NOTratemyprof.com/professor/1835982"
 }
 ```
 
-### API Gateway setup
-- Go to API Gateway and click Create API
-- Click on Build next to REST API
-- give the API a name and click Create API
-- under Resources in the left panel, select Create Resource
-- name the resource (e.g. sentiment) and create
-- with your new resource selected, select Create Method
-- select POST from the dropdown and choose Lambda function
-- choose the correct region and the Lambda function from earlier
-- leave the other defaults and Save
-- click on your Resource again and Enable CORS under Resource Details
-- select the checkbox for POST and click Save
-- click on Deploy API
-- choose \[New Stage\] and name the stage (e.g. dev or prod)
-- click Deploy
-- Note the Invoke URL and save it for later
+## API Gateway
+
+### Create API Gateway
+1. Navigate to API Gateway console and click Create API
+2. Click on Build next to REST API
+3. give the API a name and click Create API
+
+### Create Resource
+1. under Resources in the left panel, select Create Resource
+2. name the resource (e.g. vibecheck) and create
+3. with your new resource selected, select Create Method
+4. select POST from the dropdown and choose Lambda function
+5. choose the correct region and choose the Lambda function you built in the previous steps
+6. leave the other defaults and Save
+
+### Enable CORS
+1. click on your Resource again (above the POST item) and click on Enable CORS under Resource Details
+2. select the checkbox for POST and click Save
+
+### Deploy API Gateway
+1. click on Deploy API
+2. choose \[New Stage\] and name the stage (e.g. dev or prod)
+3. click Deploy
+4. Note the Invoke URL shown on the page after deploying.
+5. **IMPORTANT** the Invoke URL displayed after deploying is incomplete. You will need to add a slash and the name of your resource at the end. For example:
+    - displayed Invoke URL: https://1x34oeu2ye.execute-api.ca-central-1.amazonaws.com/dev
+    - complete: https://1x34oeu2ye.execute-api.ca-central-1.amazonaws.com/dev/vibecheck
+6. Note the **complete** Invoke URL and save it somewhere. You will use it for next steps in [WEB.md](WEB.md).
