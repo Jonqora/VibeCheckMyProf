@@ -21,5 +21,7 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
         review["vcmp_sentiment"] = "placeholder"
         review["vcmp_emotion"] = "anger"
         review["vcmp_objectivity"] = 3.0
+        
+    
 
     return professor_json
