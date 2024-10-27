@@ -49,6 +49,17 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
 }
 ```
 
+## Add Amazon Comprehend Permissions
+
+### Steps to Add Permissions to the IAM Role:
+1. Open the IAM console in AWS.
+2. Select **Roles** from the sidebar on the left.
+3. In the search bar, type the name of the Lambda function you just created.
+4. Click on the role name to open it.
+5. On the new page, go to the **Permissions** tab, click **Add permissions**, and select **Attach policies**.
+6. In the search bar, type `ComprehendReadOnly`, check the box next to it, and click **Add permissions**.
+7. The permission is now added to the role, allowing the Lambda function to call Amazon Comprehend.
+
 ## API Gateway
 
 ### Create API Gateway
