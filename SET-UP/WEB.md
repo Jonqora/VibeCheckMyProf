@@ -31,7 +31,7 @@ const config = {
 
 ### Configure S3 bucket
 1. create a new S3 bucket
-2. turn off "Block public access" on the bucket permissions 
+2. turn off "Block all public access" on the bucket permissions and acknowledge the warning
 3. upload all files in /web into the bucket
 4. go to the bucket, click on Properties and scroll down to the Static Website Hosting section. Click Edit
 5. Enable and enter 'index.html` under Index document. 
