@@ -7,5 +7,7 @@ boto3
 # sentiment.py
 torch == 2.4.1
 transformers == 4.45.2
+textblob == 0.18.0
+language-tool-python == 2.8.1
 
 # frontend.py

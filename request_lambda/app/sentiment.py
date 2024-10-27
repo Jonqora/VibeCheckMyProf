@@ -8,6 +8,60 @@
 # ----------------------------------------------------------------------------#
 
 from typing import Dict, Any
+import subprocess
+import warnings
+
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+from textblob import TextBlob
+import boto3
+import language_tool_python
+
+
+class SentimentAnalyzer:
+    def __init__(self):
+        self.tokenizer = AutoTokenizer.from_pretrained("monologg/bert-base-cased-goemotions-original")
+        self.model = AutoModelForSequenceClassification.from_pretrained("monologg/bert-base-cased-goemotions-original")
+        self.emotion_labels = self.model.config.id2label
+        self.tool = self.initialize_language_tool()
+        self.comprehend = boto3.client('comprehend', region_name="ca-central-1")
+
+    def initialize_language_tool(self):
+        try:
+            subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT)
+            return language_tool_python.LanguageTool('en-US')
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            warnings.warn("Java is not installed or not found. Spelling and grammar analysis will be skipped.")
+            return None
+
+    def analyze_sentiment_textblob(self, text):
+        blob = TextBlob(text)
+        polarity = blob.sentiment.polarity
+        subjectivity = blob.sentiment.subjectivity
+        return polarity, subjectivity
+
+    def analyze_emotion_goemotions(self, text):
+        inputs = self.tokenizer(text, return_tensors="pt")
+        outputs = self.model(**inputs)
+        predictions = torch.softmax(outputs.logits, dim=-1)
+        predicted_class = torch.argmax(predictions, dim=-1).item()
+        predicted_emotion = self.emotion_labels[predicted_class]
+        return predicted_emotion
+
+    def analyze_spelling_and_grammar(self, text):
+        if self.tool is None:
+            return 1, 0, []
+        matches = self.tool.check(text)
+        misspelled_words = []
+        for match in matches:
+            if len(match.replacements) > 0:
+                misspelled_words.append((text[match.offset: match.offset + match.errorLength], match.replacements[0]))
+        quality = 1 - (len(misspelled_words) / len(text.split())) if len(text.split()) > 0 else 1
+        return quality, len(misspelled_words)
+
+    def analyze_sentiment_comprehend(self, text):
+        response = self.comprehend.detect_sentiment(Text=text, LanguageCode='en')
+        return response['Sentiment']
 
 
 # Compute and add sentiment fields into every professor rating. The only
@@ -16,12 +70,21 @@ from typing import Dict, Any
 # NOTE: please preface all new fields with "vcmp_" in order to better
 # distingish the original data from the data we are adding.
 def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
-    # TODO # for example...
+    sentiment_analyzer = SentimentAnalyzer()
+
     for review in professor_json["reviews"]:
-        review["vcmp_sentiment"] = "placeholder"
-        review["vcmp_emotion"] = "anger"
-        review["vcmp_objectivity"] = 3.0
-        
-    
+        comment = review["comment"]
+
+        tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(comment)
+        emotion = sentiment_analyzer.analyze_emotion_goemotions(comment)
+        comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(comment)
+        spelling_quality, spelling_errors = sentiment_analyzer.analyze_spelling_and_grammar(comment)
+
+        review["vcmp_polarity"] = tb_polarity,
+        review["vcmp_subjectivity"] = tb_subjectivity,
+        review["vcmp_emotion"] = emotion,
+        review["vcmp_sentiment"] = comprehend_sentiment,
+        review["vcmp_spellingerrors"] = spelling_errors,
+        review["vcmp_spellingquality"] = spelling_quality
 
     return professor_json
