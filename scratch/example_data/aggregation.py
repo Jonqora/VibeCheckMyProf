@@ -154,8 +154,7 @@ def calculate_prof_and_cleanup(data):
             )
         top_emotions = sorted(
             data["sum_vcmp_emotion"], 
-            key=data["sum_vcmp_emotion"].get, 
-            reverse=True
+            key=lambda emotion: (-data["sum_vcmp_emotion"][emotion], emotion)
             )[:3]
         data["vcmp_emotion"] = [
             (emotion, data["sum_vcmp_emotion"][emotion]) 
