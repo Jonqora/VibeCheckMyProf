@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/RDS.png" width="50" height="50" />
+    <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/main/scratch/image_files/RDS.png" width="50" height="50" />
 </p> 
 
 ##  Database and Security

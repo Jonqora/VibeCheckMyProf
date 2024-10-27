@@ -58,11 +58,11 @@ Before you begin, ensure of the following:
 
 
 ## Steps
-1. Set Up Database: Follow the instructions in [**DATABASE.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/DATABASE.md).
+1. Set Up Database: Follow the instructions in [**DATABASE.md**](/SET-UP/DATABASE.md).
     * Documentation related to the database setup and management
-2. Deploy Lambda Function: Refer to [**LAMBDA.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/LAMBDA.md)
+2. Deploy Lambda Function: Refer to [**LAMBDA.md**](/SET-UP/LAMBDA.md)
     * Instructions for setting up and deploying the backend AWS Lambda function.
-3. Host frontend web files: See [**WEB.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WEB.md)
+3. Host frontend web files: See [**WEB.md**](/SET-UP/WEB.md)
     * Instructions on how to set up and host the frontend web files.
 
 

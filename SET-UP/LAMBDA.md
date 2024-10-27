@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/scratch/image_files/lambda.png" width="50" height="50" />
+  <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/main/scratch/image_files/lambda.png" width="50" height="50" />
 </p> 
 
 ## Lambda and API Gateway
@@ -30,7 +30,7 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
 ### Create Lambda
 1. Create a new Lambda and choose Container image option
 2. Name it and choose the container image you just uploaded
-3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on 86_64. Now create the function.
+3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function.
 3. Deploy
 4. You can test the Lambda with the following test events:
 ```
