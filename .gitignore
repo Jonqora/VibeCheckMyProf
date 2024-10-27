@@ -4,6 +4,12 @@
 # Permissions key files
 *.pem
 
+# Terraform tracking files
+infra/.terraform
+infra/.terraform.lock.hd
+infra/.terraform.tfstate
+infra/.terraform.tfstate.backup
+
 # Node.js modules
 node_modules/
 
