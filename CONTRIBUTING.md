@@ -23,6 +23,9 @@ You will see an output with error messages and locations for all linter errors. 
 
 # Repository Structure
 
+## /request_lambda folder
+Holds files for creating the containerized Lambda function that runs backend computation for the app. This includes RMP API use, sentiment analysis, frontend formatting and database interaction.
+
 ## /web folder
 Holds files relating to hosting the app webpage. There is a missing `config.js` folder that you will need to create following the setup guide in README.
 
