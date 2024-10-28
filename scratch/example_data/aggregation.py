@@ -193,8 +193,8 @@ def calculate_course_and_cleanup(course):
         )
     top_emotions = sorted(
         course["sum_vcmp_emotion"], 
-        key=course["sum_vcmp_emotion"].get, 
-        reverse=True)[:3]
+        key=lambda emotion: (-course["sum_vcmp_emotion"][emotion], emotion)
+        )[:3]
     course["vcmp_emotion"] = [
         (emotion, course["sum_vcmp_emotion"][emotion])
         for emotion in top_emotions
