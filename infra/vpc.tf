@@ -1,67 +1,75 @@
-# VPC definition
-resource "aws_vpc" "web_app_vpc" {
-  cidr_block = "10.0.0.0/16" # "10.0.0.0/16"
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+# VPC Configuration
+
+# Create Application VPC
+resource "aws_vpc" "main_vpc" {
+  cidr_block = "10.0.0.0/16"
+
   tags = {
-    Name = "${var.application_name}-vpc"
+    Name    = "main-vpc"
+    Project = var.application_name
   }
 }
 
-# Public Subnet
+# Public Subnet for S3 Bucket and NAT Gateway
 resource "aws_subnet" "public_subnet_1" {
-  vpc_id     = aws_vpc.web_app_vpc.id
+  vpc_id     = aws_vpc.main_vpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "ca-central-1a"
   map_public_ip_on_launch = true  # Assign public IPs to instances
   tags = {
-    Name = "${var.application_name}-public-subnet-1"
+    Name    = "public-subnet-1"
+    Project = var.application_name
   }
 }
 
-# Public Subnet
+# Public Subnet for Coverage Redundancy
 resource "aws_subnet" "public_subnet_2" {
-  vpc_id     = aws_vpc.web_app_vpc.id
+  vpc_id     = aws_vpc.main_vpc.id
   cidr_block = "10.0.3.0/24"
   availability_zone = "ca-central-1b"
   tags = {
-    Name = "${var.application_name}-public-subnet-2"
+    Name    = "public-subnet-2"
+    Project = var.application_name
   }
 }
 
-# Private Subnet
+# Private Subnet for RDS & Lambda
 resource "aws_subnet" "private_subnet_1" {
-  vpc_id     = aws_vpc.web_app_vpc.id
+  vpc_id     = aws_vpc.main_vpc.id
   cidr_block = "10.0.2.0/24"
   availability_zone = "ca-central-1a"
   tags = {
-    Name = "${var.application_name}-private-subnet-1"
+    Name    = "private-subnet-1"
+    Project = var.application_name
   }
 }
 
-# Private Subnet
+# Private Subnet for Coverage Redundancy
 resource "aws_subnet" "private_subnet_2" {
-  vpc_id     = aws_vpc.web_app_vpc.id
+  vpc_id     = aws_vpc.main_vpc.id
   cidr_block = "10.0.4.0/24"
   availability_zone = "ca-central-1b"
   tags = {
-    Name = "${var.application_name}-private-subnet-2"
+    Name    = "private-subnet-2"
+    Project = var.application_name
   }
 }
 
-# Internet Gateway (to allow public access to the frontend)
+# Internet Gateway for Public Internet Access
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.web_app_vpc.id
+  vpc_id = aws_vpc.main_vpc.id
   tags = {
-    Name = "${var.application_name}-igw"
+    Name    = "main-igw"
+    Project = var.application_name
   }
 }
 
-# NAT Gateway (to allow outbound internet access for private subnet)
+# NAT Gateway for Private Subnet Internet Access
 resource "aws_eip" "nat_eip" {
   domain = "vpc"
   tags = {
-    Name = "${var.application_name}-nat-eip"
+    Name    = "nat-eip"
+    Project = var.application_name
   }
 }
 
@@ -69,53 +77,56 @@ resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.nat_eip.id
   subnet_id     = aws_subnet.public_subnet_1.id  # NAT Gateway in public subnet
   tags = {
-    Name = "${var.application_name}-nat-gateway"
+    Name    = "nat-gateway"
+    Project = var.application_name
   }
 }
 
 # Route Table for Public Subnet (Internet access)
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.web_app_vpc.id
+  vpc_id = aws_vpc.main_vpc.id
   route {
     cidr_block = "0.0.0.0/0"  # Route all traffic to the internet
     gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
-    Name = "${var.application_name}-public-route-table"
+    Name    = "public-route-table"
+    Project = var.application_name
   }
 }
 
-# Route Table Association for Public Subnet
+# Route Table Association for Public Subnets
 resource "aws_route_table_association" "public_route_table_assoc_1" {
   subnet_id      = aws_subnet.public_subnet_1.id
   route_table_id = aws_route_table.public_route_table.id
 }
 
-# Route Table Association for Public Subnet
+# Route Table Association for Public Subnets
 resource "aws_route_table_association" "public_route_table_assoc_2" {
   subnet_id      = aws_subnet.public_subnet_2.id
   route_table_id = aws_route_table.public_route_table.id
 }
 
-# Route Table for Private Subnet (NAT Gateway for outbound traffic)
+# Route Table for Private Subnets
 resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.web_app_vpc.id
+  vpc_id = aws_vpc.main_vpc.id
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat_gateway.id
   }
   tags = {
-    Name = "${var.application_name}-private-route-table"
+    Name    = "private-route-table"
+    Project = var.application_name
   }
 }
 
-# Route Table Association for Private Subnet
+# Route Table Association for Private Subnets
 resource "aws_route_table_association" "private_route_table_assoc_1" {
   subnet_id      = aws_subnet.private_subnet_1.id
   route_table_id = aws_route_table.private_route_table.id
 }
 
-# Route Table Association for Private Subnet
+# Route Table Association for Private Subnets
 resource "aws_route_table_association" "private_route_table_assoc_2" {
   subnet_id      = aws_subnet.private_subnet_2.id
   route_table_id = aws_route_table.private_route_table.id
@@ -125,8 +136,9 @@ resource "aws_route_table_association" "private_route_table_assoc_2" {
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "rds-subnet-group"
   subnet_ids = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id, aws_subnet.private_subnet_1.id,
-    aws_subnet.private_subnet_2.id]
+                aws_subnet.private_subnet_2.id]
   tags = {
-    Name = "${var.application_name}-rds-subnet-group"
+    Name    = "rds-subnet-group"
+    Project = var.application_name
   }
 }
