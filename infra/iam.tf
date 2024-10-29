@@ -2,7 +2,7 @@
 
 # Create IAM Role for Lambda to Access RDS
 resource "aws_iam_role" "lambda_rds_role" {
-  name = "lambda-rds-access-role"
+  name = "${var.app_prefix}-lambda-rds-access-role"
 
   assume_role_policy = jsonencode({
     "Version": "2012-10-17",
@@ -18,14 +18,14 @@ resource "aws_iam_role" "lambda_rds_role" {
   })
 
   tags = {
-    Name        = "lambda_rds_role"
-    Project     = var.application_name
+    Name        = "${var.app_prefix}-lambda-rds-role"
+    Project     = var.app_name
   }
 }
 
 # Create IAM Policy for Lambda-RDS Access
 resource "aws_iam_policy" "lambda_rds_policy" {
-  name        = "lambda-rds-policy"
+  name        = "${var.app_prefix}-lambda-rds-policy"
   description = "Policy for Lambda to access RDS MySQL and Secrets Manager"
 
   policy = jsonencode({
@@ -55,8 +55,8 @@ resource "aws_iam_policy" "lambda_rds_policy" {
   })
 
   tags = {
-    Name        = "lambda_rds_role"
-    Project     = var.application_name
+    Name        = "${var.app_prefix}-lambda-rds-role"
+    Project     = var.app_name
   }
 }
 

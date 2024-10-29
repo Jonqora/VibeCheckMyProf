@@ -3,10 +3,11 @@
 # Create Application VPC
 resource "aws_vpc" "main_vpc" {
   cidr_block = "10.0.0.0/16"
-
+  enable_dns_support   = true
+  enable_dns_hostnames = true
   tags = {
-    Name    = "main-vpc"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-main-vpc"
+    Project = var.app_name
   }
 }
 
@@ -17,8 +18,8 @@ resource "aws_subnet" "public_subnet_1" {
   availability_zone = "ca-central-1a"
   map_public_ip_on_launch = true  # Assign public IPs to instances
   tags = {
-    Name    = "public-subnet-1"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-public-subnet-1"
+    Project = var.app_name
   }
 }
 
@@ -28,8 +29,8 @@ resource "aws_subnet" "public_subnet_2" {
   cidr_block = "10.0.3.0/24"
   availability_zone = "ca-central-1b"
   tags = {
-    Name    = "public-subnet-2"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-public-subnet-2"
+    Project = var.app_name
   }
 }
 
@@ -39,8 +40,8 @@ resource "aws_subnet" "private_subnet_1" {
   cidr_block = "10.0.2.0/24"
   availability_zone = "ca-central-1a"
   tags = {
-    Name    = "private-subnet-1"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-private-subnet-1"
+    Project = var.app_name
   }
 }
 
@@ -50,8 +51,8 @@ resource "aws_subnet" "private_subnet_2" {
   cidr_block = "10.0.4.0/24"
   availability_zone = "ca-central-1b"
   tags = {
-    Name    = "private-subnet-2"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-private-subnet-2"
+    Project = var.app_name
   }
 }
 
@@ -59,8 +60,8 @@ resource "aws_subnet" "private_subnet_2" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main_vpc.id
   tags = {
-    Name    = "main-igw"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-main-igw"
+    Project = var.app_name
   }
 }
 
@@ -68,8 +69,8 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_eip" "nat_eip" {
   domain = "vpc"
   tags = {
-    Name    = "nat-eip"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-nat-eip"
+    Project = var.app_name
   }
 }
 
@@ -77,8 +78,8 @@ resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.nat_eip.id
   subnet_id     = aws_subnet.public_subnet_1.id  # NAT Gateway in public subnet
   tags = {
-    Name    = "nat-gateway"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-nat-gateway"
+    Project = var.app_name
   }
 }
 
@@ -90,8 +91,8 @@ resource "aws_route_table" "public_route_table" {
     gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
-    Name    = "public-route-table"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-public-route-table"
+    Project = var.app_name
   }
 }
 
@@ -115,8 +116,8 @@ resource "aws_route_table" "private_route_table" {
     nat_gateway_id = aws_nat_gateway.nat_gateway.id
   }
   tags = {
-    Name    = "private-route-table"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-private-route-table"
+    Project = var.app_name
   }
 }
 
@@ -134,11 +135,11 @@ resource "aws_route_table_association" "private_route_table_assoc_2" {
 
 # Subnet Group for RDS
 resource "aws_db_subnet_group" "rds_subnet_group" {
-  name       = "rds-subnet-group"
+  name       = "${var.app_prefix}-rds-subnet-group"
   subnet_ids = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id, aws_subnet.private_subnet_1.id,
                 aws_subnet.private_subnet_2.id]
   tags = {
-    Name    = "rds-subnet-group"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-rds-subnet-group"
+    Project = var.app_name
   }
 }

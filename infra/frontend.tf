@@ -2,11 +2,11 @@
 
 # Create S3 Bucket for Frontend
 resource "aws_s3_bucket" "frontend_bucket" {
-  bucket = "frontend-bucket"
+  bucket = "${var.app_prefix}-frontend-bucket"
 
   tags = {
-    Name    = "frontend-bucket"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-frontend-bucket"
+    Project = var.app_name
   }
 }
 
@@ -59,6 +59,12 @@ resource "aws_cloudfront_distribution" "cdn" {
     }
   }
 
+  restrictions {
+    geo_restriction {
+      restriction_type = "none" # Do not restrict distribution based on Geo
+    }
+  }
+
   enabled             = true
   default_root_object = "index.html"
 
@@ -68,6 +74,9 @@ resource "aws_cloudfront_distribution" "cdn" {
     target_origin_id       = "S3-Frontend"
     forwarded_values {
       query_string = false
+      cookies {
+        forward = "none"
+      }
     }
     viewer_protocol_policy = "redirect-to-https"
   }
@@ -77,7 +86,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   tags = {
-    Name    = "frontend-distribution"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-frontend-distribution"
+    Project = var.app_name
   }
 }

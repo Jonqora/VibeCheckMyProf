@@ -21,7 +21,7 @@ resource "aws_db_instance" "mysql-rds-db" {
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name  # Reference the DB subnet group
 
   tags = {
-    Name    = "rds-db"
-    Project = var.application_name
+    Name    = "${var.app_prefix}-rds-db"
+    Project = var.app_name
   }
 }
