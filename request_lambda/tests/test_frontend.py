@@ -6,8 +6,6 @@
 # to test smaller functions and helper functions where you can.
 # ----------------------------------------------------------------------------#
 
-import json
-import os
 import unittest
 from collections import defaultdict
 
@@ -22,7 +20,7 @@ class TestFrontend(unittest.TestCase):
                 {
                     "quality": 5,
                     "difficulty": 4,
-                    "comment": "His lectures are engaging and this class had tons of online resources available (mini-lecture videos covering specific topics, finals from different years, for example).  He's active on piazza and he's approachable during office hours and immediately after the lecture. Never made me feel dumb for having a question :) final was difficult tho lol",
+                    "comment": "His lectures are engaging and this class had tons of online resources available (mini-lecture videos covering specific topics, finals from different years, for example).  He's active on piazza and he's approachable during office hours and immediately after the lecture. Never made me feel dumb for having a question :) final was difficult tho lol",  # noqa: E501
                     "class_name": "MATH221",
                     "date": "2024-05-10 19:50:00",
                     "take_again": True,
@@ -42,7 +40,7 @@ class TestFrontend(unittest.TestCase):
                 {
                     "quality": 4,
                     "difficulty": 4,
-                    "comment": "221 is one of the easiest 200 level math courses, so it's relatively easy to do well on the midterms. However, the final was what knocked our grades down. IT WAS HARD. Ben only scaled those who missed a midterm and those who did so bad on the midterms that they're depending on the final to survive, so it was kinda unfair to other students.",
+                    "comment": "221 is one of the easiest 200 level math courses, so it's relatively easy to do well on the midterms. However, the final was what knocked our grades down. IT WAS HARD. Ben only scaled those who missed a midterm and those who did so bad on the midterms that they're depending on the final to survive, so it was kinda unfair to other students.",  # noqa: E501
                     "class_name": "MATH221",
                     "date": "2024-05-05 18:37:21",
                     "take_again": True,
@@ -62,7 +60,7 @@ class TestFrontend(unittest.TestCase):
                 {
                     "quality": 5,
                     "difficulty": 4,
-                    "comment": "As long as you review the class everyday, you will be ok. The professor is the best",
+                    "comment": "As long as you review the class everyday, you will be ok. The professor is the best",  # noqa: E501
                     "class_name": "MATH220",
                     "date": "2024-04-23 21:36:42",
                     "take_again": True,
@@ -83,10 +81,8 @@ class TestFrontend(unittest.TestCase):
             "num_ratings": 3,
         }
 
-
     def test_format(self):
         data = self.professor_data
-
         formatted_data = frontend.format(data)
 
         # Check if the courses are formatted correctly
@@ -94,8 +90,12 @@ class TestFrontend(unittest.TestCase):
         self.assertEqual(len(formatted_data["courses"]), 2)
 
         # Check if aggregate fields are calculated
-        self.assertAlmostEqual(formatted_data["vcmp_polarity"], 0.198233, places=4)
-        self.assertAlmostEqual(formatted_data["vcmp_subjectivity"], 0.416267, places=4)
+        self.assertAlmostEqual(
+            formatted_data["vcmp_polarity"], 0.198233, places=4
+            )
+        self.assertAlmostEqual(
+            formatted_data["vcmp_subjectivity"], 0.416267, places=4
+            )
         self.assertEqual(formatted_data["vcmp_sentiment"]["negative"], 2)
         self.assertEqual(formatted_data["vcmp_sentiment"]["neutral"], 1)
 
@@ -107,7 +107,6 @@ class TestFrontend(unittest.TestCase):
         self.assertEqual(MATH221["num_ratings"], 2)
         self.assertAlmostEqual(MATH221["difficulty"], 4.0)
         self.assertAlmostEqual(MATH221["rating"], 4.5)
-
 
     def test_init_prof(self):
         data = self.professor_data
@@ -124,7 +123,6 @@ class TestFrontend(unittest.TestCase):
         self.assertEqual(data["sum_vcmp_spellingerrors"], 0)
         self.assertEqual(data["sum_vcmp_spellingquality"], 0)
         self.assertEqual(data["course_dict"], {})
-
 
     def test_sum_prof_from_review(self):
         data = self.professor_data
@@ -143,7 +141,6 @@ class TestFrontend(unittest.TestCase):
                     })
         self.assertEqual(data["sum_vcmp_spellingerrors"], 1)
         self.assertEqual(data["sum_vcmp_spellingquality"], 0.9317)
-
 
     def test_init_course(self):
         data = self.professor_data
@@ -175,7 +172,7 @@ class TestFrontend(unittest.TestCase):
             0
             )
         self.assertIsInstance(
-            data["course_dict"]["MATH221"]["sum_vcmp_emotion"], 
+            data["course_dict"]["MATH221"]["sum_vcmp_emotion"],
             defaultdict
             )
         self.assertEqual(
@@ -194,7 +191,6 @@ class TestFrontend(unittest.TestCase):
             0
             )
 
-
     def test_sum_course_from_review(self):
         data = self.professor_data
         frontend.init_prof(data)
@@ -210,20 +206,19 @@ class TestFrontend(unittest.TestCase):
         self.assertEqual(
             data["course_dict"]["MATH221"]["sum_vcmp_subjectivity"], 0.1567)
         self.assertEqual(
-            data["course_dict"]["MATH221"]["sum_vcmp_emotion"]["nervousness"], 
+            data["course_dict"]["MATH221"]["sum_vcmp_emotion"]["nervousness"],
             1
             )
         self.assertEqual(
-            data["course_dict"]["MATH221"]["sum_vcmp_sentiment"]["negative"], 
+            data["course_dict"]["MATH221"]["sum_vcmp_sentiment"]["negative"],
             1
             )
         self.assertEqual(
             data["course_dict"]["MATH221"]["sum_vcmp_spellingerrors"], 1)
         self.assertEqual(
-            data["course_dict"]["MATH221"]["sum_vcmp_spellingquality"], 
+            data["course_dict"]["MATH221"]["sum_vcmp_spellingquality"],
             0.9317
             )
-        
 
     def test_sum_course_from_review_repeated(self):
         data = self.professor_data
@@ -242,24 +237,23 @@ class TestFrontend(unittest.TestCase):
         self.assertEqual(
             data["course_dict"]["MATH221"]["sum_vcmp_subjectivity"], 0.9252)
         self.assertEqual(
-            data["course_dict"]["MATH221"]["sum_vcmp_emotion"]["nervousness"], 
+            data["course_dict"]["MATH221"]["sum_vcmp_emotion"]["nervousness"],
             1
             )
         self.assertEqual(
-            data["course_dict"]["MATH221"]["sum_vcmp_emotion"]["remorse"], 
+            data["course_dict"]["MATH221"]["sum_vcmp_emotion"]["remorse"],
             1
             )
         self.assertEqual(
-            data["course_dict"]["MATH221"]["sum_vcmp_sentiment"]["negative"], 
+            data["course_dict"]["MATH221"]["sum_vcmp_sentiment"]["negative"],
             2
             )
         self.assertEqual(
             data["course_dict"]["MATH221"]["sum_vcmp_spellingerrors"], 1)
         self.assertEqual(
-            data["course_dict"]["MATH221"]["sum_vcmp_spellingquality"], 
+            data["course_dict"]["MATH221"]["sum_vcmp_spellingquality"],
             1.9036
-            )
-
+        )
 
     def test_calculate_prof_and_cleanup(self):
         data = self.professor_data
@@ -276,7 +270,7 @@ class TestFrontend(unittest.TestCase):
         frontend.sum_course_from_review(data, "MATH221", review2)
         frontend.sum_course_from_review(data, "MATH220", review3)
         frontend.calculate_prof_and_cleanup(data)
-        
+
         self.assertNotIn("sum_vcmp_polarity", data)
         self.assertNotIn("sum_vcmp_subjectivity", data)
         self.assertNotIn("sum_vcmp_emotion", data)
@@ -297,7 +291,6 @@ class TestFrontend(unittest.TestCase):
         self.assertAlmostEqual(data["vcmp_spellingerrors"], 2 / 3, 4)
         self.assertAlmostEqual(data["vcmp_spellingquality"], 0.9484, 4)
 
-
     def test_calculate_course_and_cleanup(self):
         data = self.professor_data
         frontend.init_prof(data)
@@ -309,8 +302,8 @@ class TestFrontend(unittest.TestCase):
         frontend.calculate_prof_and_cleanup(data)
         courses = sorted(
             data["course_dict"].values(),
-            key = lambda x : x["num_ratings"],
-            reverse = True
+            key=lambda x: x["num_ratings"],
+            reverse=True
             )
         data["courses"] = []
         course = courses[0]
@@ -336,7 +329,6 @@ class TestFrontend(unittest.TestCase):
         self.assertEqual(course["vcmp_sentiment"]["negative"], 2)
         self.assertEqual(course["vcmp_spellingerrors"], 0.5)
         self.assertEqual(course["vcmp_spellingquality"], 0.9518)
-
 
 
 if __name__ == "__main__":

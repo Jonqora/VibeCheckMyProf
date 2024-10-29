@@ -55,7 +55,7 @@ def lambda_handler(event, context):
                 'statusCode': 400,
                 'body': json.dumps({"error": f"ID {professor_id} not found."})
             }
-        
+
         pre_sentiment = professor_json.copy()
         # Process data and have sentiment analysis added to it
         professor_json = sentiment.analyze(professor_json)  # TODO
@@ -281,7 +281,6 @@ def lambda_handler(event, context):
             ]
         }
         # # # # # # # # #  end of dummy code  # # # # # # # # #
-
 
     # Return a 200 OK response with the data
     return {

@@ -23,7 +23,7 @@ import sys
 # up any intermediate values stored (e.g. totals from calculating averages)
 def format(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     """Aggregate the data under courses and prof"""
-    
+
     # Prepare the prof with tally/sum fields, course dict, and course list
     init_prof(professor_json)
 
@@ -46,8 +46,8 @@ def format(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     # Sort the courses by reverse count
     courses = sorted(
         professor_json["course_dict"].values(),
-        key = lambda x : x["num_ratings"],
-        reverse = True
+        key=lambda x: x["num_ratings"],
+        reverse=True
         )
     professor_json["courses"] = []
 
@@ -139,11 +139,11 @@ def calculate_prof_and_cleanup(data):
             data["sum_vcmp_subjectivity"] / data["num_ratings"], 4
             )
         top_emotions = sorted(
-            data["sum_vcmp_emotion"], 
+            data["sum_vcmp_emotion"],
             key=lambda emotion: (-data["sum_vcmp_emotion"][emotion], emotion)
             )[:3]
         data["vcmp_emotion"] = [
-            (emotion, data["sum_vcmp_emotion"][emotion]) 
+            (emotion, data["sum_vcmp_emotion"][emotion])
             for emotion in top_emotions
             ]
         data["vcmp_sentiment"] = data["sum_vcmp_sentiment"]
@@ -178,7 +178,7 @@ def calculate_course_and_cleanup(course):
         course["sum_vcmp_subjectivity"] / course["num_ratings"], 4
         )
     top_emotions = sorted(
-        course["sum_vcmp_emotion"], 
+        course["sum_vcmp_emotion"],
         key=lambda emotion: (-course["sum_vcmp_emotion"][emotion], emotion)
         )[:3]
     course["vcmp_emotion"] = [
