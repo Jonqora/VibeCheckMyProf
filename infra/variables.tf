@@ -9,7 +9,7 @@ variable "app_name" {
 variable "app_prefix" {
   description = "Prefix to add to unique resource names"
   type        = string
-  default     = "vcmf"
+  default     = "vcmp"
 }
 
 variable "database_name" {

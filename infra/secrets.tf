@@ -2,7 +2,7 @@
 
 # Create Secret in Secrets Manager
 resource "aws_secretsmanager_secret" "db_credentials" {
-  name        = "${var.database_secret_name}-test"  # The name of your secret
+  name        = "${var.database_secret_name}-test2"  # The name of your secret
   description = "RDS MySQL database credentials for the application"
   tags = {
     Name    = "${var.app_prefix}-db-secret"
