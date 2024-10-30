@@ -8,6 +8,6 @@ boto3
 torch == 2.4.1
 transformers == 4.45.2
 textblob == 0.18.0
-language-tool-python == 2.8.1
+spellchecker == 0.8.1
 
 # frontend.py

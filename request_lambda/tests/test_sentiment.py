@@ -8,9 +8,7 @@
 
 import json
 import os
-
-from app import sentiment
-
+from request_lambda.app import sentiment
 
 def dummy_prof_data():
     # Load the dummy data from the JSON file
@@ -18,11 +16,25 @@ def dummy_prof_data():
     with open(json_path, 'r') as f:
         return json.load(f)
 
-
 def test_analyze():
+    os.environ['AWS_ACCESS_KEY_ID'] = ''
+    os.environ['AWS_SECRET_ACCESS_KEY'] = ''
+    os.environ['AWS_SESSION_TOKEN'] = ''
+
     professor_json = dummy_prof_data()
     result = sentiment.analyze(professor_json)
-
+    print(result)
     assert isinstance(result, dict)
-    assert "sentiment" in result["reviews"][0]  # TODO update this
-    # TODO more assertions that actually match the transformation
+    assert "reviews" in result
+
+    for review in result["reviews"]:
+        assert isinstance(review["vcmp_polarity"], float), "vcmp_polarity should be a float"
+        assert isinstance(review["vcmp_subjectivity"], float), "vcmp_subjectivity should be a float"
+        assert isinstance(review["vcmp_emotion"], str), "should be a string"
+        assert isinstance(review["vcmp_sentiment"], str), "should be a string"
+        assert isinstance(review["vcmp_spellingerrors"], int), "should be a int"
+        assert isinstance(review["vcmp_spellingquality"], float), "should be a float"
+    print("All tests pass")
+
+if __name__ == '__main__':
+    test_analyze()

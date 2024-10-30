@@ -8,14 +8,12 @@
 # ----------------------------------------------------------------------------#
 
 from typing import Dict, Any
-import subprocess
-import warnings
 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 from textblob import TextBlob
 import boto3
-import language_tool_python
+from spellchecker import SpellChecker
 
 
 class SentimentAnalyzer:
@@ -23,16 +21,8 @@ class SentimentAnalyzer:
         self.tokenizer = AutoTokenizer.from_pretrained("monologg/bert-base-cased-goemotions-original")
         self.model = AutoModelForSequenceClassification.from_pretrained("monologg/bert-base-cased-goemotions-original")
         self.emotion_labels = self.model.config.id2label
-        self.tool = self.initialize_language_tool()
         self.comprehend = boto3.client('comprehend', region_name="ca-central-1")
-
-    def initialize_language_tool(self):
-        try:
-            subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT)
-            return language_tool_python.LanguageTool('en-US')
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            warnings.warn("Java is not installed or not found. Spelling and grammar analysis will be skipped.")
-            return None
+        self.spellchecker = SpellChecker()
 
     def analyze_sentiment_textblob(self, text):
         blob = TextBlob(text)
@@ -49,13 +39,7 @@ class SentimentAnalyzer:
         return predicted_emotion
 
     def analyze_spelling_and_grammar(self, text):
-        if self.tool is None:
-            return 1, 0, []
-        matches = self.tool.check(text)
-        misspelled_words = []
-        for match in matches:
-            if len(match.replacements) > 0:
-                misspelled_words.append((text[match.offset: match.offset + match.errorLength], match.replacements[0]))
+        misspelled_words = self.spellchecker.unknown(text.split())
         quality = 1 - (len(misspelled_words) / len(text.split())) if len(text.split()) > 0 else 1
         return quality, len(misspelled_words)
 
@@ -80,11 +64,11 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
         comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(comment)
         spelling_quality, spelling_errors = sentiment_analyzer.analyze_spelling_and_grammar(comment)
 
-        review["vcmp_polarity"] = tb_polarity,
-        review["vcmp_subjectivity"] = tb_subjectivity,
-        review["vcmp_emotion"] = emotion,
-        review["vcmp_sentiment"] = comprehend_sentiment,
-        review["vcmp_spellingerrors"] = spelling_errors,
+        review["vcmp_polarity"] = tb_polarity
+        review["vcmp_subjectivity"] = tb_subjectivity
+        review["vcmp_emotion"] = emotion
+        review["vcmp_sentiment"] = comprehend_sentiment
+        review["vcmp_spellingerrors"] = spelling_errors
         review["vcmp_spellingquality"] = spelling_quality
 
     return professor_json
