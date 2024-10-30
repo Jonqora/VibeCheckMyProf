@@ -1,9 +1,15 @@
 # Definitions of variables for use in the application
 
-variable "application_name" {
+variable "app_name" {
   description = "Application name to add to AWS resource tags"
   type        = string
   default     = "vibe-check-my-prof"
+}
+
+variable "app_prefix" {
+  description = "Prefix to add to unique resource names"
+  type        = string
+  default     = "vcmp"
 }
 
 variable "database_name" {
