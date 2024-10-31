@@ -1,5 +1,6 @@
 # Project configuration files
 /web/config.js
+/request_lambda/tests/config.py
 
 # Permissions key files
 *.pem
