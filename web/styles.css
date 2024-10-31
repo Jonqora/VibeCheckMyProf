@@ -11,7 +11,19 @@ body {
 }
 
 .response-field {
-    display: none;
+    display: none; /*Toggle visibility for debugging*/
+    width: 100%; 
+    max-width: 800px;
+    height: 200px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 2px solid #f9c5d1;
+    background-color: transparent;
+    color: #f9c5d1;
+    resize: none;
+    font-size: 14px;
+    outline: none;
+    margin-top: 10px;
 }
 
 .input-group {
