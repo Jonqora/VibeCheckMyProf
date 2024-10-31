@@ -15,11 +15,21 @@ from textblob import TextBlob
 import boto3
 from spellchecker import SpellChecker
 
+model_name = "monologg/bert-base-cased-goemotions-original"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(model_name)
+
+# Save to a local directory
+tokenizer.save_pretrained("./models/goemotions-tokenizer")
+model.save_pretrained("./models/goemotions-model")
+
 
 class SentimentAnalyzer:
     def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained("monologg/bert-base-cased-goemotions-original")
-        self.model = AutoModelForSequenceClassification.from_pretrained("monologg/bert-base-cased-goemotions-original")
+        # Load the tokenizer and model from the local directory
+        self.tokenizer = AutoTokenizer.from_pretrained("./models/goemotions-tokenizer")
+        self.model = AutoModelForSequenceClassification.from_pretrained("./models/goemotions-model")
+
         self.emotion_labels = self.model.config.id2label
         self.comprehend = boto3.client('comprehend', region_name="ca-central-1")
         self.spellchecker = SpellChecker()
