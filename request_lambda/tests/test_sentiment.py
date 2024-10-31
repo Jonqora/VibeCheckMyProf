@@ -9,6 +9,7 @@
 import json
 import os
 from request_lambda.app import sentiment
+from config import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN
 
 def dummy_prof_data():
     # Load the dummy data from the JSON file
@@ -17,9 +18,9 @@ def dummy_prof_data():
         return json.load(f)
 
 def test_analyze():
-    os.environ['AWS_ACCESS_KEY_ID'] = ''
-    os.environ['AWS_SECRET_ACCESS_KEY'] = ''
-    os.environ['AWS_SESSION_TOKEN'] = ''
+    os.environ['AWS_ACCESS_KEY_ID'] = AWS_ACCESS_KEY_ID
+    os.environ['AWS_SECRET_ACCESS_KEY'] = AWS_SECRET_ACCESS_KEY
+    os.environ['AWS_SESSION_TOKEN'] = AWS_SESSION_TOKEN
 
     professor_json = dummy_prof_data()
     result = sentiment.analyze(professor_json)
