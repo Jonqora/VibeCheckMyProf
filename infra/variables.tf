@@ -38,7 +38,7 @@ variable "database_password" {
 variable "database_secret_name" {
   description = "Name of the secret to authenticate to the RDS database instance"
   type        = string
-  default     = "my-super-db-secret"
+  default     = "vcmp-db-secret"
 }
 
 variable "aws_region" {
