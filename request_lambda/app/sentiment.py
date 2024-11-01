@@ -19,8 +19,8 @@ class SentimentAnalyzer:
     def __init__(self):
         start_time = time.perf_counter()
         # Load the tokenizer and model from the local directory
-        self.tokenizer = AutoTokenizer.from_pretrained("./models/goemotions-tokenizer")
-        self.model = AutoModelForSequenceClassification.from_pretrained("./models/goemotions-model")
+        self.tokenizer = AutoTokenizer.from_pretrained("models/goemotions-tokenizer")
+        self.model = AutoModelForSequenceClassification.from_pretrained("models/goemotions-model")
 
         self.emotion_labels = self.model.config.id2label
         self.comprehend = boto3.client('comprehend', region_name="ca-central-1")
