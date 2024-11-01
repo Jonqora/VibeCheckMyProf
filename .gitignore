@@ -10,6 +10,9 @@ infra/.terraform.lock.hcl
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
 
+# Environment configuration for local database connection
+infra/config.env
+
 # Node.js modules
 node_modules/
 

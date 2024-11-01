@@ -1,21 +1,29 @@
 # Table Schemas - Basic Tables
 
-## professors
-| Column        | Data Type    | Description                                          |
-|---------------|--------------|------------------------------------------------------|
-| prof_id       | INT (PK)     | Unique identifier for the professor (Auto Increment) |
-| prof_name     | VARCHAR(100) | Name of the professor                                |
-| school_id     | INT (FK)     | Foreign key linking to `schools` table               |
-| rating_count  | INT          | Number of ratings                                    |
-| avg_qual      | DECIMAL(3,2) | Average quality rating                               |
-| avg_diff      | DECIMAL(3,2) | Average difficulty rating                            |
-| last_reviewed | DATETIME     | The last time a rating was added                     |
-
 ## schools
-| Column      | Data Type    | Description                                       |
-|-------------|--------------|---------------------------------------------------|
-| school_id   | INT (PK)     | Unique identifier for the school (Auto Increment) |
-| school_name | VARCHAR(255) | Name of the school                                |
+| Column      | Data Type   | Description                                 |
+|-------------|-------------|---------------------------------------------|
+| school_id   | INT (PK)    | Unique identifier for the school (from RMP) |
+| school_name | VARCHAR(85) | Name of the school                          |
+
+## professors
+| Column            | Data Type    | Description                                          |
+|-------------------|--------------|------------------------------------------------------|
+| prof_id           | INT (PK)     | Unique identifier for the professor (from RMP)       |
+| prof_name         | VARCHAR(100) | Name of the professor                                |
+| dept              | VARCHAR(100) | Department professor is affiliated with              | 
+| avg_diff          | DECIMAL(2,1) | Average difficulty rating                            |
+| avg_rating        | DECIMAL(2,1) | Average overall rating                               |
+| would_retake_rate | DECIMAL(6,4) | Percentage of reviewers that would retake the course | 
+| rating_count      | INT          | Number of ratings                                    |
+| school_id         | INT (FK)     | Foreign key linking to `schools` table               |
+
+## requests
+| Column            | Data Type | Description                                      |
+|-------------------|-----------|--------------------------------------------------|
+| prof_id           | INT       | Unique identifier for the professor (from RMP)   |
+| request_date      | TIMESTAMP | Date the user request came in                    | 
+| resulted_in_write | BOOLEAN   | Whether the request resulted in a database write |
 
 ## courses
 | Column      | Data Type   | Description                                       |
@@ -23,67 +31,36 @@
 | course_id   | INT (PK)    | Unique identifier for the course (Auto Increment) |
 | school_id   | INT (FK)    | Foreign key linking to `schools` table            |
 | course_name | VARCHAR(50) | Name of the course (e.g. MATH221)                 |
-| dept        | CHAR(4)     | Course department (e.g. MATH)                     |
-| level       | INT         | Year-level of course (e.g. 100)                   |
-
-## ratings 
-_Denormalized to improve performance of frequently-anticipated queries._
-
-| Column      | Data Type    | Description                                        |
-|-------------|--------------|----------------------------------------------------|
-| rating_id   | INT (PK)     | Unique identifier for the rating (Auto Increment)  |
-| prof_id     | INT (FK)     | Foreign key linking to `professors` table          |
-| prof_name   | VARCHAR(100) | Name of the professor                              |
-| course_id   | INT (FK)     | Foreign key linking to `courses` table             |
-| course_name | VARCHAR(50)  | Name of the course (e.g. MATH221)                  |
-| sent_id     | INT (FK)     | Foreign key linking to `sentiments` table          |
-| emotion     | VARCHAR(20)  | Predicted emotion of the given rating comment      |
-| review_date | DATETIME     | Date the review was posted (e.g. "Nov 20th, 2018") |
-| quality     | DECIMAL(3,2) | Quality rating for the course                      |
-| difficulty  | DECIMAL(3,2) | Difficulty rating for the course                   |
-| comments    | TEXT         | Comments provided by the student                   |
 
 ## sentiments
-| Column       | Data Type    | Description                                                                |
-|--------------|--------------|----------------------------------------------------------------------------|
-| sent_id      | INT (PK)     | Unique identifier for the sentiment analysis model output (Auto Increment) |
-| sent_date    | DATETIME     | The date and time the rating underwent sentiment analysis                  |
-| ml_version   | CHAR(10)     | Version of the model used to perform sentiment analysis                    |
-| emotion      | VARCHAR(20)  | Predicted emotion of the given rating comment                              |
-| emotion_conf | DECIMAL(3,2) | Confidence of the model for the given prediction                           | 
-| spell_error  | DECIMAL(3,2) | Percentage of comment containing poor spelling/grammar                     |
+| Column        | Data Type    | Description                                                                |
+|---------------|--------------|----------------------------------------------------------------------------|
+| sent_id       | INT (PK)     | Unique identifier for the sentiment analysis model output (Auto Increment) |
+| sent_date     | TIMESTAMP    | The date and time the rating underwent sentiment analysis                  |
+| polarity      | FLOAT        | Range [-1.0, 1.0], where -1 is negative and 1 is positive.                 |
+| subjectivity  | FLOAT        | Range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective    |
+| emotion       | VARCHAR(50)  | Predicted emotion of the given rating comment (e.g. "angry")               |
+| sentiment     | VARCHAR(50)  | Polarity as a categorical construct (e.g. "positive")                      | 
+| spell_error   | INT          | Count of spelling errors in the text                                       |
+| spell_quality | DECIMAL(5,4) | Quality of text, where 1.0 indicates no error.                             |
 
-# Table Schemas - Aggregate Tables
-## avg_ratings_by_professor
-| Column         | Data Type    | Description                                                       |
-|----------------|--------------|-------------------------------------------------------------------|
-| prof_name      | VARCHAR(100) | Name of the professor                                             |
-| avg_quality    | DECIMAL(3,2) | Average quality rating for all courses taught by the professor    |
-| avg_difficulty | DECIMAL(3,2) | Average difficulty rating for all courses taught by the professor |
-| rating_count   | INT          | Total number of reviews/ratings received for that professor       |
 
-## avg_ratings_by_course
-| Column         | Data Type    | Description                                                     |
-|----------------|--------------|-----------------------------------------------------------------|
-| course_name    | VARCHAR(50)  | Name of the course                                              |
-| avg_quality    | DECIMAL(3,2) | Average quality rating for that course across all professors    |
-| avg_difficulty | DECIMAL(3,2) | Average difficulty rating for that course across all professors |
-| rating_count   | INT          | Total number of reviews/ratings received for that course        |
+## ratings
 
-## active_professors 
-_Professor activity measured based on rating count_
-
-| Column         | Data Type    | Description                                                       |
-|----------------|--------------|-------------------------------------------------------------------|
-| prof_name      | VARCHAR(100) | Name of the professor                                             |
-| rating_count   | INT          | Total number of reviews/ratings received for that professor       |
-
-## sentiment_summary
-| Column        | Data Type    | Description                                 |
-|---------------|--------------|---------------------------------------------|
-| prof_id       | INT (PK)     | Unique identifier for the professor         |
-| prof_name     | VARCHAR(100) | Name of the professor                       |
-| emotion       | VARCHAR(20)  | One of the top three most common emotions   |
-| emotion_count | INT          | Count of ratings classified as that emotion |
-| rank          | INT          | Ranking amongst the top three               |
-
+| Column          | Data Type    | Description                                                       |
+|-----------------|--------------|-------------------------------------------------------------------|
+| rating_id       | INT (PK)     | Unique identifier for the rating (Auto Increment)                 |
+| prof_id         | INT (FK)     | Foreign key linking to `professors` table                         |
+| course_id       | INT (FK)     | Foreign key linking to `courses` table                            |
+| sent_id         | INT (FK)     | Foreign key linking to `sentiments` table                         |
+| review_date     | DATETIME     | Date the review was posted (e.g. "Nov 20th, 2018")                |
+| quality         | DECIMAL(2,1) | Quality rating for the course                                     |
+| difficulty      | DECIMAL(2,1) | Difficulty rating for the course                                  |
+| comment         | TEXT         | Comment/textual review provided by the student                    |
+| take_again      | BOOLEAN      | True if student would take the course again                       |
+| grade_achieved  | VARCHAR(20)  | Final grade student achieved (e.g. "A+")                          |
+| thumbs_up       | INT          | Count of viewers that gave the review a "thumbs-up"               |
+| thumbs_down     | INT          | Count of viewers that gave the review a "thumbs-down"             |
+| online_class    | BOOLEAN      | Indicates whether the course was delivered online                 |
+| for_credit      | BOOLEAN      | Indicates whether the course was taken for credit                 |
+| attendance_mand | BOOLEAN      | Indicates if performance in the course requires attending lecture |

@@ -19,7 +19,7 @@ variable "database_name" {
 }
 
 variable "cidr_block" {
-  description = "Personal public IP address for database access from local environment"
+  description = "Your personal public IP address (append '/32' to the end, e.g. 38.13.78.95/32)"
   type        = string
 }
 
@@ -38,7 +38,7 @@ variable "database_password" {
 variable "database_secret_name" {
   description = "Name of the secret to authenticate to the RDS database instance"
   type        = string
-  default     = "my-super-db-secret"
+  default     = "vcmp-db-secret"
 }
 
 variable "aws_region" {
