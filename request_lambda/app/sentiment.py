@@ -14,13 +14,19 @@ from textblob import TextBlob
 import boto3
 from spellchecker import SpellChecker
 import time
+import os
 
 class SentimentAnalyzer:
     def __init__(self):
         start_time = time.perf_counter()
-        # Load the tokenizer and model from the local directory
-        self.tokenizer = AutoTokenizer.from_pretrained("models/goemotions-tokenizer")
-        self.model = AutoModelForSequenceClassification.from_pretrained("models/goemotions-model")
+
+
+        base_path = os.path.dirname(__file__)
+        tokenizer_path = os.path.join(base_path, "models/goemotions-tokenizer")
+        model_path = os.path.join(base_path, "models/goemotions-model")
+
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_path)
 
         self.emotion_labels = self.model.config.id2label
         self.comprehend = boto3.client('comprehend', region_name="ca-central-1")
@@ -84,7 +90,7 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
         review["vcmp_polarity"] = tb_polarity
         review["vcmp_subjectivity"] = tb_subjectivity
         review["vcmp_emotion"] = emotion
-        review["vcmp_sentiment"] = comprehend_sentiment
+        review["vcmp_sentiment"] = comprehend_sentiment.lower()
         review["vcmp_spellingerrors"] = spelling_errors
         review["vcmp_spellingquality"] = spelling_quality
 
