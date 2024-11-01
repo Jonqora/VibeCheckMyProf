@@ -9,7 +9,6 @@
 import json
 import os
 from request_lambda.app import sentiment
-from config import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN
 
 def dummy_prof_data():
     # Load the dummy data from the JSON file
@@ -18,9 +17,6 @@ def dummy_prof_data():
         return json.load(f)
 
 def test_analyze():
-    os.environ['AWS_ACCESS_KEY_ID'] = AWS_ACCESS_KEY_ID
-    os.environ['AWS_SECRET_ACCESS_KEY'] = AWS_SECRET_ACCESS_KEY
-    os.environ['AWS_SESSION_TOKEN'] = AWS_SESSION_TOKEN
 
     professor_json = dummy_prof_data()
     result = sentiment.analyze(professor_json)
@@ -37,5 +33,17 @@ def test_analyze():
         assert isinstance(review["vcmp_spellingquality"], float), "should be a float"
     print("All tests pass")
 
-if __name__ == '__main__':
-    test_analyze()
+# Lambda handler function
+def lambda_handler(event, context):
+    try:
+        # Run the test
+        result = test_analyze()
+        return {
+            "statusCode": 200,
+            "body": json.dumps({"message": result})
+        }
+    except AssertionError as e:
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": str(e)})
+        }
