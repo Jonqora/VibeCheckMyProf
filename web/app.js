@@ -70,6 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function renderResponse(data) {
+    const rating = data.rating.toFixed(1);
+    const difficulty = data.difficulty.toFixed(1);
+    const polarity = transformPolarity(data.vcmp_polarity);
+    const subjectivity = transformSubjectivity(data.vcmp_subjectivity);
+    const spellingquality = transformSpelling(data.vcmp_spellingquality);
+
     const professorOverview = document.getElementById('response-prof');
     professorOverview.style.display = 'block'; // Undo display:none
     professorOverview.innerHTML = '';
@@ -86,16 +92,18 @@ function renderResponse(data) {
         <div class="flex-col stats-rmp">
             <div class="stats-prof">Prof:</div>
             <div class="flex-row stats-1">
-                <div class="flex-col quality stats-box">
+                <div class="flex-col quality stats-box" 
+                     style="background-color: ${toGradient(rating, 0, 5)}">
                     <div class="quality-stat stats-stat flex-row">
-                        <div class="stats-num">${data.rating.toFixed(1)}</div>
+                        <div class="stats-num">${rating}</div>
                         <div class="stats-den">/5</div>
                     </div>
                     <div class="quality-text stats-text">quality</div>
                 </div>
-                <div class="flex-col difficulty stats-box">
+                <div class="flex-col difficulty stats-box"
+                     style="background-color: ${toGradient(difficulty, 0, 5)}">
                     <div class="difficulty-stat stats-stat flex-row">
-                        <div class="stats-num">${data.difficulty.toFixed(1)}</div>
+                        <div class="stats-num">${difficulty}</div>
                         <div class="stats-den">/5</div>
                     </div>
                     <div class="difficulty-text stats-text">difficulty</div>
@@ -105,22 +113,25 @@ function renderResponse(data) {
         <div class="flex-col stats-vcmp">
             <div class="stats-reviews">Reviews:</div>
             <div class="flex-row stats-2">
-                <div class="flex-col polarity stats-box" >
+                <div class="flex-col polarity stats-box"
+                     style="background-color: ${toGradient(polarity, 0, 5)}">
                     <div class="polarity-stat stats-stat flex-row">
-                        <div class="stats-num">${transformPolarity(data.vcmp_polarity)}</div>
+                        <div class="stats-num">${polarity}</div>
                         <div class="stats-den">/5</div>
                     </div>
                     <div class="polarity-text stats-text">positivity</div>
                 </div>
-                <div class="flex-col subjectivity stats-box">
+                <div class="flex-col subjectivity stats-box"
+                     style="background-color: ${toGradient(subjectivity, 0, 5)}">
                     <div class="subjectivity-stat stats-stat flex-row">
-                        <div class="stats-num">${transformSubjectivity(data.vcmp_subjectivity)}</div>
+                        <div class="stats-num">${subjectivity}</div>
                         <div class="stats-den">/5</div>
                     </div>
                     <div class="subjectivity-text stats-text">subjectivity</div>
                 </div>
-                <div class="flex-col spelling stats-box">
-                    <div class="spelling-stat stats-stat">${transformSpelling(data.vcmp_spellingquality)}%</div>
+                <div class="flex-col spelling stats-box"
+                     style="background-color: ${toGradient(spellingquality, 0.9, 1)}">
+                    <div class="spelling-stat stats-stat">${spellingquality}%</div>
                     <div class="spelling-text stats-text">spelling</div>
                 </div>
             </div>
@@ -135,6 +146,11 @@ function renderResponse(data) {
 }
 
 function renderCourse(courseData) {
+    const rating = courseData.rating.toFixed(1);
+    const difficulty = courseData.difficulty.toFixed(1);
+    const polarity = transformPolarity(courseData.vcmp_polarity);
+    const subjectivity = transformSubjectivity(courseData.vcmp_subjectivity);
+    const spellingquality = transformSpelling(courseData.vcmp_spellingquality);
     const html = `
     <div class="course">
         <div class="course-name">${courseData.course_name}</div>
@@ -148,16 +164,18 @@ function renderCourse(courseData) {
             <div class="flex-col stats-rmp">
                 <div class="stats-prof">Prof:</div>
                 <div class="flex-row stats-1">
-                    <div class="flex-col quality stats-box">
+                    <div class="flex-col quality stats-box"
+                         style="background-color: ${toGradient(rating, 0, 5)}">
                         <div class="quality-stat stats-stat flex-row">
-                            <div class="stats-num">${courseData.rating.toFixed(1)}</div>
+                            <div class="stats-num">${rating}</div>
                             <div class="stats-den">/5</div>
                         </div>
                         <div class="quality-text stats-text">quality</div>
                     </div>
-                    <div class="flex-col difficulty stats-box">
+                    <div class="flex-col difficulty stats-box"
+                         style="background-color: ${toGradient(difficulty, 0, 5)}">
                         <div class="difficulty-stat stats-stat flex-row">
-                            <div class="stats-num">${courseData.difficulty.toFixed(1)}</div>
+                            <div class="stats-num">${difficulty}</div>
                             <div class="stats-den">/5</div>
                         </div>
                         <div class="difficulty-text stats-text">difficulty</div>
@@ -167,22 +185,25 @@ function renderCourse(courseData) {
             <div class="flex-col stats-vcmp">
                 <div class="stats-reviews">Reviews:</div>
                 <div class="flex-row stats-2">
-                    <div class="flex-col polarity stats-box">
+                    <div class="flex-col polarity stats-box"
+                         style="background-color: ${toGradient(polarity, 0, 5)}">
                         <div class="polarity-stat stats-stat flex-row">
-                            <div class="stats-num">${transformPolarity(courseData.vcmp_polarity)}</div>
+                            <div class="stats-num">${polarity}</div>
                             <div class="stats-den">/5</div>
                         </div>
                         <div class="polarity-text stats-text">positivity</div>
                     </div>
-                    <div class="flex-col subjectivity stats-box">
+                    <div class="flex-col subjectivity stats-box"
+                         style="background-color: ${toGradient(subjectivity, 0, 5)}">
                         <div class="subjectivity-stat stats-stat flex-row">
-                            <div class="stats-num">${transformSubjectivity(courseData.vcmp_subjectivity)}</div>
+                            <div class="stats-num">${subjectivity}</div>
                             <div class="stats-den">/5</div>
                         </div>
                         <div class="subjectivity-text stats-text">subjectivity</div>
                     </div>
-                    <div class="flex-col spelling stats-box">
-                        <div class="spelling-stat stats-stat">${transformSpelling(courseData.vcmp_spellingquality)}%</div>
+                    <div class="flex-col spelling stats-box"
+                         style="background-color: ${toGradient(spellingquality, 0.9, 1)}">
+                        <div class="spelling-stat stats-stat">${spellingquality}%</div>
                         <div class="spelling-text stats-text">spelling</div>
                     </div>
                 </div>
@@ -242,10 +263,9 @@ function transformSpelling(num) {
 }
 
 function toGradient(value, minValue, maxValue) {
-    const color1 = "#3d86ff";
-    const color2 = "#ff41b5";
-    
-    // Ensure value is within the allowed range
+    const color1 = '#3d86ff';
+    const color2 = '#ff41b5';
+
     value = Math.max(Math.min(value, maxValue), minValue);
 
     // Convert hex to RGB
