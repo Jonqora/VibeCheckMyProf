@@ -71,9 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function renderResponse(data) {
     const professorOverview = document.getElementById('response-prof');
-    console.log(transformPolarity(-1)); // Expected output: 0.0
-    console.log(transformPolarity(0));  // Expected output: 2.5
-    console.log(transformPolarity(1));  // Expected output: 5.0
+    professorOverview.style.display = 'block'; // Undo display:none
     professorOverview.innerHTML = '';
     professorOverview.innerHTML = `
     <div class="prof-name">${data.name}</div>

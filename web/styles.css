@@ -131,6 +131,10 @@ body {
     align-items: flex-start;
 } 
 
+.response-prof {
+    display: none;
+}
+
 .response-prof, .course {
     border: 0.25rem solid transparent;
     border-radius: 1rem;
