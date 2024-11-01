@@ -71,15 +71,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function renderResponse(data) {
     const professorOverview = document.getElementById('response-prof');
-    
+    console.log(transformPolarity(-1)); // Expected output: 0.0
+    console.log(transformPolarity(0));  // Expected output: 2.5
+    console.log(transformPolarity(1));  // Expected output: 5.0
+    professorOverview.innerHTML = '';
     professorOverview.innerHTML = `
     <div class="prof-name">${data.name}</div>
     <div class="school-name">${data.school_name}</div>
     <div class="flex-row vibes-row">
-        ${renderVibes(data.vcmp_emotion)}
+        ${renderVibes(data.vcmp_emotion, data.num_ratings)}
     </div>
     <div class="flex-row feels-row">
-        ${renderFeels(data.vcmp_sentiment)}
+        ${renderFeels(data.vcmp_sentiment, data.num_ratings)}
     </div>
     <div class="flex-row stats-row">
         <div class="flex-col stats-rmp">
@@ -87,14 +90,14 @@ function renderResponse(data) {
             <div class="flex-row stats-1">
                 <div class="flex-col quality stats-box">
                     <div class="quality-stat stats-stat flex-row">
-                        <div class="stats-num">${parseFloat(data.rating.toFixed(1))}</div>
+                        <div class="stats-num">${data.rating.toFixed(1)}</div>
                         <div class="stats-den">/5</div>
                     </div>
                     <div class="quality-text stats-text">quality</div>
                 </div>
                 <div class="flex-col difficulty stats-box">
                     <div class="difficulty-stat stats-stat flex-row">
-                        <div class="stats-num">${parseFloat(data.difficulty.toFixed(1))}</div>
+                        <div class="stats-num">${data.difficulty.toFixed(1)}</div>
                         <div class="stats-den">/5</div>
                     </div>
                     <div class="difficulty-text stats-text">difficulty</div>
@@ -119,12 +122,77 @@ function renderResponse(data) {
                     <div class="subjectivity-text stats-text">subjectivity</div>
                 </div>
                 <div class="flex-col spelling stats-box">
-                    <div class="spelling-stat stats-stat" >${transformSpelling(data.vcmp_spellingquality)}%</div>
+                    <div class="spelling-stat stats-stat">${transformSpelling(data.vcmp_spellingquality)}%</div>
                     <div class="spelling-text stats-text">spelling</div>
                 </div>
             </div>
         </div>
     </div>`;
+
+    const coursesComponent = document.getElementById('response-courses');
+    coursesComponent.innerHTML = '';
+    for (const course of data.courses) {
+        coursesComponent.insertAdjacentHTML('beforeend', renderCourse(course));
+    }
+}
+
+function renderCourse(courseData) {
+    const html = `
+    <div class="course">
+        <div class="course-name">${courseData.course_name}</div>
+        <div class="flex-row vibes-row">
+            ${renderVibes(courseData.vcmp_emotion, courseData.num_ratings)}
+        </div>
+        <div class="flex-row feels-row">
+            ${renderFeels(courseData.vcmp_sentiment, courseData.num_ratings)}
+        </div>
+        <div class="flex-row stats-row">
+            <div class="flex-col stats-rmp">
+                <div class="stats-prof">Prof:</div>
+                <div class="flex-row stats-1">
+                    <div class="flex-col quality stats-box">
+                        <div class="quality-stat stats-stat flex-row">
+                            <div class="stats-num">${courseData.rating.toFixed(1)}</div>
+                            <div class="stats-den">/5</div>
+                        </div>
+                        <div class="quality-text stats-text">quality</div>
+                    </div>
+                    <div class="flex-col difficulty stats-box">
+                        <div class="difficulty-stat stats-stat flex-row">
+                            <div class="stats-num">${courseData.difficulty.toFixed(1)}</div>
+                            <div class="stats-den">/5</div>
+                        </div>
+                        <div class="difficulty-text stats-text">difficulty</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-col stats-vcmp">
+                <div class="stats-reviews">Reviews:</div>
+                <div class="flex-row stats-2">
+                    <div class="flex-col polarity stats-box">
+                        <div class="polarity-stat stats-stat flex-row">
+                            <div class="stats-num">${transformPolarity(courseData.vcmp_polarity)}</div>
+                            <div class="stats-den">/5</div>
+                        </div>
+                        <div class="polarity-text stats-text">positivity</div>
+                    </div>
+                    <div class="flex-col subjectivity stats-box">
+                        <div class="subjectivity-stat stats-stat flex-row">
+                            <div class="stats-num">${transformSubjectivity(courseData.vcmp_subjectivity)}</div>
+                            <div class="stats-den">/5</div>
+                        </div>
+                        <div class="subjectivity-text stats-text">subjectivity</div>
+                    </div>
+                    <div class="flex-col spelling stats-box">
+                        <div class="spelling-stat stats-stat">${transformSpelling(courseData.vcmp_spellingquality)}%</div>
+                        <div class="spelling-text stats-text">spelling</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    return html;
 }
 
 function renderVibes(vibesData, numRatings) {
@@ -159,20 +227,20 @@ function transformPolarity(num) {
     // Standardize -1-1 to 0-5
     let transformed = num * 2.5 + 2.5;
     transformed = Math.min(5, Math.max(0, transformed));
-    return parseFloat(transformed.toFixed(1));
+    return transformed.toFixed(1);
 }
 
 function transformSubjectivity(num) {
     // Standardize 0-1 to 0-5
     let transformed = num * 5;
     transformed = Math.min(5, Math.max(0, transformed));
-    return parseFloat(transformed.toFixed(1));
+    return transformed.toFixed(1);
 }
 
 function transformSpelling(num) {
     // Show 0-1 as %
     let transformed = num * 100;
-    return parseFloat(transformed.toFixed(0));
+    return transformed.toFixed(0);
 }
 
 function toEmoji(emotion) {

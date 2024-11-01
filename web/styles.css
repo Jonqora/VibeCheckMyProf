@@ -119,6 +119,12 @@ body {
 .vibes-row, .feels-row {
     align-items: center;
     align-content: center;
+    justify-content: center;
+}
+
+.vibes, .vibes-text, .feels, .feels-text {
+    margin-left: 6px;
+    margin-right: 6px;
 }
 
 .stats-rmp, .stats-vcmp {
