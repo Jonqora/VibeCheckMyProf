@@ -15,15 +15,6 @@ from textblob import TextBlob
 import boto3
 from spellchecker import SpellChecker
 
-model_name = "monologg/bert-base-cased-goemotions-original"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForSequenceClassification.from_pretrained(model_name)
-
-# Save to a local directory
-tokenizer.save_pretrained("./models/goemotions-tokenizer")
-model.save_pretrained("./models/goemotions-model")
-
-
 class SentimentAnalyzer:
     def __init__(self):
         # Load the tokenizer and model from the local directory
