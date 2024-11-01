@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 // Display the API response in the text area
                 responseField.value = `Response: ${JSON.stringify(data, null, 2)}`;
+                // TODO stuff with data
             })
             .catch(error => {
                 // Display error message if the request fails
@@ -66,3 +67,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function emotionToEmoji(emotion) {
+    const emojiMap = {
+        admiration: '👏',
+        amusement: '😂',
+        anger: '😡',
+        annoyance: '😠',
+        approval: '👍',
+        caring: '🩷',
+        confusion: '🤨',
+        curiosity: '🔍',
+        desire: '✨',
+        disappointment: '😞',
+        disapproval: '👎',
+        disgust: '🤮',
+        embarrassment: '😳',
+        excitement: '🤩',
+        fear: '😨',
+        gratitude: '🙏',
+        grief: '😭',
+        joy: '😃',
+        love: '❤️',
+        nervousness: '😬',
+        optimism: '🤞',
+        pride: '😤',
+        realization: '👀',
+        relief: '😌',
+        remorse: '😟',
+        sadness: '😢',
+        surprise: '😮'
+    };
+  
+    // Return the matching emoji or a default question mark if not found
+    return emojiMap[emotion.toLowerCase()] || '❓';
+}
