@@ -241,6 +241,41 @@ function transformSpelling(num) {
     return transformed.toFixed(0);
 }
 
+function toGradient(value, minValue, maxValue) {
+    const color1 = "#3d86ff";
+    const color2 = "#ff41b5";
+    
+    // Ensure value is within the allowed range
+    value = Math.max(Math.min(value, maxValue), minValue);
+
+    // Convert hex to RGB
+    const color1RGB = [
+        parseInt(color1.slice(1, 3), 16),
+        parseInt(color1.slice(3, 5), 16),
+        parseInt(color1.slice(5, 7), 16)
+    ];
+    const color2RGB = [
+        parseInt(color2.slice(1, 3), 16),
+        parseInt(color2.slice(3, 5), 16),
+        parseInt(color2.slice(5, 7), 16)
+    ];
+
+    // Normalize value to range [0.0, 1.0]
+    const factor = (value - minValue) / (maxValue - minValue);
+
+    // Interpolate each RGB channel
+    const interpolatedRGB = color1RGB.map((channel, i) =>
+        Math.round(channel + (color2RGB[i] - channel) * factor)
+    );
+
+    // Convert RGB back to hex
+    const interpolatedHex = `#${interpolatedRGB
+        .map(channel => channel.toString(16).padStart(2, '0'))
+        .join('')}`;
+
+    return interpolatedHex;
+}
+
 function toEmoji(emotion) {
     const emojiMap = {
         admiration: '👏',
