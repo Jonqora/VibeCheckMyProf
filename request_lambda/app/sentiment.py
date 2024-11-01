@@ -2,9 +2,8 @@
 # Process professor data and have sentiment analysis added to it
 
 # ----------------------------------------------------------------------------#
-# NOTE: this file contains function stub(s). In order for our code to work
-# together, the stub purpose and signatures must be followed. Feel free to
-# define additional functions to do parts of the work, delegate as needed.
+# NOTE: In order for our code to work together, we followed the stub purpose and signatures 
+# with additional functions to do parts of the work.
 # ----------------------------------------------------------------------------#
 
 from typing import Dict, Any
