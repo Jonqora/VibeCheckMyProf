@@ -130,7 +130,7 @@ function renderResponse(data) {
                     <div class="subjectivity-text stats-text">subjectivity</div>
                 </div>
                 <div class="flex-col spelling stats-box"
-                     style="background-color: ${toGradient(spellingquality, 0.9, 1)}">
+                     style="background-color: ${toGradient(spellingquality, 90, 100)}">
                     <div class="spelling-stat stats-stat">${spellingquality}%</div>
                     <div class="spelling-text stats-text">spelling</div>
                 </div>
@@ -202,7 +202,7 @@ function renderCourse(courseData) {
                         <div class="subjectivity-text stats-text">subjectivity</div>
                     </div>
                     <div class="flex-col spelling stats-box"
-                         style="background-color: ${toGradient(spellingquality, 0.9, 1)}">
+                         style="background-color: ${toGradient(spellingquality, 90, 100)}">
                         <div class="spelling-stat stats-stat">${spellingquality}%</div>
                         <div class="spelling-text stats-text">spelling</div>
                     </div>
