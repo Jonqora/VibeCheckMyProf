@@ -148,6 +148,28 @@ function renderResponse(data) {
     for (const course of data.courses) {
         coursesComponent.insertAdjacentHTML('beforeend', renderCourse(course));
     }
+
+    const emojiTooltipContainers = document.querySelectorAll('.emoji-container');
+
+    emojiTooltipContainers.forEach(container => {
+        const tooltipTrigger = container.querySelector('.emoji-trigger');
+        // const tooltipText = container.querySelector('.emoji-tooltip');
+    
+        tooltipTrigger.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent from bubbling to the document
+            container.classList.toggle('active');
+    
+            // Position the tooltip
+            // positionTooltip(tooltipTrigger, tooltipText, container);
+        });
+    });
+    
+    // Close tooltip if clicked outside
+    document.addEventListener('click', () => {
+        emojiTooltipContainers.forEach(container => {
+            container.classList.remove('active');
+        });
+    });
 }
 
 function renderCourse(courseData) {
@@ -214,6 +236,9 @@ function renderCourse(courseData) {
                 </div>
             </div>
         </div>
+        <div class="flex-row emojis-row">
+            ${renderEmojis(courseData.reviews)}
+        </div>
     </div>
     `;
     return html;
@@ -245,6 +270,22 @@ function renderFeels(feelsData, numRatings) {
         <div class="feels-neutral feels">⏺️ neutral (${feelsData.neutral})</div>
         <div class="feels-mixed feels">🔀 mixed (${feelsData.mixed})</div>
     `;
+}
+
+function renderEmojis(reviewsData) {
+    let emojisHTML = '';
+    for (const review of reviewsData) {
+        const reviewHTML = `
+            <div class="emoji-container">
+                <span class="emoji-trigger">${toEmoji(review.vcmp_emotion)}</span>
+                <div class="emoji-tooltip">
+                    ${review.comment} 
+                </div>
+            </div>
+        `;
+        emojisHTML += reviewHTML;
+    }
+    return emojisHTML;
 }
 
 function transformPolarity(num) {
@@ -335,3 +376,22 @@ function toEmoji(emotion) {
     // Return the matching emoji or a default question mark if not found
     return emojiMap[emotion.toLowerCase()] || '❓';
 }
+
+
+// DELETE LATER TODO
+// Toggle tooltip visibility on mobile tap
+const emojiTrigger = document.querySelector('.emoji-trigger');
+const emojiContainer = document.querySelector('.emoji-container');
+
+emojiTrigger.addEventListener('click', () => {
+    emojiContainer.classList.toggle('active');
+});
+
+// Close tooltip if clicked outside
+document.addEventListener('click', (event) => {
+    if (!emojiContainer.contains(event.target)) {
+        emojiContainer.classList.remove('active');
+    }
+});
+
+

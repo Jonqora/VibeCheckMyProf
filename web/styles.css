@@ -162,7 +162,7 @@ body {
     text-align: left;
 }
 
-.vibes-row, .feels-row, .stats-row {
+.vibes-row, .feels-row, .stats-row, .emojis-row {
     margin-top: 0.5rem;
     flex-wrap: wrap;
 }
@@ -212,6 +212,47 @@ body {
 
 .stats-text {
     font-weight: bold;
+}
+
+.emojis-row {
+    font-size: 1.5rem;
+    justify-content: flex-start;
+    align-content: center;
+    padding: 0.5rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.emoji-container {
+    position: relative;
+    display: inline-block;
+}
+
+.emoji-trigger {
+    cursor: pointer;
+}
+
+.emoji-tooltip {
+    width: 300px; /* Max width for the tooltip */
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    text-align: left;
+    font-size: 1rem;
+    border-radius: 5px;
+    padding: 8px;
+    position: absolute;
+    z-index: 5;
+    bottom: 125%; /* Position above the trigger */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+
+.emoji-container:hover .emoji-tooltip,
+.emoji-container.active .emoji-tooltip {
+    visibility: visible;
+    opacity: 1;
 }
 
 .loading-overlay {
