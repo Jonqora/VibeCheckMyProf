@@ -40,13 +40,16 @@ class SentimentAnalyzer:
         subjectivity = blob.sentiment.subjectivity
         return polarity, subjectivity
 
-    def analyze_emotion_goemotions(self, text):
-        inputs = self.tokenizer(text, return_tensors="pt")
-        outputs = self.model(**inputs)
-        predictions = torch.softmax(outputs.logits, dim=-1)
-        predicted_class = torch.argmax(predictions, dim=-1).item()
-        predicted_emotion = self.emotion_labels[predicted_class]
-        return predicted_emotion
+    def analyze_emotion_goemotions(self, multitexts):
+        inputs = self.tokenizer(multitexts, return_tensors="pt", padding=True, truncation=True)
+        with torch.no_grad():
+            outputs = self.model(**inputs)
+            predictions = torch.softmax(outputs.logits, dim=-1)
+        emotions = []
+        for pred in predictions:
+            predicted_classes = torch.argmax(predictions, dim=-1).tolist()
+            emotions = [self.emotion_labels[class_idx] for class_idx in predicted_classes]
+        return emotions
 
     def analyze_spelling_and_grammar(self, text):
         misspelled_words = self.spellchecker.unknown(text.split())
@@ -71,13 +74,21 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     Comprehend_time = 0
     Spelling_time = 0
 
+    goemotion_start = time.perf_counter()
+    comments = []
     for review in professor_json["reviews"]:
+        comments.append(review["comment"])
+    emotions = sentiment_analyzer.analyze_emotion_goemotions(comments)
+    goemotion_end = time.perf_counter()
+    GoEmotions_time += goemotion_end - goemotion_start
+
+    for i, review in enumerate(professor_json["reviews"]):
         comment = review["comment"]
         time1 = time.perf_counter()
         tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(comment)
         time2 = time.perf_counter()
         TextBlob_time += time2 - time1
-        emotion = sentiment_analyzer.analyze_emotion_goemotions(comment)
+        emotion = emotions[i]
         time3 = time.perf_counter()
         GoEmotions_time += time3 - time2
         comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(comment)
