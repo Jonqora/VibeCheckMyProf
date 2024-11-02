@@ -20,15 +20,14 @@ class SentimentAnalyzer:
     def __init__(self):
         start_time = time.perf_counter()
 
-
         base_path = os.path.dirname(__file__)
         tokenizer_path = os.path.join(base_path, "models/goemotions-tokenizer")
         model_path = os.path.join(base_path, "models/goemotions-model")
 
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
         self.model = AutoModelForSequenceClassification.from_pretrained(model_path)
-
         self.emotion_labels = self.model.config.id2label
+
         self.comprehend = boto3.client('comprehend', region_name="ca-central-1")
         self.spellchecker = SpellChecker()
         end_time = time.perf_counter()
@@ -40,15 +39,24 @@ class SentimentAnalyzer:
         subjectivity = blob.sentiment.subjectivity
         return polarity, subjectivity
 
-    def analyze_emotion_goemotions(self, multitexts):
-        inputs = self.tokenizer(multitexts, return_tensors="pt", padding=True, truncation=True)
-        with torch.no_grad():
-            outputs = self.model(**inputs)
-            predictions = torch.softmax(outputs.logits, dim=-1)
+    def analyze_emotion_goemotions(self, multitexts, batch_size=8):
         emotions = []
-        for pred in predictions:
-            predicted_classes = torch.argmax(predictions, dim=-1).tolist()
-            emotions = [self.emotion_labels[class_idx] for class_idx in predicted_classes]
+
+        # Split multitexts into batches of specified batch_size
+        for i in range(0, len(multitexts), batch_size):
+            batch_texts = multitexts[i:i + batch_size]
+            inputs = self.tokenizer(batch_texts, return_tensors="pt", padding=True, truncation=True)
+
+            with torch.no_grad():
+                outputs = self.model(**inputs)
+                predictions = torch.softmax(outputs.logits, dim=-1)
+
+            # Process predictions for the current batch
+            for pred in predictions:
+                predicted_classes = torch.argmax(pred).item()
+                emotion = self.emotion_labels[predicted_classes]
+                emotions.append(emotion)
+
         return emotions
 
     def analyze_spelling_and_grammar(self, text):
