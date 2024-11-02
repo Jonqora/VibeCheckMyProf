@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to send API request to the API Gateway endpoint
     function sendApiRequest(professorUrl) {
+        const loadingOverlay = document.getElementById('loading');
+        loadingOverlay.style.display = 'flex';
+
         // The API URL is loaded from config.js
         // eslint-disable-next-line no-undef
         fetch(config.apiUrl, {
@@ -35,12 +38,14 @@ document.addEventListener('DOMContentLoaded', function() {
         })
             .then(response => response.json())
             .then(data => {
+                loadingOverlay.style.display = 'none';
                 // Display the API response in the text area
                 responseField.value = `Response: ${JSON.stringify(data, null, 2)}`;
                 const responseData = JSON.parse(data.body);
                 renderResponse(responseData);
             })
             .catch(error => {
+                loadingOverlay.style.display = 'none';
                 // Display error message if the request fails
                 responseField.value = `Error: ${error.message}`;
             });
