@@ -13,7 +13,7 @@ COPY ../shared /var/task/shared
 COPY . /var/task/on_demand_professor_data
 
 # Copy the specific Lambda function code
-COPY on_demand.py ${LAMBDA_TASK_ROOT}
+COPY on_demand_professor_data/on_demand.py ${LAMBDA_TASK_ROOT}
 
 # Set the handler
 CMD ["on_demand.lambda_handler"]
