@@ -2,7 +2,7 @@ import os
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # this code download the model and save it to app/models
-model_name = "monologg/bert-base-cased-goemotions-original"
+model_name = "jitesh/emotion-english"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
