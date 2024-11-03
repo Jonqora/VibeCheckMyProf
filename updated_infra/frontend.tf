@@ -2,7 +2,7 @@
 
 # Create S3 bucket for front end
 resource "aws_s3_bucket" "frontend_bucket" {
-  bucket = "my-frontend-bucket"  # Change to a unique name
+  bucket = "dumpster-fire"
 
   tags = {
     Name = "Frontend Hosting Bucket"

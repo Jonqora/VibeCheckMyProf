@@ -5,8 +5,8 @@ resource "aws_db_instance" "professor_data" {
   allocated_storage    = 20
   engine               = "mysql"
   instance_class       = "db.t4g.micro"
-  identifier           = "professor_data_db"
-  db_name              = "professor_data_db"
+  identifier           = "vcmp-db"
+  db_name              = "vcmp-db"
   username             = "admin"
   password             = "RfQ2kBiL5NPJpLF"
   vpc_security_group_ids = [aws_security_group.rds_sg.id]

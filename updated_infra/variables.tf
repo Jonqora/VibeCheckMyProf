@@ -18,10 +18,10 @@ variable "database_name" {
   default     = "vibecheckmyprofdb"
 }
 
-variable "cidr_block" {
-  description = "Your personal public IP address (append '/32' to the end, e.g. 38.13.78.95/32)"
-  type        = string
-}
+# variable "cidr_block" {
+#   description = "Your personal public IP address (append '/32' to the end, e.g. 38.13.78.95/32)"
+#   type        = string
+# }
 
 variable "database_user" {
   description = "The database master username"
@@ -32,7 +32,7 @@ variable "database_user" {
 variable "database_password" {
   description = "The database master password (save for authenticating to the database later)"
   type        = string
-  sensitive   = true # This variable is marked as sensitive so it's not displayed in logs
+  default   = "RfQ2kBiL5NPJpLF" # This variable is marked as sensitive so it's not displayed in logs
 }
 
 variable "database_secret_name" {
