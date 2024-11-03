@@ -8,6 +8,12 @@ The following steps ensure correct setup of the containerized lambda that serves
 
 ## Containerized Lambda
 
+### Download model
+1. Make sure you are on the main branch and have pulled recent changes.
+2. Navigate to the `/request_lambda` directory and find the `download_model.py` script
+3. Run the script to download the model (the most recent model has been used in `jitesh/emotion-english`).
+4. The model will be saved in the `/request_lambda/app` directory.
+
 ### Build Container
 
 1. Make sure you are on main branch and have pulled recent changes.
@@ -32,7 +38,9 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
 2. Name it and choose the container image you just uploaded
 3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function.
 3. Deploy
-4. You can test the Lambda with the following test events:
+4. Navigate to the function and click on the Configuration tab
+5. Set the **memory** to 3008MB and the **timeout** to 2 minutes. 
+6. You can test the Lambda with the following test events:
 ```
 {
   "url": "https://ratemyprofessors.com/professor/1835982"
