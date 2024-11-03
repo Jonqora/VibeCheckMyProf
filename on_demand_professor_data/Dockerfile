@@ -7,6 +7,10 @@ FROM public.ecr.aws/lambda/python:3.9
 COPY ../shared/requirements.txt .
 RUN pip install -r requirements.txt
 
+# Copy the lambda-specific dependencies and install them
+COPY odpd_requirements.txt .
+RUN pip install -r odpd_requirements.txt
+
 # Copy the shared code
 COPY ../shared /var/task/shared
 # Copy on-demand code

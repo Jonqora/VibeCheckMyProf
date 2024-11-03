@@ -1,0 +1,8 @@
+# preload_professor_data lambda requirements
+
+# rmp_api.py
+RateMyProfessorAPI
+
+# sentiment.py
+torch == 2.4.1
+transformers == 4.45.2

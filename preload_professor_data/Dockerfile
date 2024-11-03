@@ -7,6 +7,10 @@ FROM public.ecr.aws/lambda/python:3.9
 COPY ../shared/requirements.txt .
 RUN pip install -r requirements.txt
 
+# Copy the lambda-specific dependencies and install them
+COPY ppd_requirements.txt .
+RUN pip install -r ppd_requirements.txt
+
 # Copy the shared code
 COPY ../shared /var/task/shared
 # Copy preload code

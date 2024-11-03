@@ -1,13 +1,6 @@
-# rmp_api.py
-RateMyProfessorAPI 
+# Shared lambda requirements
 
 # Database
 boto3
 mysql-connector-python
 python-dotenv
-
-# sentiment.py
-torch == 2.4.1
-transformers == 4.45.2
-
-# frontend.py
