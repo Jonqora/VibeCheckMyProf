@@ -275,7 +275,8 @@ function renderEmojis(reviewsData) {
             <div class="emoji-container">
                 <span class="emoji-trigger">${toEmoji(review.vcmp_emotion)}</span>
                 <div class="emoji-tooltip">
-                    ${review.comment} 
+                    ${review.comment} <br>
+                    ${toEmoji(review.vcmp_emotion)} (${review.vcmp_emotion})
                 </div>
             </div>
         `;
