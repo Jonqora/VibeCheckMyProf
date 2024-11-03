@@ -153,14 +153,35 @@ function renderResponse(data) {
 
     emojiTooltipContainers.forEach(container => {
         const tooltipTrigger = container.querySelector('.emoji-trigger');
-        // const tooltipText = container.querySelector('.emoji-tooltip');
+        const tooltipText = container.querySelector('.emoji-tooltip');
     
-        tooltipTrigger.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent from bubbling to the document
-            container.classList.toggle('active');
+        // tooltipTrigger.addEventListener('click', (event) => {
+        //     event.stopPropagation(); // Prevent from bubbling to the document
+        //     container.classList.toggle('active');
     
-            // Position the tooltip
-            // positionTooltip(tooltipTrigger, tooltipText, container);
+        //     // Position the tooltip
+        //     positionTooltip(tooltipTrigger, tooltipText, container);
+        // });
+        // Show tooltip on mouse enter
+
+        tooltipTrigger.addEventListener('mouseenter', () => {
+            positionTooltip(tooltipTrigger, tooltipText, container);
+            tooltipText.style.visibility = 'visible';
+        });
+
+        // Hide tooltip on mouse leave
+        tooltipTrigger.addEventListener('mouseleave', () => {
+            tooltipText.style.visibility = 'hidden';
+        });
+
+        // Toggle tooltip visibility on click
+        tooltipTrigger.addEventListener('click', () => {
+            if (tooltipText.style.visibility === 'visible') {
+                tooltipText.style.visibility = 'hidden';
+            } else {
+                positionTooltip(tooltipTrigger, tooltipText, container);
+                tooltipText.style.visibility = 'visible';
+            }
         });
     });
     
@@ -170,6 +191,33 @@ function renderResponse(data) {
             container.classList.remove('active');
         });
     });
+}
+
+// Function to position the tooltip
+function positionTooltip(trigger, tooltip, container) {
+    const triggerRect = trigger.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const boundaryRect = container.closest('.emojis-row').getBoundingClientRect();
+
+    console.log('Trigger Rect:', triggerRect);
+    console.log('Tooltip Rect:', tooltipRect);
+    console.log('Boundary Rect:', boundaryRect);
+
+    // Initial tooltip position (centering on trigger)
+    let tooltipLeft = triggerRect.left + (triggerRect.width / 2) - (tooltipRect.width / 2);
+    console.log('tooltipLeft:', tooltipLeft);
+    // Adjust tooltip to stay within boundaryRect (left and right edges of emojis-row)
+    if (tooltipLeft < boundaryRect.left) {
+        tooltipLeft = boundaryRect.left;
+    } else if (tooltipLeft + tooltipRect.width > boundaryRect.right) {
+        tooltipLeft = boundaryRect.right - tooltipRect.width;
+    }
+    console.log('tooltipLeft:', tooltipLeft);
+    // Set the calculated left position for the tooltip
+    tooltip.style.left = `${tooltipLeft}px`;
+
+    // Set the top position to be above the trigger element
+    // tooltip.style.top = `${triggerRect.top - tooltipRect.height - 8}px`;
 }
 
 function renderCourse(courseData) {
@@ -376,22 +424,3 @@ function toEmoji(emotion) {
     // Return the matching emoji or a default question mark if not found
     return emojiMap[emotion.toLowerCase()] || '❓';
 }
-
-
-// DELETE LATER TODO
-// Toggle tooltip visibility on mobile tap
-const emojiTrigger = document.querySelector('.emoji-trigger');
-const emojiContainer = document.querySelector('.emoji-container');
-
-emojiTrigger.addEventListener('click', () => {
-    emojiContainer.classList.toggle('active');
-});
-
-// Close tooltip if clicked outside
-document.addEventListener('click', (event) => {
-    if (!emojiContainer.contains(event.target)) {
-        emojiContainer.classList.remove('active');
-    }
-});
-
-

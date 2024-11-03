@@ -233,11 +233,12 @@ body {
 }
 
 .emoji-tooltip {
-    width: 300px; /* Max width for the tooltip */
+    visibility: hidden;
+    width: 400px; /* Max width for the tooltip */
     background-color: rgba(0, 0, 0, 0.75);
     color: #fff;
     text-align: left;
-    font-size: 1rem;
+    font-size: 0.9rem;
     border-radius: 5px;
     padding: 8px;
     position: absolute;
