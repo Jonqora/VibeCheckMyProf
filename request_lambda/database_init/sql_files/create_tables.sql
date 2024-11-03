@@ -17,7 +17,7 @@ CREATE TABLE professors (
 );
 
 CREATE TABLE requests (
-    prof_id             INT NOT NULL,
+    prof_id             INT PRIMARY KEY NOT NULL,
     request_date        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     resulted_in_write   BOOL,
     FOREIGN KEY (prof_id) REFERENCES professors(prof_id)
@@ -30,22 +30,10 @@ CREATE TABLE courses (
     FOREIGN KEY (school_id) REFERENCES schools(school_id)
 );
 
-CREATE TABLE sentiments (
-    sent_id         INT AUTO_INCREMENT PRIMARY KEY,
-    sent_date       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    polarity        FLOAT,
-    subjectivity    FLOAT,
-    emotion         VARCHAR(50),
-    sentiment       VARCHAR(50),
-    spell_error     INT,
-    spell_quality   DECIMAL(5,4)
-);
-
 CREATE TABLE ratings (
     rating_id       INT AUTO_INCREMENT PRIMARY KEY,
-    prof_id         INT,
+    prof_id         INT NOT NULL,
     course_id       INT,
-    sent_id         INT,
     review_date     DATETIME,
     quality         DECIMAL(2,1),
     difficulty      DECIMAL(2,1),
@@ -57,7 +45,21 @@ CREATE TABLE ratings (
     online_class    BOOLEAN,
     for_credit      BOOLEAN,
     attendance_mand BOOLEAN,
-    FOREIGN KEY (prof_id)   REFERENCES professors(prof_id),
-    FOREIGN KEY (course_id) REFERENCES courses(course_id),
-    FOREIGN KEY (sent_id)   REFERENCES sentiments(sent_id)
+    FOREIGN KEY (prof_id) REFERENCES professors(prof_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+
+CREATE TABLE sentiments (
+    sent_id         INT AUTO_INCREMENT PRIMARY KEY,
+    rating_id       INT,
+    sent_date       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    polarity        FLOAT,
+    subjectivity    FLOAT,
+    emotion         VARCHAR(50),
+    sentiment       VARCHAR(50),
+    spell_error     INT,
+    spell_quality   DECIMAL(5,4),
+    FOREIGN KEY (rating_id) REFERENCES ratings(rating_id)
+        ON DELETE CASCADE
+);
+

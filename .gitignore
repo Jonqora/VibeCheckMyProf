@@ -9,6 +9,8 @@ infra/.terraform
 infra/.terraform.lock.hcl
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
+terraform.tfstate
+.terraform.tfstate.lock.info
 
 # Environment configuration for local database connection
 infra/config.env

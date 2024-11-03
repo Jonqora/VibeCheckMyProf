@@ -21,7 +21,7 @@
 ## requests
 | Column            | Data Type | Description                                      |
 |-------------------|-----------|--------------------------------------------------|
-| prof_id           | INT       | Unique identifier for the professor (from RMP)   |
+| prof_id           | INT (FK)  | Foreign key linking to `professors` table        |
 | request_date      | TIMESTAMP | Date the user request came in                    | 
 | resulted_in_write | BOOLEAN   | Whether the request resulted in a database write |
 
@@ -32,27 +32,12 @@
 | school_id   | INT (FK)    | Foreign key linking to `schools` table            |
 | course_name | VARCHAR(50) | Name of the course (e.g. MATH221)                 |
 
-## sentiments
-| Column        | Data Type    | Description                                                                |
-|---------------|--------------|----------------------------------------------------------------------------|
-| sent_id       | INT (PK)     | Unique identifier for the sentiment analysis model output (Auto Increment) |
-| sent_date     | TIMESTAMP    | The date and time the rating underwent sentiment analysis                  |
-| polarity      | FLOAT        | Range [-1.0, 1.0], where -1 is negative and 1 is positive.                 |
-| subjectivity  | FLOAT        | Range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective    |
-| emotion       | VARCHAR(50)  | Predicted emotion of the given rating comment (e.g. "angry")               |
-| sentiment     | VARCHAR(50)  | Polarity as a categorical construct (e.g. "positive")                      | 
-| spell_error   | INT          | Count of spelling errors in the text                                       |
-| spell_quality | DECIMAL(5,4) | Quality of text, where 1.0 indicates no error.                             |
-
-
 ## ratings
-
 | Column          | Data Type    | Description                                                       |
 |-----------------|--------------|-------------------------------------------------------------------|
 | rating_id       | INT (PK)     | Unique identifier for the rating (Auto Increment)                 |
 | prof_id         | INT (FK)     | Foreign key linking to `professors` table                         |
 | course_id       | INT (FK)     | Foreign key linking to `courses` table                            |
-| sent_id         | INT (FK)     | Foreign key linking to `sentiments` table                         |
 | review_date     | DATETIME     | Date the review was posted (e.g. "Nov 20th, 2018")                |
 | quality         | DECIMAL(2,1) | Quality rating for the course                                     |
 | difficulty      | DECIMAL(2,1) | Difficulty rating for the course                                  |
@@ -64,3 +49,16 @@
 | online_class    | BOOLEAN      | Indicates whether the course was delivered online                 |
 | for_credit      | BOOLEAN      | Indicates whether the course was taken for credit                 |
 | attendance_mand | BOOLEAN      | Indicates if performance in the course requires attending lecture |
+
+## sentiments
+| Column        | Data Type    | Description                                                                |
+|---------------|--------------|----------------------------------------------------------------------------|
+| sent_id       | INT (PK)     | Unique identifier for the sentiment analysis model output (Auto Increment) |
+| rating_id     | INT (PK)     | Foreign key linking to `ratings` table                                     |
+| sent_date     | TIMESTAMP    | The date and time the rating underwent sentiment analysis                  |
+| polarity      | FLOAT        | Range [-1.0, 1.0], where -1 is negative and 1 is positive.                 |
+| subjectivity  | FLOAT        | Range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective    |
+| emotion       | VARCHAR(50)  | Predicted emotion of the given rating comment (e.g. "angry")               |
+| sentiment     | VARCHAR(50)  | Polarity as a categorical construct (e.g. "positive")                      | 
+| spell_error   | INT          | Count of spelling errors in the text                                       |
+| spell_quality | DECIMAL(5,4) | Quality of text, where 1.0 indicates no error.                             |

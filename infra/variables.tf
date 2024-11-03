@@ -46,3 +46,9 @@ variable "aws_region" {
   type        = string
   default     = "ca-central-1"
 }
+
+variable "seconds_interval" {
+  description = "The interval of time in seconds data is considered fresh before triggering a reload."
+  type        = number
+  default     = 604800
+}
