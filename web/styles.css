@@ -108,6 +108,7 @@ body {
 .flex-row {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-evenly;
 }
 
@@ -167,10 +168,16 @@ body {
     flex-wrap: wrap;
 }
 
+.stats1, .stats2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .stats-box {
-    width: 110px;
+    width: 100px;
     height: 90px;
-    margin: 0 0.25rem 0 0.25rem;
+    margin: 0.25rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -179,6 +186,7 @@ body {
 .response-prof .stats-box {
     background-color: #ff41b5;
 }
+
 .course .stats-box {
     background-color: #ff41b5;
 }
@@ -197,7 +205,7 @@ body {
 }
 
 .stats-stat {
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: bold;
     margin-bottom: -0.25rem;
     justify-content: center;
