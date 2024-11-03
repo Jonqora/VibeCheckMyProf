@@ -34,6 +34,9 @@ resource "local_file" "env_file" {
     DB_PASSWORD=${aws_db_instance.mysql-rds-db.password}
     DB_HOST=${aws_db_instance.mysql-rds-db.endpoint}
     DB_PORT=${aws_db_instance.mysql-rds-db.port}
+    DB_SECRET_NAME=${var.database_secret_name}
+    DB_REGION_NAME=${var.aws_region}
+    SECOND_INTERVAL=${var.seconds_interval}
   EOT
   filename = "config.env"
 }
