@@ -1,8 +1,8 @@
 # flake8: noqa
 import mysql.connector
 
-from request_lambda.app.config import Config
-from request_lambda.app.payload import Professor, Rating, Sentiment
+from shared.config import Config
+from shared.payload import Professor, Rating, Sentiment
 from mysql.connector.connection import MySQLConnection, MySQLCursor
 
 class QueryConnector:

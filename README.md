@@ -4,6 +4,13 @@
 
 **VibeCheckMyProf** is a service that performs sentiment analysis on reviews for professors on the site **ratemyprofessors.com**, providing users with an appealing visual summary of recent reviews without having to scroll and read all of them. Users can compare the VibeCheck score with numerical ratings on the ratemyprofessors site and can also view a visualization of VibeCheck comment scores over time.
 
+# Dockerfiles
+Build from the project root so Docker can access both the Lambda-specific and shared files.
+## Build preload-professor-data Docker image from project root
+docker build -t preload-professor-data -f preload_professor_data/Dockerfile .
+
+## Build on-demand-professor-data Docker image from project root
+docker build -t on-demand-professor-data -f on_demand_professor_data/Dockerfile .
 
 ### Use Cases:
 - A first year anxious student cannot decide which Math Professor to take a math course with, they learn about VibeCheckMyProf to get an overview of each professor’s reviews without having to read any comments.

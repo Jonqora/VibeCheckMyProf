@@ -15,7 +15,7 @@
 import json
 import re
 
-from . import database
+from shared import database
 from . import frontend
 from . import rmp_api
 from . import sentiment

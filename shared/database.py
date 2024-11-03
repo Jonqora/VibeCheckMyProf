@@ -5,9 +5,9 @@ import mysql.connector
 
 from typing import Dict, Any
 from datetime import datetime, timezone, timedelta
-from request_lambda.app.config import Config
-from request_lambda.app.payload import Professor, Rating, Sentiment
-from request_lambda.app.query import QueryConnector, QueryRunner
+from shared.config import Config
+from shared.payload import Professor, Rating, Sentiment
+from shared.query import QueryConnector, QueryRunner
 
 
 def get_recent_data(professor_id: int) -> Dict[str, Any]:

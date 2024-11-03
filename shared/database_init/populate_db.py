@@ -1,6 +1,6 @@
 """ Script to Bootstrap Database """
-from request_lambda.app.config import Config
-from request_lambda.app import database
+from shared.config import Config
+from shared import database
 
 env_file_path = "infra/config.env"
 drop_tables_file_path = \
