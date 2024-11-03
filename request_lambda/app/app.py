@@ -43,7 +43,7 @@ def lambda_handler(event, context):
     professor_id = int(url.split('/')[-1])
 
     # Check for recent data in our database (return data if present else None)
-    professor_json = database.get_recent_data(professor_id)  # TODO
+    professor_json = database.get_recent_data(professor_id)
 
     pre_sentiment = {}
     if not professor_json:
@@ -61,7 +61,7 @@ def lambda_handler(event, context):
         professor_json = sentiment.analyze(professor_json)  # TODO
 
         # Send data and sentiment to be stored in backend database
-        database.write_data(professor_json)  # TODO
+        database.write_data(professor_json)
 
     # Format the data for the response to the front end
     if pre_sentiment != professor_json:
