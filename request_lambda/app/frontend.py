@@ -189,7 +189,7 @@ def calculate_course_and_cleanup(course):
     course["vcmp_spellingquality"] = round(
         course["sum_vcmp_spellingquality"] / course["num_ratings"], 4
         )
-    
+
     reviews = course["reviews"]
     del course["reviews"]
     course["reviews"] = reviews  # Reposition reviews to be last
