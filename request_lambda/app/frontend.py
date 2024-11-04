@@ -1,12 +1,6 @@
 # frontend.py
 # formats and prepares professor data before it sending back in API response
 
-# ----------------------------------------------------------------------------#
-# NOTE: this file contains function stubs. In order for our code to work
-# together, the stub purpose and signatures must be followed. Feel free to
-# define additional functions to do parts of the work, delegate as needed.
-# ----------------------------------------------------------------------------#
-
 from typing import Dict, Any
 from collections import defaultdict
 import json
@@ -108,7 +102,8 @@ def init_course(data, course_name):
             "mixed": 0
         },
         "sum_vcmp_spellingerrors": 0,
-        "sum_vcmp_spellingquality": 0
+        "sum_vcmp_spellingquality": 0,
+        "reviews": []
         }
     data["course_dict"][course_name] = course_tracker
 
@@ -127,6 +122,8 @@ def sum_course_from_review(data, course_name, review):
     course["sum_vcmp_sentiment"][review["vcmp_sentiment"]] += 1
     course["sum_vcmp_spellingerrors"] += review["vcmp_spellingerrors"]
     course["sum_vcmp_spellingquality"] += review["vcmp_spellingquality"]
+
+    course["reviews"].append(review)
 
 
 def calculate_prof_and_cleanup(data):
@@ -192,6 +189,10 @@ def calculate_course_and_cleanup(course):
     course["vcmp_spellingquality"] = round(
         course["sum_vcmp_spellingquality"] / course["num_ratings"], 4
         )
+
+    reviews = course["reviews"]
+    del course["reviews"]
+    course["reviews"] = reviews  # Reposition reviews to be last
 
     del course["sum_difficulty"]
     del course["sum_rating"]
