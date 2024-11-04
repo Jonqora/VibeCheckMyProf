@@ -2,6 +2,7 @@
 # Interacts with backend database
 import json
 import mysql.connector
+import time
 
 from typing import Dict, Any
 from datetime import datetime, timezone, timedelta
@@ -13,8 +14,13 @@ from request_lambda.app.query import QueryConnector, QueryRunner
 def get_recent_data(professor_id: int) -> Dict[str, Any]:
     """ Returns dict of recently analyzed professor reviews,
         empty if ratings are stale. """
+    start_time = time.perf_counter()
     config = Config().from_env()
     payload = get_data_from_db(professor_id, config)
+    stop_time = time.perf_counter()
+
+    get_data_time = stop_time - start_time
+    print(f"Time to get recent data from DB: {(get_data_time):.4f} seconds.")
     return payload
 
 
@@ -92,8 +98,13 @@ def get_formatted_as_dict(rows: list) -> Dict[str, Any]:
 
 def write_data(professor_dict: Dict[str, Any]) -> None:
     """ Parses and writes dictionary data to database. """
+    start_time = time.perf_counter()
     config = Config().from_env()
     insert_data_from_dict(professor_dict, config)
+    stop_time = time.perf_counter()
+    
+    write_data_time = stop_time - start_time
+    print(f"Time to write data to DB: {(write_data_time):.4f} seconds.")
 
 
 def insert_data_from_dict(professor_dict: Dict[str, Any],
