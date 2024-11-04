@@ -39,13 +39,17 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
 3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function.
 3. Deploy
 4. Under the `Configuration` tab, select `General configuration` and set the **memory** to 3008MB and the **timeout** to 2 minutes. 
-5. Under the `Configuration` tab, select `Environment variables` and add all the variables from the project's `infra/config.env` file
-6. Under the `Configuration` tab, select `RDS databases` and `Connect to RDS database`
-   - Use an existing database
-   - In the `RDS database` dropdown, select our project's database (i.e. `vibecheckmyprofdb`)
-   - Select `Create`
-   - Wait for AWS to create the necessary security groups and update the lambda function
-7. You can test the Lambda with the following test events:
+5. Under the `Configuration` tab, select `Environment variables` and add all the variables from the project's `infra/config.env` file.
+6. Under the `Configuration` tab, select `RDS databases` and `Connect to RDS database`.
+   - Use an existing database.
+   - In the `RDS database` dropdown, select our project's database (i.e. `vibecheckmyprofdb`).
+   - Select `Create`.
+   - Wait for AWS to create the necessary security groups and update the lambda function.
+7. Under the `Configuration` tab, select `VPC` and `Edit`.
+   - In the `Security groups` dropdown, select the one named `vcmp-lambda-sg`.
+   - Select `Save`.
+   - Wait for the lambda function to finish updating.
+8. You can test the Lambda with the following test events:
 
 ```
 {
