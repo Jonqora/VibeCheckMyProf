@@ -1,5 +1,9 @@
 # Project configuration files
 /web/config.js
+/request_lambda/tests/config.py
+
+# SA models
+request_lambda/app/models/*
 
 # Permissions key files
 *.pem
