@@ -12,9 +12,14 @@ request_lambda/app/models/*
 infra/.terraform
 infra/.terraform.lock.hcl
 infra/terraform.tfstate
+infra/.terraform.tfstate.lock.info
 infra/terraform.tfstate.backup
 terraform.tfstate
 .terraform.tfstate.lock.info
+infra/.terraform.*
+infra/terraform.*
+.terraform.*
+terraform.*
 
 # Environment configuration for local database connection
 infra/config.env
