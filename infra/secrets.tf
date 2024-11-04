@@ -1,9 +1,13 @@
-# Create the secret in Secrets Manager
+# Secrets Manager for Security Layer
+
+# Create Secret in Secrets Manager
 resource "aws_secretsmanager_secret" "db_credentials" {
-  name        = var.database_secret_name  # The name of your secret
-  description = "RDS MySQL database credentials for the application"
+  name                    = var.database_secret_name  # The name of your secret
+  description             = "RDS MySQL database credentials for the application"
+  recovery_window_in_days = 0
   tags = {
-    name = "${var.application_name}-secret"
+    Name    = "${var.app_prefix}-db-secret"
+    Project = var.app_name
   }
 }
 

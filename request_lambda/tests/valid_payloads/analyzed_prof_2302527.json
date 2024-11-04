@@ -1,0 +1,53 @@
+{
+    "professor_id": 2302527,
+    "name": "Cinda Heeran",
+    "department": "Computer Science",
+    "difficulty": 2.8,
+    "rating": 4.3,
+    "would_take_again": 86,
+    "num_ratings": 2,
+    "school_id": 1413,
+    "school_name": "University of British Columbia",
+    "reviews": [
+        {
+            "quality": 5,
+            "difficulty": 2,
+            "comment": "Not sure why CPEN has to take this since our 221 overlaps this significantly. Excellent prof, lectures, course organization though. Very nice prof and generous marking scheme. Assessments very fair and responsive on Piazza.",
+            "class_name": "CPSC221",
+            "date": "2024-08-05 02:37:52",
+            "take_again": true,
+            "grade": "B",
+            "thumbs_up": 0,
+            "thumbs_down": 0,
+            "online_class": false,
+            "credit": true,
+            "attendance_mandatory": false,
+            "vcmp_polarity": 0.2751,
+            "vcmp_subjectivity": 0.8779,
+            "vcmp_emotion": "caring",
+            "vcmp_sentiment": "neutral",
+            "vcmp_spellingerrors": 0,
+            "vcmp_spellingquality": 0.8922
+        },
+        {
+            "quality": 5,
+            "difficulty": 3,
+            "comment": "Cinda wasn't super available for OH or individual help but she's a great lecturer. I had so much fun in her classes and can tell she's super passionate about her projects. Such an inspirational person and very fun to listen to!",
+            "class_name": "CPSC203",
+            "date": "2023-05-20 06:41:59",
+            "take_again": false,
+            "grade": "Not sure yet",
+            "thumbs_up": 3,
+            "thumbs_down": 2,
+            "online_class": true,
+            "credit": false,
+            "attendance_mandatory": true,
+            "vcmp_polarity": 0.9736,
+            "vcmp_subjectivity": 0.4465,
+            "vcmp_emotion": "disappointment",
+            "vcmp_sentiment": "negative",
+            "vcmp_spellingerrors": 0,
+            "vcmp_spellingquality": 0.9459
+        }
+    ]
+}

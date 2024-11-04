@@ -1,36 +1,42 @@
-# Output the VPC ID
-output "vpc_id" {
-  value = aws_vpc.web_app_vpc.id
+# Output values used to create database connection
+
+output "db_name" {
+  description = "The name of the database"
+  value       = aws_db_instance.mysql-rds-db.db_name
 }
 
-# Output the public subnet ID
-output "public_subnet_id_1" {
-  value = aws_subnet.public_subnet_1.id
+output "db_user" {
+  description = "Database master username"
+  value       = aws_db_instance.mysql-rds-db.username
 }
 
-# Output the public subnet ID
-output "public_subnet_id_2" {
-  value = aws_subnet.public_subnet_2.id
+output "db_password" {
+  description = "Database master password"
+  value       = aws_db_instance.mysql-rds-db.password
+  sensitive   = true
 }
 
-# Output the private subnet ID
-output "private_subnet_id_1" {
-  value = aws_subnet.private_subnet_1.id
-}
-
-# Output the private subnet ID
-output "private_subnet_id_2" {
-  value = aws_subnet.private_subnet_2.id
-}
-
-# Output the RDS endpoint
-output "rds_endpoint" {
+output "db_host" {
   description = "The endpoint of the RDS instance"
   value       = aws_db_instance.mysql-rds-db.endpoint
 }
 
-# Output the RDS arn
-output "rds_arn" {
-  description = "The arn of the RDS instance"
-  value       = aws_db_instance.mysql-rds-db.arn
+output "db_port" {
+  description = "The database port"
+  value       = aws_db_instance.mysql-rds-db.port
+}
+
+# Output db connection values to config.env file
+resource "local_file" "env_file" {
+  content = <<-EOT
+    DB_NAME=${var.database_name}
+    DB_USER=${var.database_user}
+    DB_PASSWORD=${aws_db_instance.mysql-rds-db.password}
+    DB_HOST=${aws_db_instance.mysql-rds-db.endpoint}
+    DB_PORT=${aws_db_instance.mysql-rds-db.port}
+    DB_SECRET_NAME=${var.database_secret_name}
+    DB_REGION_NAME=${var.aws_region}
+    SECOND_INTERVAL=${var.seconds_interval}
+  EOT
+  filename = "config.env"
 }

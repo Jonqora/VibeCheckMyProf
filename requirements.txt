@@ -7,10 +7,15 @@ RateMyProfessorAPI
 # Database
 boto3
 mysql-connector-python
-pymysql
+python-dotenv
 
 # sentiment.py
 torch == 2.4.1
 transformers == 4.45.2
 
 # frontend.py
+
+# tests
+pytest
+pytest-cov
+pytest-sugar

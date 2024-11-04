@@ -1,0 +1,33 @@
+{
+    "professor_id": 511007,
+    "name": "Cinda Heeran",
+    "department": "Computer Science",
+    "difficulty": 3.0,
+    "rating": 5.0,
+    "would_take_again": 100,
+    "num_ratings": 1,
+    "school_id": 1112,
+    "school_name": "University Of Illinois at Urbana - Champaign",
+    "reviews": [
+        {
+            "quality": 5,
+            "difficulty": 3,
+            "comment": "Professor Cinda Heeren is the best professor I ever had. She is caring about students to learn the material properly and enjoy the class. She keeps involving students in the class. I took CS121 at UBC with her and she is great in relating the material to upper year courses (CS221).",
+            "class_name": "CS121",
+            "date": "2018-06-28 02:37:52",
+            "take_again": true,
+            "grade": "",
+            "thumbs_up": 2,
+            "thumbs_down": 0,
+            "online_class": false,
+            "credit": true,
+            "attendance_mandatory": true,
+            "vcmp_polarity": 0.1622,
+            "vcmp_subjectivity": 0.1567,
+            "vcmp_emotion": "nervousness",
+            "vcmp_sentiment": "negative",
+            "vcmp_spellingerrors": 1,
+            "vcmp_spellingquality": 0.9317
+        }
+    ]
+}

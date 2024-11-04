@@ -12,7 +12,7 @@ from app import app
 
 def test_lambda_handler_valid_url():
     event = {
-        "url": "https://www.ratemyprofessors.com/professor/123456"
+        "url": "https://www.ratemyprofessors.com/professor/1835982"
     }
     context = {}  # Lambda context can be mocked
     response = app.lambda_handler(event, context)
