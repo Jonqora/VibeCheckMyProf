@@ -1,5 +1,6 @@
 # sentiment.py
 # Process professor data and have sentiment analysis added to it
+# flake8: noqa: E501
 
 # ----------------------------------------------------------------------------#
 # NOTE: In order for our code to work together, we followed the stub purpose and signatures 
@@ -16,22 +17,27 @@ from spellchecker import SpellChecker
 import time
 import os
 
+
 class SentimentAnalyzer:
     def __init__(self):
         start_time = time.perf_counter()
 
         base_path = os.path.dirname(__file__)
-        tokenizer_path = os.path.join(base_path, "models/goemotions-tokenizer")
+        tokenizer_path\
+            = os.path.join(base_path, "models/goemotions-tokenizer")
         model_path = os.path.join(base_path, "models/goemotions-model")
 
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_path)
+        self.model = AutoModelForSequenceClassification.from_pretrained(
+            model_path)
         self.emotion_labels = self.model.config.id2label
 
-        self.comprehend = boto3.client('comprehend', region_name="ca-central-1")
+        self.comprehend = boto3.client('comprehend',
+                                       region_name="ca-central-1")
         self.spellchecker = SpellChecker()
         end_time = time.perf_counter()
-        print(f"Time to init SentimentAnalyzer: {(end_time - start_time):.4f} seconds")
+        print(
+            f"Time to init SentimentAnalyzer: {(end_time - start_time):.4f} seconds")
 
     def analyze_sentiment_textblob(self, text):
         blob = TextBlob(text)
@@ -45,7 +51,8 @@ class SentimentAnalyzer:
         # Split multitexts into batches of specified batch_size
         for i in range(0, len(multitexts), batch_size):
             batch_texts = multitexts[i:i + batch_size]
-            inputs = self.tokenizer(batch_texts, return_tensors="pt", padding=True, truncation=True)
+            inputs = self.tokenizer(batch_texts, return_tensors="pt",
+                                    padding=True, truncation=True)
 
             with torch.no_grad():
                 outputs = self.model(**inputs)
@@ -61,11 +68,13 @@ class SentimentAnalyzer:
 
     def analyze_spelling_and_grammar(self, text):
         misspelled_words = self.spellchecker.unknown(text.split())
-        quality = 1 - (len(misspelled_words) / len(text.split())) if len(text.split()) > 0 else 1
+        quality = 1 - (len(misspelled_words) / len(text.split())) if len(
+            text.split()) > 0 else 1
         return quality, len(misspelled_words)
 
     def analyze_sentiment_comprehend(self, text):
-        response = self.comprehend.detect_sentiment(Text=text, LanguageCode='en')
+        response = self.comprehend.detect_sentiment(Text=text,
+                                                    LanguageCode='en')
         return response['Sentiment']
 
 
@@ -93,16 +102,19 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     for i, review in enumerate(professor_json["reviews"]):
         comment = review["comment"]
         time1 = time.perf_counter()
-        tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(comment)
+        tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(
+            comment)
         time2 = time.perf_counter()
         TextBlob_time += time2 - time1
         emotion = emotions[i]
         time3 = time.perf_counter()
         GoEmotions_time += time3 - time2
-        comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(comment)
+        comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(
+            comment)
         time4 = time.perf_counter()
         Comprehend_time += time4 - time3
-        spelling_quality, spelling_errors = sentiment_analyzer.analyze_spelling_and_grammar(comment)
+        spelling_quality, spelling_errors = sentiment_analyzer.analyze_spelling_and_grammar(
+            comment)
         time5 = time.perf_counter()
         Spelling_time += time5 - time4
 
