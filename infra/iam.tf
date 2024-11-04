@@ -26,7 +26,7 @@ resource "aws_iam_role" "lambda_rds_role" {
 # Create IAM Policy for Lambda-RDS Access
 resource "aws_iam_policy" "lambda_rds_policy" {
   name        = "${var.app_prefix}-lambda-rds-policy"
-  description = "Policy for Lambda to access RDS MySQL and Secrets Manager"
+  description = "Policy for Lambda to access RDS MySQL"
 
   policy = jsonencode({
     "Version": "2012-10-17",
@@ -35,11 +35,9 @@ resource "aws_iam_policy" "lambda_rds_policy" {
         "Effect": "Allow",
         "Action": [
           "rds-db:connect",  # Allows Lambda to connect to the RDS database
-          "secretsmanager:GetSecretValue"  # Allows Lambda to retrieve secrets from Secrets Manager
         ],
         "Resource": [
           "${aws_db_instance.mysql-rds-db.arn}:dbuser:${var.database_user}",  # Use RDS db ARN
-          aws_secretsmanager_secret.db_credentials.arn  # Refers to the secret ARN created by Terraform
         ]
       },
       {

@@ -7,6 +7,7 @@ mysql-connector-python
 python-dotenv
 
 # sentiment.py
+numpy == 1.26.4
 torch == 2.4.1
 transformers == 4.45.2
 textblob == 0.18.0
