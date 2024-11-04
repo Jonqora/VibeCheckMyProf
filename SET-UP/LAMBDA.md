@@ -38,9 +38,15 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
 2. Name it and choose the container image you just uploaded
 3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function.
 3. Deploy
-4. Navigate to the function and click on the Configuration tab
-5. Set the **memory** to 3008MB and the **timeout** to 2 minutes. 
-6. You can test the Lambda with the following test events:
+4. Under the `Configuration` tab, select `General configuration` and set the **memory** to 3008MB and the **timeout** to 2 minutes. 
+5. Under the `Configuration` tab, select `Environment variables` and add all the variables from the project's `infra/config.env` file
+6. Under the `Configuration` tab, select `RDS databases` and `Connect to RDS database`
+   - Use an existing database
+   - In the `RDS database` dropdown, select our project's database (i.e. `vibecheckmyprofdb`)
+   - Select `Create`
+   - Wait for AWS to create the necessary security groups and update the lambda function
+7. You can test the Lambda with the following test events:
+
 ```
 {
   "url": "https://ratemyprofessors.com/professor/1835982"
@@ -56,6 +62,17 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
   "url": "https://www.NOTratemyprof.com/professor/1835982"
 }
 ```
+
+## Add Amazon Comprehend Permissions
+
+### Steps to Add Permissions to the IAM Role:
+1. Open the IAM console in AWS.
+2. Select **Roles** from the sidebar on the left.
+3. In the search bar, type the name of the Lambda function you just created.
+4. Click on the role name to open it.
+5. On the new page, go to the **Permissions** tab, click **Add permissions**, and select **Attach policies**.
+6. In the search bar, type `ComprehendReadOnly`, check the box next to it, and click **Add permissions**.
+7. The permission is now added to the role, allowing the Lambda function to call Amazon Comprehend.
 
 ## API Gateway
 

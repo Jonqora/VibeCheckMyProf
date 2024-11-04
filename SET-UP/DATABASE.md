@@ -29,6 +29,7 @@ export AWS_ACCESS_KEY_ID="your-access-key"
 export AWS_SECRET_ACCESS_KEY="your-secret-key"
 export AWS_SESSION_TOKEN="your-access-token"
 ```
+3. Ensure you have installed all of the libraries listed in the `Database` portion of the `requirements.txt` file.
 
 ### Create the DB Instance with Terraform
 Now you're ready to use Terraform!
@@ -60,16 +61,28 @@ To create the RDS instance, run:
 terraform apply
 ```
 See the above information about the prompted variable values. Terraform will ask for confirmation before applying the changes. Type `yes` to proceed.
+Note: it may take a few minutes for this step to complete.
 
-Once Terraform has finished applying the configuration, it will output the **RDS endpoint**. You can use this endpoint 
-to connect to the database. Note: it may take a few minutes for this step to complete.
+Once Terraform has finished applying the configuration, it will output the **database connection information**. These 
+values can be used to connect to the database. Terraform will also add these values to an environment configuration file 
+`infra/config.env` so you can easily use them in code that interacts with the database. See `database/populate_db.py` for an example
+of how to use the environment file.
 
-### Cleanup (Optional)
+#### 4. Load Sample Data into the Database
+Run the script `database/populate_db.py` to bootstrap the AWS RDS database. The script will create the application tables, and
+load a small sample of data into the tables.
+
+### Cleanup (Optional) - Use with Caution
+#### Remove Tables from Database
+If you want to remove the tables from the database, run the script `database/cleanup_db.py`. The script will drop the
+application tables from the database. 
+
+#### Remove the RDS Instance from AWS
 If you want to destroy the RDS instance, you can use:
 ```bash
 terraform destroy
 ```
-This will remove **all** the resources created by Terraform, including the RDS instance and security group.
+This will remove **all** the resources created by Terraform, including the RDS instance, VPC, and security groups.
 
 ### Terraform FAQ
 [This documentation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build) provides more 
@@ -113,7 +126,7 @@ from botocore.exceptions import ClientError
 
 def get_secret():
 
-    secret_name = "my-super-db-secret" # Replace with the secret name
+    secret_name = "vcmp-db-secret" # Replace with the secret name
     region_name = "ca-central-1"
 
     # Create a Secrets Manager client
@@ -140,7 +153,5 @@ def get_secret():
 IAM roles are defined and assigned to policies throughout our application. They define how different resources are 
 allowed to interact with each other (e.g. such as reading from the database, writing, etc.). 
 - `lambda-rds-access-role`: IAM role for lambda function to access RDS database.
-- `ec2-rds-access-role`: IAM role for EC2 to access RDS database.
-- `lambda-s3-access-role`: IAM role for Lambda to retrieve and put objects in S3 storage bucket.
 
 The appropriate role should be applied to your portion of the application service.

@@ -10,9 +10,14 @@ request_lambda/app/models/*
 
 # Terraform tracking files
 infra/.terraform
-infra/.terraform.lock.hd
-infra/.terraform.tfstate
-infra/.terraform.tfstate.backup
+infra/.terraform.lock.hcl
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+terraform.tfstate
+.terraform.tfstate.lock.info
+
+# Environment configuration for local database connection
+infra/config.env
 
 # Node.js modules
 node_modules/

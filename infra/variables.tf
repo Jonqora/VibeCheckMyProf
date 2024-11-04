@@ -1,9 +1,15 @@
 # Definitions of variables for use in the application
 
-variable "application_name" {
+variable "app_name" {
   description = "Application name to add to AWS resource tags"
   type        = string
   default     = "vibe-check-my-prof"
+}
+
+variable "app_prefix" {
+  description = "Prefix to add to unique resource names"
+  type        = string
+  default     = "vcmp"
 }
 
 variable "database_name" {
@@ -13,7 +19,7 @@ variable "database_name" {
 }
 
 variable "cidr_block" {
-  description = "Personal public IP address for database access from local environment"
+  description = "Your personal public IP address (append '/32' to the end, e.g. 38.13.78.95/32)"
   type        = string
 }
 
@@ -32,11 +38,17 @@ variable "database_password" {
 variable "database_secret_name" {
   description = "Name of the secret to authenticate to the RDS database instance"
   type        = string
-  default     = "my-super-db-secret"
+  default     = "vcmp-db-secret"
 }
 
 variable "aws_region" {
   description = "AWS region to deploy the resources"
   type        = string
   default     = "ca-central-1"
+}
+
+variable "seconds_interval" {
+  description = "The interval of time in seconds data is considered fresh before triggering a reload."
+  type        = number
+  default     = 604800
 }

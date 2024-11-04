@@ -1,0 +1,33 @@
+{
+    "professor_id": 1835982,
+    "name": "Ben Williams",
+    "department": "Mathematics",
+    "difficulty": 2.0,
+    "rating": 3.6,
+    "would_take_again": 76.1905,
+    "num_ratings": 26,
+    "school_id": 1413,
+    "school_name": "University of British Columbia",
+    "reviews": [
+        {
+            "quality": 5,
+            "difficulty": 4,
+            "comment": "Fantastic lecturer, always approachable in office hours, the man is a genius. Definitely learned a great deal of matrix algebra and walked away with a good understand of the concepts. Always encourages his students to look at the material more deeply. Final was a bit hard, but I would pick still Ben any day of the week for any course.",
+            "class_name": "MATH221",
+            "date": "2024-07-02 01:36:51",
+            "take_again": true,
+            "grade": "A",
+            "thumbs_up": 0,
+            "thumbs_down": 0,
+            "online_class": false,
+            "credit": true,
+            "attendance_mandatory": false,
+            "vcmp_polarity": 0.3853,
+            "vcmp_subjectivity": 0.1579,
+            "vcmp_emotion": "realization",
+            "vcmp_sentiment": "negative",
+            "vcmp_spellingerrors": 3,
+            "vcmp_spellingquality": 0.9363
+        }
+    ]
+}
