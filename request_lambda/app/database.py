@@ -36,7 +36,7 @@ def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
             recent_data = qr.get_prof_records(professor_id)
             if not recent_data:
                 raise ValueError(f"""Failed query for {professor_id}.""")
-            payload = get_formatted_as_json(recent_data)
+            payload = get_formatted_as_dict(recent_data)
     except mysql.connector.Error as err:
         print(f"An error occurred: {err}")
         payload = {}
@@ -49,15 +49,15 @@ def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
     return payload
 
 
-def get_formatted_as_json(rows: list) -> Dict[str, Any]:
+def get_formatted_as_dict(rows: list) -> Dict[str, Any]:
     """ Returns dictionary of rows formatted for frontend. """
     result = {
         "professor_id": rows[0][0],
         "name": rows[0][1],
         "department": rows[0][2],
-        "difficulty": rows[0][3],
-        "rating": rows[0][4],
-        "would_take_again": rows[0][5],
+        "difficulty": float(rows[0][3]),
+        "rating": float(rows[0][4]),
+        "would_take_again": float(rows[0][5]),
         "num_ratings": rows[0][6],
         "school_id": rows[0][7],
         "school_name": rows[0][8],
@@ -66,8 +66,8 @@ def get_formatted_as_json(rows: list) -> Dict[str, Any]:
 
     for row in rows:
         review = {
-            "quality": row[9],
-            "difficulty": row[10],
+            "quality": float(row[9]),
+            "difficulty": float(row[10]),
             "comment": row[11],
             "class_name": row[20],
             "date": row[18].strftime("%Y-%m-%d %H:%M:%S"),
@@ -83,7 +83,7 @@ def get_formatted_as_json(rows: list) -> Dict[str, Any]:
             "vcmp_emotion": row[23],
             "vcmp_sentiment": row[24],
             "vcmp_spellingerrors": row[25],
-            "vcmp_spellingquality": row[26]
+            "vcmp_spellingquality": float(row[26])
         }
         result["reviews"].append(review)
 
