@@ -18,7 +18,13 @@ resource "aws_db_instance" "mysql-rds-db" {
   publicly_accessible                 = true                                       # Make DB is publicly accessible
   port                                = 3306                                       # MySQL port
   backup_retention_period             = 7                                          # Backup retention in days
-  vpc_security_group_ids              = [aws_security_group.rds_sg.id]             # Allow access from backend only
+  vpc_security_group_ids              = [                                          # Allow access from backend only
+                                        aws_security_group.rds_sg.id,
+                                        aws_security_group.rds_sg_grafana1.id,
+                                        aws_security_group.rds_sg_grafana2.id,
+                                        aws_security_group.rds_sg_grafana3.id,
+                                        aws_security_group.rds_sg_grafana4.id
+                                        ]
   db_subnet_group_name                = aws_db_subnet_group.rds_subnet_group.name  # Reference the DB subnet group
 
   tags = {
