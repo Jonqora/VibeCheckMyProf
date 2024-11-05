@@ -82,5 +82,5 @@ This document catalogs emotions and emojis from the paper (Demszky et al., 2020)
 ### surprise 😮 
 - Feeling astonished, startled by something unexpected.
 
-### neutral 😐
+### neutral ❓
 - None of the above
