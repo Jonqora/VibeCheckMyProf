@@ -3,7 +3,7 @@
 /request_lambda/tests/config.py
 
 # SA models
-request_lambda/app/models/*
+request_lambda/lambda2/models/*
 
 # Permissions key files
 *.pem
