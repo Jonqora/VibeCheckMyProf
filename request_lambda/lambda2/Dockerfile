@@ -1,6 +1,6 @@
 FROM public.ecr.aws/lambda/python:3.9
 
-COPY requirements.txt ./
+COPY lambda2/requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
