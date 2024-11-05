@@ -45,7 +45,6 @@ def lambda_handler(event, context):
     # Check for recent data in our database (return data if present else None)
     professor_json = database.get_recent_data(professor_id)
 
-    pre_sentiment = {}
     if not professor_json:
         # Get prof and ratings data using RateMyProfessorAPI
         try:
