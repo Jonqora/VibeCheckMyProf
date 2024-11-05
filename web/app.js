@@ -344,7 +344,7 @@ function toEmoji(emotion) {
         admiration: '👏',
         amusement: '😂',
         anger: '😡',
-        annoyance: '😠',
+        annoyance: '😒',
         approval: '👍',
         caring: '🩷',
         confusion: '🤨',
@@ -364,10 +364,11 @@ function toEmoji(emotion) {
         optimism: '🤞',
         pride: '😤',
         realization: '👀',
-        relief: '😌',
+        relief: '😅',
         remorse: '😟',
         sadness: '😢',
-        surprise: '😮'
+        surprise: '😮',
+        neutral: '❓'
     };
   
     // Return the matching emoji or a default question mark if not found
