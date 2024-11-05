@@ -28,6 +28,56 @@
             <div id="response-courses" class="response-courses">
             </div>
         </div>
+        <div id="definitions-container" class="defs-container">
+            <div class="defs-title">📖 Definitions 📖</div>
+            <table id="definitions" class="defs-table">
+                <tr>
+                    <td>Vibes</td>
+                    <td>Top 3 emotions found in reviews <br>
+                        (Number indicates the number of reviews with that emotion)<br>
+                        <i>Generated with GoEmotion</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Feels</td>
+                    <td>Sentiments associated with each review <br>
+                        (Number indicates the number of reviews with that sentiment)<br>
+                        <i>Generated with Amazon Comprehend</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Quality</td>
+                    <td>Overall quality stat out of 5 <br>
+                        <i>From ratemyprofessors.com</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Difficulty</td>
+                    <td>Overall difficulty stat out of 5 <br>
+                        <i>From ratemyprofessors.com</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Positivity</td>
+                    <td>Average score from 0 (negative) to 5 (positive) from review comments <br>
+                        <i>Generated with TextBlob</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Subjectivity</td>
+                    <td>Average score from 0 (objective) to 5 (subjective) from review comments<br>
+                        <i>Generated with TextBlob</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Spelling</td>
+                    <td>Average percentage of words spelt correctly in review comments<br>
+                        <i>Generated with pyspellchecker</i>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
     </div>
     <!-- Load config.js first -->
     <script src="config.js"></script>
