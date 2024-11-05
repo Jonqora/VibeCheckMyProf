@@ -275,7 +275,7 @@ function toEmoji(emotion) {
         remorse: '😟',
         sadness: '😢',
         surprise: '😮',
-        neutral: '😐'
+        neutral: '❓'
     };
   
     // Return the matching emoji or a default question mark if not found
