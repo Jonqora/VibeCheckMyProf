@@ -11,6 +11,11 @@ from datetime import datetime
 import time
 
 
+def get_prof_name(professor_id: int):
+    professor = ratemyprofessor.Professor(professor_id)
+    return professor.name
+
+
 def get_prof_data(professor_id: int):
     start_time = time.perf_counter()
 

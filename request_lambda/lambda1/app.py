@@ -1,23 +1,16 @@
 # app.py
-# This lambda function delegates work to database, API, sentiment analysis and
+# This lambda function delegates work to database, API, and
 # frontend formatting modules.
 
-# The json format output by these functions
-#     database.get_recent_data
-#     rmp_api.get_prof_data
-#     sentiment.analyze
-# ...and consumed by these functions
-#     sentiment.analyze
-#     database.write_data
-#     frontend.format
-# is demonstrated in prof_data_1835982.json
-
+import boto3
 import json
 import re
 
 from ..common import database
 from . import frontend
 from ..common import rmp_api
+
+LAMBDA2_FUNCTION_NAME = "vibe-check-my-prof-lambda2"
 
 
 def lambda_handler(event, context):
@@ -42,27 +35,54 @@ def lambda_handler(event, context):
     professor_id = int(url.split('/')[-1])
 
     # Check for recent data in our database (return data if present else None)
-    professor_json = database.get_recent_data(professor_id)
+    if database.has_recent_data(professor_id):
+        # Get, format and send the data
+        print(f"Database contains recent data for prof")
+        professor_json = database.get_recent_data(professor_id)
+        database.log_standard_request(professor_id)
+        response = {
+            "STATUS": "DATA_RETRIEVED",
+            "DATA": frontend.format(professor_json)
+        }
+        return {
+            'statusCode': 200,
+            'body': json.dumps(response)
+        }
+    
+    # Get the professor name from RMP API for responses
+    try:
+        professor_name = rmp_api.get_prof_name(professor_id)
+    except ValueError:
+        return {
+            'statusCode': 400,
+            'body': json.dumps({"error": f"ID {professor_id} not found."})
+        }
+        
+    if database.has_recent_analysis_request(professor_id):
+        # Send a response to inform analysis already requested
+        print(f"Recent analysis request found")
+        database.log_standard_request(professor_id)
+        response = {
+            "STATUS": "ANALYSIS_IN_PROGRESS",
+            "PROF_NAME": professor_name
+        }
+    else:
+        # Start analysis and
+        # Send a response to inform analysis has begun
+        client = boto3.client('lambda')
+        client.invoke(
+            FunctionName=LAMBDA2_FUNCTION_NAME,  # Lambda function to invoke
+            InvocationType='Event',       # Asynchronous
+            Payload=json.dumps({"id": professor_id})
+        )
+        print(f"No recent data and no recent analysis request")
+        print(f"Invoked lambda function {LAMBDA2_FUNCTION_NAME}")
+        response = {
+            "STATUS": "ANALYSIS_REQUESTED",
+            "PROF_NAME": professor_name
+        }
 
-    if not professor_json:
-        # Get prof and ratings data using RateMyProfessorAPI
-        try:
-            professor_json = rmp_api.get_prof_data(professor_id)
-        except ValueError:
-            return {
-                'statusCode': 400,
-                'body': json.dumps({"error": f"ID {professor_id} not found."})
-            }
-
-        # Process data and have sentiment analysis added to it
-        professor_json = sentiment.analyze(professor_json)
-
-        # Send data and sentiment to be stored in backend database
-        database.write_data(professor_json)
-
-    response = frontend.format(professor_json)
-
-    # Return a 200 OK response with the data
+    # Return a 200 OK response
     return {
         'statusCode': 200,
         'body': json.dumps(response)
