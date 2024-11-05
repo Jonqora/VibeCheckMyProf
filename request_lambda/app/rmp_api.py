@@ -49,7 +49,7 @@ def get_prof_data(professor_id: int):
             "attendance_mandatory": rating.attendance_mandatory
         }
         prof_data["reviews"].append(review)
-    
+
     stop_time = time.perf_counter()
     rmp_api_time = stop_time - start_time
     print(f"Time to fetch data from RMP: {(rmp_api_time):.4f} seconds.")

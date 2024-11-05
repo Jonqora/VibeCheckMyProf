@@ -102,7 +102,7 @@ def write_data(professor_dict: Dict[str, Any]) -> None:
     config = Config().from_env()
     insert_data_from_dict(professor_dict, config)
     stop_time = time.perf_counter()
-    
+
     write_data_time = stop_time - start_time
     print(f"Time to write data to DB: {(write_data_time):.4f} seconds.")
 
