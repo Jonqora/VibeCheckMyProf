@@ -1,12 +1,8 @@
 """ Script to Bootstrap Database """
-import json
 import os
 
 from request_lambda.app.config import Config
 from request_lambda.app import database
-from request_lambda.app import frontend
-from request_lambda.app import rmp_api
-from request_lambda.app import sentiment
 
 
 env_file_path = "infra/config.env"

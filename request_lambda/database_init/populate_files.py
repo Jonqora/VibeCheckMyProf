@@ -2,9 +2,6 @@
 import json
 import os
 
-from request_lambda.app.config import Config
-from request_lambda.app import database
-from request_lambda.app import frontend
 from request_lambda.app import rmp_api
 from request_lambda.app import sentiment
 
@@ -41,11 +38,11 @@ def process_prof_id(professor_id: int, script_dir):
 
     # Save prof data as a json file
     save_dict_to_json(professor_json, professor_id, script_dir)
-    print(f"Saved {professor_json["name"]} to a json file ({professor_id})")
+    print(f"Saved {professor_json['name']} to a json file ({professor_id})")
 
     # Write data + sentiment to the database
     # database.write_data(professor_json)
-    # print(f"Wrote {professor_json["name"]} to the database ({professor_id})")
+    # print(f"Wrote {professor_json['name']} to the database ({professor_id})")
 
 
 def save_dict_to_json(prof_dict, prof_id, script_dir):
