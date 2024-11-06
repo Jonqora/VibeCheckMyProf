@@ -24,6 +24,32 @@ resource "aws_security_group" "rds_sg" {
     protocol    = "tcp"
     cidr_blocks = [var.cidr_block, "128.189.204.245/32"] # Allow traffic from my IP Address & UBC
   }
+  
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = [
+      "20.67.29.229/32",
+      "35.189.216.92/32",
+      "52.230.136.32/32",
+      "35.196.207.58/32",
+      "35.247.201.140/32",
+      "34.95.128.218/32",
+      "34.76.83.209/32",
+      "35.189.52.157/32",
+      "34.72.240.165/32",
+      "23.236.55.100/32",
+      "34.71.213.69/32",
+      "34.139.9.89/32",
+      "34.140.174.239/32",
+      "35.196.219.66/32",
+      "18.180.113.16/32",
+      "35.224.213.187/32",
+      "35.231.42.145/32",
+      "20.67.29.230/32"
+    ]  # Allow traffic from Grafana 
+  }
 
   egress {
     from_port   = 0
@@ -109,6 +135,11 @@ resource "aws_security_group" "rds_sg_grafana1" {
       "34.151.230.121/32"
     ]  # Allow traffic from Grafana 
   }
+
+  tags = {
+    Name    = "${var.app_prefix}-rds-sg-grafana1"
+    Project = var.app_name
+  }
 }
 
 # Security Group for RDS DB (Grafana 2)
@@ -181,6 +212,11 @@ resource "aws_security_group" "rds_sg_grafana2" {
       "35.232.101.234/32",
       "34.77.66.52/32"
     ]  # Allow traffic from Grafana 
+  }
+
+  tags = {
+    Name    = "${var.app_prefix}-rds-sg-grafana2"
+    Project = var.app_name
   }
 }
 
@@ -255,36 +291,10 @@ resource "aws_security_group" "rds_sg_grafana3" {
       "35.224.152.225/32"
     ]  # Allow traffic from Grafana 
   }
-}
 
-# Security Group for RDS DB (Grafana 4)
-resource "aws_security_group" "rds_sg_grafana4" {
-  vpc_id = aws_vpc.main_vpc.id
-
-  ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = [
-      "20.67.29.229/32",
-      "35.189.216.92/32",
-      "52.230.136.32/32",
-      "35.196.207.58/32",
-      "35.247.201.140/32",
-      "34.95.128.218/32",
-      "34.76.83.209/32",
-      "35.189.52.157/32",
-      "34.72.240.165/32",
-      "23.236.55.100/32",
-      "34.71.213.69/32",
-      "34.139.9.89/32",
-      "34.140.174.239/32",
-      "35.196.219.66/32",
-      "18.180.113.16/32",
-      "35.224.213.187/32",
-      "35.231.42.145/32",
-      "20.67.29.230/32"
-    ]  # Allow traffic from Grafana 
+  tags = {
+    Name    = "${var.app_prefix}-rds-sg-grafana3"
+    Project = var.app_name
   }
 }
 
