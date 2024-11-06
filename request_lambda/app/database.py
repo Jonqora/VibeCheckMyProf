@@ -22,17 +22,22 @@ def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
     qc = QueryConnector(config)
     qr = QueryRunner(qc.connection)
     current_time_utc = datetime.now(timezone.utc)
-    data_freshness_cutoff = (current_time_utc
-                             - timedelta(seconds=config.rec_int_sec))
+    # Calculate "interval seconds ago" date
+    staleness_cutoff = (current_time_utc
+                        - timedelta(seconds=config.rec_int_sec))
 
     try:
         last_prof_write = qr.get_prof_request_date(professor_id)
         if last_prof_write is None:
+            # We haven't processed this prof yet, return none
             payload = {}
+        # Check if request date came before the cutoff
         elif (last_prof_write[0].replace(tzinfo=timezone.utc)
-              <= data_freshness_cutoff):
+              < staleness_cutoff):
+            # The data is stale, return none
             payload = {}
         else:
+            # Prof data is still valid, return it
             recent_data = qr.get_prof_records(professor_id)
             if not recent_data:
                 raise ValueError(f"""Failed query for {professor_id}.""")
