@@ -9,7 +9,8 @@
 
 import json
 import os
-from request_lambda.app import sentiment
+
+from request_lambda.app.sentiment import SentimentAnalyzer
 
 
 def dummy_prof_data():
@@ -21,7 +22,8 @@ def dummy_prof_data():
 
 def test_analyze():
     professor_json = dummy_prof_data()
-    result = sentiment.analyze(professor_json)
+    sentiment_analyzer = SentimentAnalyzer()
+    result = sentiment_analyzer.analyze(professor_json)
     print(result)
     assert isinstance(result, dict)
     assert "reviews" in result

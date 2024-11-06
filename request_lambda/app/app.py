@@ -18,7 +18,10 @@ import re
 from . import database
 from . import frontend
 from . import rmp_api
-from . import sentiment
+from request_lambda.app.sentiment import SentimentAnalyzer
+
+# Initialize SA model instance outside the handler
+sentiment_analyzer = SentimentAnalyzer()
 
 
 def lambda_handler(event, context):
@@ -58,7 +61,7 @@ def lambda_handler(event, context):
 
         pre_sentiment = professor_json.copy()
         # Process data and have sentiment analysis added to it
-        professor_json = sentiment.analyze(professor_json)  # TODO
+        professor_json = sentiment_analyzer.analyze(professor_json)
 
         # Send data and sentiment to be stored in backend database
         database.write_data(professor_json)

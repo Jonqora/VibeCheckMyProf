@@ -39,6 +39,53 @@ class SentimentAnalyzer:
         print(
             f"Time to init SentimentAnalyzer: {(end_time - start_time):.4f} seconds")
 
+    def analyze(self, professor_json: Dict[str, Any]) -> Dict[str, Any]:
+        TextBlob_time = 0
+        GoEmotions_time = 0
+        Comprehend_time = 0
+        Spelling_time = 0
+
+        goemotion_start = time.perf_counter()
+        comments = []
+        for review in professor_json["reviews"]:
+            comments.append(review["comment"])
+        emotions = self.analyze_emotion_goemotions(comments)
+        goemotion_end = time.perf_counter()
+        GoEmotions_time += goemotion_end - goemotion_start
+
+        for i, review in enumerate(professor_json["reviews"]):
+            comment = review["comment"]
+            time1 = time.perf_counter()
+            tb_polarity, tb_subjectivity = self.analyze_sentiment_textblob(
+                comment)
+            time2 = time.perf_counter()
+            TextBlob_time += time2 - time1
+            emotion = emotions[i]
+            time3 = time.perf_counter()
+            GoEmotions_time += time3 - time2
+            comprehend_sentiment = self.analyze_sentiment_comprehend(
+                comment)
+            time4 = time.perf_counter()
+            Comprehend_time += time4 - time3
+            spelling_quality, spelling_errors = self.analyze_spelling_and_grammar(
+                comment)
+            time5 = time.perf_counter()
+            Spelling_time += time5 - time4
+
+            review["vcmp_polarity"] = tb_polarity
+            review["vcmp_subjectivity"] = tb_subjectivity
+            review["vcmp_emotion"] = emotion
+            review["vcmp_sentiment"] = comprehend_sentiment.lower()
+            review["vcmp_spellingerrors"] = spelling_errors
+            review["vcmp_spellingquality"] = spelling_quality
+
+        print(f"Time for TextBlob analysis: {TextBlob_time:.4f} seconds.")
+        print(f"Time for GoEmotions analysis: {GoEmotions_time:.4f} seconds.")
+        print(f"Time for Comprehend analysis: {Comprehend_time:.4f} seconds.")
+        print(f"Time for Spelling analysis: {Spelling_time:.4f} seconds.")
+
+        return professor_json
+
     def analyze_sentiment_textblob(self, text):
         blob = TextBlob(text)
         polarity = blob.sentiment.polarity
