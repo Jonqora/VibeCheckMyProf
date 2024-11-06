@@ -16,7 +16,7 @@ import boto3
 from spellchecker import SpellChecker
 import time
 import os
-
+from request_lambda.app.config import Config
 
 class SentimentAnalyzer:
     def __init__(self):
@@ -49,7 +49,9 @@ class SentimentAnalyzer:
         comments = []
         for review in professor_json["reviews"]:
             comments.append(review["comment"])
-        emotions = self.analyze_emotion_goemotions(comments)
+
+        config = Config().from_env()
+        emotions = self.analyze_emotion_goemotions(comments, config.batch_size)
         goemotion_end = time.perf_counter()
         GoEmotions_time += goemotion_end - goemotion_start
 
@@ -123,58 +125,3 @@ class SentimentAnalyzer:
         response = self.comprehend.detect_sentiment(Text=text,
                                                     LanguageCode='en')
         return response['Sentiment']
-
-
-# Compute and add sentiment fields into every professor rating. The only
-# changes to the json input should be the addition of new fields on each of
-# the ratings objects with associated values from analysis.
-# NOTE: please preface all new fields with "vcmp_" in order to better
-# distingish the original data from the data we are adding.
-def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
-    sentiment_analyzer = SentimentAnalyzer()
-
-    TextBlob_time = 0
-    GoEmotions_time = 0
-    Comprehend_time = 0
-    Spelling_time = 0
-
-    goemotion_start = time.perf_counter()
-    comments = []
-    for review in professor_json["reviews"]:
-        comments.append(review["comment"])
-    emotions = sentiment_analyzer.analyze_emotion_goemotions(comments)
-    goemotion_end = time.perf_counter()
-    GoEmotions_time += goemotion_end - goemotion_start
-
-    for i, review in enumerate(professor_json["reviews"]):
-        comment = review["comment"]
-        time1 = time.perf_counter()
-        tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(
-            comment)
-        time2 = time.perf_counter()
-        TextBlob_time += time2 - time1
-        emotion = emotions[i]
-        time3 = time.perf_counter()
-        GoEmotions_time += time3 - time2
-        comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(
-            comment)
-        time4 = time.perf_counter()
-        Comprehend_time += time4 - time3
-        spelling_quality, spelling_errors = sentiment_analyzer.analyze_spelling_and_grammar(
-            comment)
-        time5 = time.perf_counter()
-        Spelling_time += time5 - time4
-
-        review["vcmp_polarity"] = tb_polarity
-        review["vcmp_subjectivity"] = tb_subjectivity
-        review["vcmp_emotion"] = emotion
-        review["vcmp_sentiment"] = comprehend_sentiment.lower()
-        review["vcmp_spellingerrors"] = spelling_errors
-        review["vcmp_spellingquality"] = spelling_quality
-
-    print(f"Time for TextBlob analysis: {TextBlob_time:.4f} seconds.")
-    print(f"Time for GoEmotions analysis: {GoEmotions_time:.4f} seconds.")
-    print(f"Time for Comprehend analysis: {Comprehend_time:.4f} seconds.")
-    print(f"Time for Spelling analysis: {Spelling_time:.4f} seconds.")
-
-    return professor_json

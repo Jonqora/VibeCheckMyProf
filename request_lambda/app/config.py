@@ -13,6 +13,7 @@ class Config:
     db_host: str = field(init=False)
     db_password: str = field(init=False)
     rec_int_sec: int = field(init=False)
+    batch_size: int = field(init=False)
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -26,6 +27,7 @@ class Config:
             if ":" in db_host_port else db_host_port
         obj.rec_int_sec = int(os.environ['SECOND_INTERVAL'])
         obj.db_password = os.environ["DB_PASSWORD"]
+        obj.batch_size = int(os.environ['BATCH_SIZE'], 8)
         return obj
 
     @classmethod
@@ -43,6 +45,7 @@ class Config:
         obj.rec_int_sec = int(os.getenv("SECOND_INTERVAL",
                                         604800))  # Default to 1 week
         obj.db_port = int(os.getenv("DB_PORT", "3306"))  # Default port 3306
+        obj.batch_size = int(os.getenv("BATCH_SIZE", 8))
         return obj
 
 
