@@ -10,8 +10,6 @@ drop_tables_file_path = \
     "request_lambda/database_init/sql_files/drop_tables.sql"
 create_tables_file_path = \
     "request_lambda/database_init/sql_files/create_tables.sql"
-sample_data_file_path1 = \
-    "request_lambda/database_init/sample_data/sentiment_output1.json"
 
 
 def process_json_files_in_folder(folder_name):
