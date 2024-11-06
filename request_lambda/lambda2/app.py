@@ -5,7 +5,6 @@
 import json
 
 from ..common import database
-from ..common import rmp_api
 from . import sentiment
 
 
@@ -14,22 +13,23 @@ def lambda_handler(event, context):
 
     try:
         # Payload contains an 'id' field
-        professor_id = event.get('id')
+        professor_json = event.get('data')
         
-        if professor_id is None:
+        if not isinstance(professor_json, dict) or not professor_json:
             return {
                 'statusCode': 400,
-                'body': json.dumps({"error": "No professor ID provided"})
+                'body': json.dumps({"error": "No professor data provided"})
             }
         
-        # Get professor and review data from RMP
         try:
-            professor_json = rmp_api.get_prof_data(professor_id)
-        except ValueError:
+            professor_id = professor_json["professor_id"]
+        except KeyError:
             return {
                 'statusCode': 400,
-                'body': json.dumps({"error": f"ID {professor_id} not found."})
-            }
+                'body': json.dumps(
+                    {"error": "'professor_id' is missing from the data"}
+                )
+    }
 
         # Process data and have sentiment analysis added to it
         database.log_analysis_request(professor_id)

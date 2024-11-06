@@ -10,7 +10,9 @@ from ..common import database
 from . import frontend
 from ..common import rmp_api
 
-LAMBDA2_FUNCTION_NAME = "vibe-check-my-prof-lambda2"
+LAMBDA2_FUNCTION_NAME = "vcmp-main-lambda"
+
+client = boto3.client('lambda')
 
 
 def lambda_handler(event, context):
@@ -69,11 +71,18 @@ def lambda_handler(event, context):
     else:
         # Start analysis and
         # Send a response to inform analysis has begun
-        client = boto3.client('lambda')
+        try:
+            professor_data = rmp_api.get_prof_data(professor_id)
+        except ValueError:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({"error": f"ID {professor_id} not found."})
+            }
+
         client.invoke(
             FunctionName=LAMBDA2_FUNCTION_NAME,  # Lambda function to invoke
             InvocationType='Event',       # Asynchronous
-            Payload=json.dumps({"id": professor_id})
+            Payload=json.dumps({"data": professor_data})
         )
         print(f"No recent data and no recent analysis request")
         print(f"Invoked lambda function {LAMBDA2_FUNCTION_NAME}")
