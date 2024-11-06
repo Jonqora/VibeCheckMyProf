@@ -14,147 +14,62 @@ from request_lambda.common.query import QueryConnector, QueryRunner
 SECONDS_RECENT_ANALYSIS = 300
 
 
-def has_recent_data(professor_id: int) -> bool:
-    """Returns True if a prof has a write request within recent time limit"""
-    return False
+def has_recent_request_entry(professor_id: int, analysis=False) -> bool:
+    """Returns True if a prof has a request within recent time limit"""
+    config = Config().from_env()
+    qc = QueryConnector(config)
+    qr = QueryRunner(qc.connection)
+    current_time_utc = datetime.now(timezone.utc)
+    if analysis:
+        recency_cutoff = (current_time_utc
+                                - timedelta(seconds=SECONDS_RECENT_ANALYSIS))
+    else:
+        recency_cutoff = (current_time_utc
+                                - timedelta(seconds=config.rec_int_sec))
+
+    try:
+        if analysis:
+            last_prof_write = qr.get_prof_request_date(professor_id, analysis=True)
+        else:
+            last_prof_write = qr.get_prof_request_date(professor_id, write=True)
+        if last_prof_write is None:
+            response = False
+        elif (last_prof_write[0].replace(tzinfo=timezone.utc)
+              <= recency_cutoff):
+            response = False
+        else:
+            response = True
+    except mysql.connector.Error as err:
+        print(f"An error occurred: {err}")
+        response = False
+    except ValueError as ve:
+        print(f"An error occurred: {ve}")
+        response = False
+    finally:
+        qr.cursor.close()   
+        qc.connection.close()
+    return response
 
 
-def has_recent_analysis_request(professor_id: int) -> bool:
-    """Returns True if a prof has a very recent analysis request"""
-    return False
-
-
-def log_standard_request(professor_id: int):
-    pass
-
-
-def log_analysis_request(professor_id: int):
-    pass
-
-
-def log_write_request(professor_id: int):
-    pass
+def log_request(professor_id: int, write = False, analysis = False):
+    """Logs a request, optionally if resulted in write or analysis request"""
+    config = Config().from_env()
+    qc = QueryConnector(config)
+    qr = QueryRunner(qc.connection)
+    try:
+        qr.insert_request(professor_id, write, analysis)
+        qc.connection.commit()
+        print("Logged standard request.")
+    except mysql.connector.Error as err:
+        print(f"An error occurred: {err}")
+    finally:
+        qr.cursor.close()
+        qc.connection.close()
 
 
 def get_recent_data(professor_id: int) -> Dict[str, Any]:
     """ Returns dict of recently analyzed professor reviews,
-        empty if ratings are stale. """
-    
-    dummy_response = {
-        "professor_id": 2971924,
-        "name": "Maryam Aliabadi",
-        "department": "Computer Science",
-        "difficulty": 3.2,
-        "rating": 4,
-        "would_take_again": 80,
-        "num_ratings": 5,
-        "school_id": 1413,
-        "school_name": "University of British Columbia",
-        "reviews": [
-            {
-                "quality": 4,
-                "difficulty": 4,
-                "comment": "I have learnt alot in this course.",
-                "class_name": "CPSC436C",
-                "date": "2024-03-18 18:36:05",
-                "take_again": True,
-                "grade": "A+",
-                "thumbs_up": 0,
-                "thumbs_down": 0,
-                "online_class": False,
-                "credit": True,
-                "attendance_mandatory": False,
-                "vcmp_polarity": 0.0,
-                "vcmp_subjectivity": 0.0,
-                "vcmp_emotion": "neutral",
-                "vcmp_sentiment": "positive",
-                "vcmp_spellingerrors": 2,
-                "vcmp_spellingquality": 0.7142857142857143
-            },
-            {
-                "quality": 5,
-                "difficulty": 3,
-                "comment": "Maryam is one of the most caring teachers that I ever had. I liked the guest speakers who were invited to the course. She did her best to bring the industrial experience of professionals to the course which was a great complementary to what we had learnt in this course. ",
-                "class_name": "CPSC436C",
-                "date": "2024-03-18 18:32:15",
-                "take_again": True,
-                "grade": "A",
-                "thumbs_up": 0,
-                "thumbs_down": 0,
-                "online_class": False,
-                "credit": True,
-                "attendance_mandatory": True,
-                "vcmp_polarity": 0.7250000000000001,
-                "vcmp_subjectivity": 0.5875,
-                "vcmp_emotion": "admiration",
-                "vcmp_sentiment": "positive",
-                "vcmp_spellingerrors": 3,
-                "vcmp_spellingquality": 0.94
-            },
-            {
-                "quality": 5,
-                "difficulty": 4,
-                "comment": "This course was very practical and it helps a lot to get a job ",
-                "class_name": "CPSC436C",
-                "date": "2024-01-17 20:40:30",
-                "take_again": True,
-                "grade": "A",
-                "thumbs_up": 0,
-                "thumbs_down": 0,
-                "online_class": False,
-                "credit": True,
-                "attendance_mandatory": True,
-                "vcmp_polarity": 0.2,
-                "vcmp_subjectivity": 0.3,
-                "vcmp_emotion": "approval",
-                "vcmp_sentiment": "positive",
-                "vcmp_spellingerrors": 0,
-                "vcmp_spellingquality": 1.0
-            },
-            {
-                "quality": 5,
-                "difficulty": 3,
-                "comment": "I truely appreciate Maryam for her awesome course. CPSC 436C was one of the most useful courses that I ever had in my academic life. It included lots of practical assignments that made me feel confident to start a career in cloud computing. Highly recommend it to UBC students from different disciplines. ",
-                "class_name": "CPSC436C",
-                "date": "2024-01-17 20:20:02",
-                "take_again": True,
-                "grade": "A+",
-                "thumbs_up": 0,
-                "thumbs_down": 0,
-                "online_class": False,
-                "credit": True,
-                "attendance_mandatory": True,
-                "vcmp_polarity": 0.35125,
-                "vcmp_subjectivity": 0.5154166666666666,
-                "vcmp_emotion": "admiration",
-                "vcmp_sentiment": "positive",
-                "vcmp_spellingerrors": 9,
-                "vcmp_spellingquality": 0.8269230769230769
-            },
-            {
-                "quality": 1,
-                "difficulty": 2,
-                "comment": "Dr. Aliabadi is honestly a very knowledgeable and engaging lecturer and the lectures are good, but the class is incredibly disorganized and her behaviours are questionable. She blames TAs for not proofreading labs/assignments/quizzes/exams. Labs and assignments are poorly documented. Nobody responds on Piazza. Overall, not recommended. ",
-                "class_name": "CPSC436C",
-                "date": "2024-01-06 01:16:30",
-                "take_again": None,
-                "grade": "A",
-                "thumbs_up": 1,
-                "thumbs_down": 0,
-                "online_class": False,
-                "credit": True,
-                "attendance_mandatory": True,
-                "vcmp_polarity": 0.18571428571428575,
-                "vcmp_subjectivity": 0.5857142857142856,
-                "vcmp_emotion": "disapproval",
-                "vcmp_sentiment": "negative",
-                "vcmp_spellingerrors": 11,
-                "vcmp_spellingquality": 0.7608695652173914
-            }
-        ]
-    }
-
-    return dummy_response
+        given that recent data exists. """
 
     start_time = time.perf_counter()
     config = Config().from_env()
@@ -169,22 +84,12 @@ def get_recent_data(professor_id: int) -> Dict[str, Any]:
 def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
     qc = QueryConnector(config)
     qr = QueryRunner(qc.connection)
-    current_time_utc = datetime.now(timezone.utc)
-    data_freshness_cutoff = (current_time_utc
-                             - timedelta(seconds=config.rec_int_sec))
-
+    
     try:
-        last_prof_write = qr.get_prof_request_date(professor_id)
-        if last_prof_write is None:
-            payload = {}
-        elif (last_prof_write[0].replace(tzinfo=timezone.utc)
-              <= data_freshness_cutoff):
-            payload = {}
-        else:
-            recent_data = qr.get_prof_records(professor_id)
-            if not recent_data:
-                raise ValueError(f"""Failed query for {professor_id}.""")
-            payload = get_formatted_as_dict(recent_data)
+        recent_data = qr.get_prof_records(professor_id)
+        if not recent_data:
+            raise ValueError(f"""Failed query for {professor_id}.""")
+        payload = get_formatted_as_dict(recent_data)
     except mysql.connector.Error as err:
         print(f"An error occurred: {err}")
         payload = {}
@@ -192,7 +97,7 @@ def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
         print(f"An error occurred: {ve}")
         payload = {}
     finally:
-        qr.cursor.close()
+        qr.cursor.close()   
         qc.connection.close()
     return payload
 
@@ -258,7 +163,7 @@ def insert_data_from_dict(professor_dict: Dict[str, Any],
         prof = Professor(professor_dict)
         qr.insert_school(prof)
         qr.insert_professor(prof)
-        qr.insert_request(prof)  # TODO edit this one
+        # qr.insert_request(prof.prof_id, True, False)  # TODO edit this one
         qr.delete_prof_reviews(prof)
 
         for review in prof.reviews:

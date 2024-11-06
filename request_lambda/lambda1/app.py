@@ -37,11 +37,11 @@ def lambda_handler(event, context):
     professor_id = int(url.split('/')[-1])
 
     # Check for recent data in our database (return data if present else None)
-    if database.has_recent_data(professor_id):
+    if database.has_recent_request_entry(professor_id):
         # Get, format and send the data
         print(f"Database contains recent data for prof")
         professor_json = database.get_recent_data(professor_id)
-        database.log_standard_request(professor_id)
+        database.log_request(professor_id)
         response = {
             "STATUS": "DATA_RETRIEVED",
             "DATA": frontend.format(professor_json)
@@ -60,10 +60,10 @@ def lambda_handler(event, context):
             'body': json.dumps({"error": f"ID {professor_id} not found."})
         }
         
-    if database.has_recent_analysis_request(professor_id):
+    if database.has_recent_request_entry(professor_id, analysis=True):
         # Send a response to inform analysis already requested
         print(f"Recent analysis request found")
-        database.log_standard_request(professor_id)
+        database.log_request(professor_id)
         response = {
             "STATUS": "ANALYSIS_IN_PROGRESS",
             "PROF_NAME": professor_name
