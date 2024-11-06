@@ -85,7 +85,7 @@ def lambda_handler(event, context):
             Payload=json.dumps({"data": professor_data})
         )
         print(f"No recent data and no recent analysis request")
-        print(f"Invoked lambda function {LAMBDA2_FUNCTION_NAME}")
+        print(f"Invoked lambda {LAMBDA2_FUNCTION_NAME} for {professor_id}")
         response = {
             "STATUS": "ANALYSIS_REQUESTED",
             "PROF_NAME": professor_name

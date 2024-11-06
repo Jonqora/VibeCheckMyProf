@@ -59,7 +59,7 @@ def log_request(professor_id: int, write = False, analysis = False):
     try:
         qr.insert_request(professor_id, write, analysis)
         qc.connection.commit()
-        print("Logged standard request.")
+        print(f"Logged request with write={write} and analysis={analysis}.")
     except mysql.connector.Error as err:
         print(f"An error occurred: {err}")
     finally:

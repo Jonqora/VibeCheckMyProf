@@ -19,8 +19,8 @@ CREATE TABLE professors (
 CREATE TABLE requests (
     prof_id             INT PRIMARY KEY NOT NULL,
     request_date        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    resulted_in_write   BOOL,
-    requested_analysis  BOOL
+    resulted_in_write   BOOLEAN,
+    requested_analysis  BOOLEAN
 );
 
 CREATE TABLE courses (
