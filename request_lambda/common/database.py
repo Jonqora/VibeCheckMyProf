@@ -12,6 +12,7 @@ from request_lambda.common.payload import Professor, Rating, Sentiment
 from request_lambda.common.query import QueryConnector, QueryRunner
 
 SECONDS_RECENT_ANALYSIS = 300
+SECONDS_RECENT_DATA = 604800
 
 
 def has_recent_request_entry(professor_id: int, analysis=False) -> bool:
@@ -20,18 +21,16 @@ def has_recent_request_entry(professor_id: int, analysis=False) -> bool:
     qc = QueryConnector(config)
     qr = QueryRunner(qc.connection)
     current_time_utc = datetime.now(timezone.utc)
-    if analysis:
-        recency_cutoff = (current_time_utc
-                                - timedelta(seconds=SECONDS_RECENT_ANALYSIS))
-    else:
-        recency_cutoff = (current_time_utc
-                                - timedelta(seconds=config.rec_int_sec))
-
+    
+    recency_cutoff = current_time_utc - timedelta(
+        seconds=SECONDS_RECENT_ANALYSIS if analysis else SECONDS_RECENT_DATA  # config.rec_int_sec
+    )
     try:
         if analysis:
             last_prof_write = qr.get_prof_request_date(professor_id, analysis=True)
         else:
             last_prof_write = qr.get_prof_request_date(professor_id, write=True)
+        print("last_prof_write", last_prof_write)
         if last_prof_write is None:
             response = False
         elif (last_prof_write[0].replace(tzinfo=timezone.utc)
@@ -163,7 +162,8 @@ def insert_data_from_dict(professor_dict: Dict[str, Any],
         prof = Professor(professor_dict)
         qr.insert_school(prof)
         qr.insert_professor(prof)
-        # qr.insert_request(prof.prof_id, True, False)  # TODO edit this one
+        qr.insert_request(prof.prof_id, True, False)  # TODO edit this one
+        print(f"Logged request with write={True} and analysis={False}.")
         qr.delete_prof_reviews(prof)
 
         for review in prof.reviews:
