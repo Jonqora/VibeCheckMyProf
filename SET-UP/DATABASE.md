@@ -70,7 +70,11 @@ of how to use the environment file.
 
 #### 4. Load Sample Data into the Database
 Run the script `database/populate_db.py` to bootstrap the AWS RDS database. The script will create the application tables, and
-load a small sample of data into the tables.
+load a small sample of data into the tables. From the project directory you can use 
+
+```
+python -m request_lambda.database_init.populate_db
+```
 
 ### Cleanup (Optional) - Use with Caution
 #### Remove Tables from Database

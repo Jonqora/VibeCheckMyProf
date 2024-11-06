@@ -10,7 +10,7 @@ This document catalogs emotions and emojis from the paper (Demszky et al., 2020)
 ### anger 😡 
 - A strong feeling of displeasure or antagonism. 
 
-### annoyance 😠 
+### annoyance 😒 
 - Mild anger, irritation. 
 
 ### approval 👍 
@@ -70,7 +70,7 @@ This document catalogs emotions and emojis from the paper (Demszky et al., 2020)
 ### realization* 👀 
 - Becoming aware of something. 
 
-### relief* 😌 
+### relief* 😅 
 - Reassurance and relaxation following release from anxiety or distress. 
 
 ### remorse* 😟 
@@ -81,3 +81,6 @@ This document catalogs emotions and emojis from the paper (Demszky et al., 2020)
 
 ### surprise 😮 
 - Feeling astonished, startled by something unexpected.
+
+### neutral ❓
+- None of the above

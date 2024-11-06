@@ -7,6 +7,7 @@ import json
 import os
 import re
 import sys
+import time
 
 
 # Format the data for the response to the front end. This may include
@@ -17,6 +18,7 @@ import sys
 # up any intermediate values stored (e.g. totals from calculating averages)
 def format(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     """Aggregate the data under courses and prof"""
+    start_time = time.perf_counter()
 
     # Prepare the prof with tally/sum fields, course dict, and course list
     init_prof(professor_json)
@@ -55,6 +57,10 @@ def format(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     # Remove the reviews and the course_dict
     del professor_json["reviews"]
     del professor_json["course_dict"]
+
+    stop_time = time.perf_counter()
+    frontend_time = stop_time - start_time
+    print(f"Time to format for frontend: {(frontend_time):.4f} seconds.")
 
     return professor_json
 
