@@ -58,7 +58,7 @@ class QueryRunner:
             VALUES (%s, %s, %s)
             ON DUPLICATE KEY UPDATE request_date = CURRENT_TIME
         """
-        self.cursor.execute(query,(prof_id, resulted_in_write, requested_analysis))
+        self.cursor.execute(query,(prof_id, int(resulted_in_write), int(requested_analysis)))
 
     def delete_prof_reviews(self, prof: Professor) -> None:
         """ Removes stale reviews from ratings and sentiments tables. """
