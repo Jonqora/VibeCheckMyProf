@@ -20,6 +20,7 @@ CREATE TABLE requests (
     prof_id             INT PRIMARY KEY NOT NULL,
     request_date        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     resulted_in_write   BOOL,
+    requested_analysis  BOOL,
     FOREIGN KEY (prof_id) REFERENCES professors(prof_id)
 );
 

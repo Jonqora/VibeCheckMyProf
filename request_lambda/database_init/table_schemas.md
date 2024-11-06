@@ -21,9 +21,10 @@
 ## requests
 | Column            | Data Type | Description                                      |
 |-------------------|-----------|--------------------------------------------------|
-| prof_id           | INT (FK)  | Foreign key linking to `professors` table        |
-| request_date      | TIMESTAMP | Date the user request came in                    | 
-| resulted_in_write | BOOLEAN   | Whether the request resulted in a database write |
+| prof_id            | INT (FK)  | Foreign key linking to `professors` table        |
+| request_date       | TIMESTAMP | Date the user request came in                    | 
+| resulted_in_write  | BOOLEAN   | Whether the request resulted in a database write |
+| requested_analysis | BOOLEAN   | Whether a new analysis was requested  |
 
 ## courses
 | Column      | Data Type   | Description                                       |
