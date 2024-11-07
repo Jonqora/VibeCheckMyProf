@@ -73,7 +73,7 @@ def lambda_handler(event, context):
         # Start analysis and
         # Send a response to inform analysis has begun
         try:
-            professor_data = rmp_api.get_prof_data(professor_id)
+            professor_name = rmp_api.get_prof_name(professor_id)
         except ValueError:
             return {
                 'statusCode': 400,
@@ -82,7 +82,7 @@ def lambda_handler(event, context):
         client.invoke(
             FunctionName=LAMBDA2_FUNCTION_NAME,  # Lambda function to invoke
             InvocationType='Event',  # Asynchronous
-            Payload=json.dumps({"data": professor_data})
+            Payload=json.dumps({"id": professor_id})
         )
         print("No recent data and no recent analysis request")
         print(f"Invoked lambda {LAMBDA2_FUNCTION_NAME} for {professor_id}")
