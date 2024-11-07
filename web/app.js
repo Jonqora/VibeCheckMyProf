@@ -293,8 +293,12 @@ function renderFeels(feelsData, numRatings) {
 function renderEmojis(reviewsData) {
     let emojisHTML = '';
     for (const review of reviewsData) {
+        let displayType = 'block';
+        if (review.comment == null || review.comment == '' || review.comment == 'No comments') {
+            displayType = 'none';
+        }
         const reviewHTML = `
-            <div class="emoji-container">
+            <div class="emoji-container" style="display: ${displayType};">
                 <span class="emoji-trigger">${toEmoji(review.vcmp_emotion)}</span>
                 <div class="emoji-tooltip">
                     ${review.comment} <br>
