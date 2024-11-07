@@ -22,12 +22,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.3853,
-            "vcmp_subjectivity": 0.1579,
-            "vcmp_emotion": "realization",
-            "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 3,
-            "vcmp_spellingquality": 0.9363
+            "vcmp_polarity": 0.3011904761904763,
+            "vcmp_subjectivity": 0.6845238095238095,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 7,
+            "vcmp_spellingquality": 0.8833333333333333
         },
         {
             "quality": 5,
@@ -42,12 +42,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": true,
-            "vcmp_polarity": 0.7017,
-            "vcmp_subjectivity": 0.118,
-            "vcmp_emotion": "approval",
-            "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.8792
+            "vcmp_polarity": 0.39999999999999997,
+            "vcmp_subjectivity": 0.39999999999999997,
+            "vcmp_emotion": "gratitude",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 8,
+            "vcmp_spellingquality": 0.864406779661017
         },
         {
             "quality": 5,
@@ -62,12 +62,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.1622,
-            "vcmp_subjectivity": 0.1567,
-            "vcmp_emotion": "nervousness",
-            "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 1,
-            "vcmp_spellingquality": 0.9317
+            "vcmp_polarity": 0.10916666666666668,
+            "vcmp_subjectivity": 0.6625000000000001,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 7,
+            "vcmp_spellingquality": 0.8703703703703703
         },
         {
             "quality": 4,
@@ -82,12 +82,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.2042,
-            "vcmp_subjectivity": 0.7685,
-            "vcmp_emotion": "remorse",
-            "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9719
+            "vcmp_polarity": -0.14876543209876542,
+            "vcmp_subjectivity": 0.7450617283950618,
+            "vcmp_emotion": "neutral",
+            "vcmp_sentiment": "mixed",
+            "vcmp_spellingerrors": 7,
+            "vcmp_spellingquality": 0.8923076923076922
         },
         {
             "quality": 5,
@@ -102,12 +102,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.2283,
-            "vcmp_subjectivity": 0.3236,
-            "vcmp_emotion": "anger",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 1,
-            "vcmp_spellingquality": 0.9416
+            "vcmp_polarity": 0.3125,
+            "vcmp_subjectivity": 0.45,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 2,
+            "vcmp_spellingquality": 0.8823529411764706
         },
         {
             "quality": 5,
@@ -122,12 +122,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.4108,
-            "vcmp_subjectivity": 0.955,
-            "vcmp_emotion": "nervousness",
-            "vcmp_sentiment": "neutral",
+            "vcmp_polarity": 0.39444444444444443,
+            "vcmp_subjectivity": 0.7777777777777778,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
             "vcmp_spellingerrors": 1,
-            "vcmp_spellingquality": 0.9513
+            "vcmp_spellingquality": 0.9
         },
         {
             "quality": 5,
@@ -142,12 +142,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.3639,
-            "vcmp_subjectivity": 0.9786,
-            "vcmp_emotion": "pride",
+            "vcmp_polarity": 0.5666666666666667,
+            "vcmp_subjectivity": 0.7166666666666668,
+            "vcmp_emotion": "approval",
             "vcmp_sentiment": "positive",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.8671
+            "vcmp_spellingerrors": 1,
+            "vcmp_spellingquality": 0.8333333333333334
         },
         {
             "quality": 2,
@@ -162,12 +162,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": true,
-            "vcmp_polarity": 0.0657,
-            "vcmp_subjectivity": 0.4596,
-            "vcmp_emotion": "love",
+            "vcmp_polarity": -0.25466666666666665,
+            "vcmp_subjectivity": 0.8553333333333333,
+            "vcmp_emotion": "disappointment",
             "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 2,
-            "vcmp_spellingquality": 0.9945
+            "vcmp_spellingerrors": 5,
+            "vcmp_spellingquality": 0.8484848484848485
         },
         {
             "quality": 5,
@@ -182,12 +182,12 @@
             "online_class": false,
             "credit": false,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.0858,
-            "vcmp_subjectivity": 0.5372,
-            "vcmp_emotion": "embarrassment",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 3,
-            "vcmp_spellingquality": 0.9803
+            "vcmp_polarity": 0.07047619047619048,
+            "vcmp_subjectivity": 0.7676190476190478,
+            "vcmp_emotion": "joy",
+            "vcmp_sentiment": "mixed",
+            "vcmp_spellingerrors": 6,
+            "vcmp_spellingquality": 0.8909090909090909
         },
         {
             "quality": 3,
@@ -202,12 +202,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": true,
-            "vcmp_polarity": 0.7423,
-            "vcmp_subjectivity": 0.9666,
-            "vcmp_emotion": "approval",
-            "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9762
+            "vcmp_polarity": 0.04166666666666667,
+            "vcmp_subjectivity": 0.675,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "mixed",
+            "vcmp_spellingerrors": 5,
+            "vcmp_spellingquality": 0.9074074074074074
         },
         {
             "quality": 5,
@@ -222,12 +222,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.3345,
-            "vcmp_subjectivity": 0.5127,
-            "vcmp_emotion": "annoyance",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9818
+            "vcmp_polarity": 0.1824786324786325,
+            "vcmp_subjectivity": 0.5352564102564102,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 10,
+            "vcmp_spellingquality": 0.8333333333333334
         },
         {
             "quality": 1,
@@ -242,12 +242,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.805,
-            "vcmp_subjectivity": 0.9515,
-            "vcmp_emotion": "nervousness",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 1,
-            "vcmp_spellingquality": 0.9948
+            "vcmp_polarity": -0.10500000000000001,
+            "vcmp_subjectivity": 0.6516666666666666,
+            "vcmp_emotion": "fear",
+            "vcmp_sentiment": "negative",
+            "vcmp_spellingerrors": 6,
+            "vcmp_spellingquality": 0.8333333333333334
         },
         {
             "quality": 1,
@@ -262,12 +262,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.339,
-            "vcmp_subjectivity": 0.551,
-            "vcmp_emotion": "desire",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9299
+            "vcmp_polarity": -0.06178571428571429,
+            "vcmp_subjectivity": 0.3028571428571428,
+            "vcmp_emotion": "annoyance",
+            "vcmp_sentiment": "negative",
+            "vcmp_spellingerrors": 6,
+            "vcmp_spellingquality": 0.8181818181818181
         },
         {
             "quality": 5,
@@ -282,12 +282,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.5404,
-            "vcmp_subjectivity": 0.3826,
-            "vcmp_emotion": "grief",
-            "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 1,
-            "vcmp_spellingquality": 0.9211
+            "vcmp_polarity": 0.21083333333333334,
+            "vcmp_subjectivity": 0.46416666666666667,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 8,
+            "vcmp_spellingquality": 0.8461538461538461
         },
         {
             "quality": 5,
@@ -302,12 +302,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.3447,
-            "vcmp_subjectivity": 0.4303,
-            "vcmp_emotion": "approval",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 1,
-            "vcmp_spellingquality": 0.9032
+            "vcmp_polarity": 0.21366666666666667,
+            "vcmp_subjectivity": 0.5676666666666667,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 6,
+            "vcmp_spellingquality": 0.8909090909090909
         },
         {
             "quality": 1,
@@ -322,12 +322,12 @@
             "online_class": true,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.0987,
-            "vcmp_subjectivity": 0.3934,
-            "vcmp_emotion": "fear",
-            "vcmp_sentiment": "positive",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9735
+            "vcmp_polarity": -0.2569444444444445,
+            "vcmp_subjectivity": 0.6680555555555555,
+            "vcmp_emotion": "annoyance",
+            "vcmp_sentiment": "negative",
+            "vcmp_spellingerrors": 7,
+            "vcmp_spellingquality": 0.8571428571428572
         },
         {
             "quality": 1,
@@ -342,12 +342,12 @@
             "online_class": true,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.2731,
-            "vcmp_subjectivity": 0.746,
-            "vcmp_emotion": "realization",
+            "vcmp_polarity": -0.6296296296296297,
+            "vcmp_subjectivity": 0.6777777777777777,
+            "vcmp_emotion": "disgust",
             "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 1,
-            "vcmp_spellingquality": 0.9586
+            "vcmp_spellingerrors": 2,
+            "vcmp_spellingquality": 0.8
         },
         {
             "quality": 5,
@@ -362,12 +362,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": null,
-            "vcmp_polarity": 0.2743,
-            "vcmp_subjectivity": 0.2206,
-            "vcmp_emotion": "realization",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 1,
-            "vcmp_spellingquality": 0.8745
+            "vcmp_polarity": 0.30243055555555554,
+            "vcmp_subjectivity": 0.6645833333333333,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 8,
+            "vcmp_spellingquality": 0.8857142857142857
         },
         {
             "quality": 5,
@@ -382,12 +382,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": null,
-            "vcmp_polarity": 0.3549,
-            "vcmp_subjectivity": 0.8683,
-            "vcmp_emotion": "fear",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 2,
-            "vcmp_spellingquality": 0.9644
+            "vcmp_polarity": 0.5527777777777777,
+            "vcmp_subjectivity": 0.7722222222222221,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 8,
+            "vcmp_spellingquality": 0.8709677419354839
         },
         {
             "quality": 3,
@@ -402,12 +402,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.4024,
-            "vcmp_subjectivity": 0.2596,
-            "vcmp_emotion": "excitement",
+            "vcmp_polarity": 0.13809523809523813,
+            "vcmp_subjectivity": 0.7031746031746031,
+            "vcmp_emotion": "neutral",
             "vcmp_sentiment": "mixed",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9485
+            "vcmp_spellingerrors": 7,
+            "vcmp_spellingquality": 0.851063829787234
         },
         {
             "quality": 5,
@@ -422,12 +422,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.2268,
-            "vcmp_subjectivity": 0.1397,
-            "vcmp_emotion": "confusion",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9175
+            "vcmp_polarity": 0.675,
+            "vcmp_subjectivity": 0.7,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 5,
+            "vcmp_spellingquality": 0.7619047619047619
         },
         {
             "quality": 4,
@@ -442,12 +442,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.1422,
-            "vcmp_subjectivity": 0.3342,
-            "vcmp_emotion": "disappointment",
-            "vcmp_sentiment": "mixed",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9708
+            "vcmp_polarity": 0.07037037037037036,
+            "vcmp_subjectivity": 0.40185185185185185,
+            "vcmp_emotion": "neutral",
+            "vcmp_sentiment": "negative",
+            "vcmp_spellingerrors": 9,
+            "vcmp_spellingquality": 0.859375
         },
         {
             "quality": 4,
@@ -462,12 +462,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.3068,
-            "vcmp_subjectivity": 0.8376,
-            "vcmp_emotion": "confusion",
-            "vcmp_sentiment": "mixed",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9571
+            "vcmp_polarity": 0.0066666666666666706,
+            "vcmp_subjectivity": 0.7266666666666667,
+            "vcmp_emotion": "disappointment",
+            "vcmp_sentiment": "negative",
+            "vcmp_spellingerrors": 8,
+            "vcmp_spellingquality": 0.8787878787878788
         },
         {
             "quality": 1,
@@ -482,12 +482,12 @@
             "online_class": false,
             "credit": true,
             "attendance_mandatory": false,
-            "vcmp_polarity": 0.9736,
-            "vcmp_subjectivity": 0.4465,
-            "vcmp_emotion": "disappointment",
+            "vcmp_polarity": -0.5719444444444445,
+            "vcmp_subjectivity": 0.6969444444444445,
+            "vcmp_emotion": "disgust",
             "vcmp_sentiment": "negative",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9459
+            "vcmp_spellingerrors": 9,
+            "vcmp_spellingquality": 0.8636363636363636
         },
         {
             "quality": 5,
@@ -502,12 +502,12 @@
             "online_class": false,
             "credit": false,
             "attendance_mandatory": null,
-            "vcmp_polarity": 0.5521,
-            "vcmp_subjectivity": 0.1411,
+            "vcmp_polarity": 0.3816666666666667,
+            "vcmp_subjectivity": 0.65,
             "vcmp_emotion": "approval",
-            "vcmp_sentiment": "mixed",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.9761
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 4,
+            "vcmp_spellingquality": 0.8888888888888888
         },
         {
             "quality": 2,
@@ -522,12 +522,12 @@
             "online_class": false,
             "credit": false,
             "attendance_mandatory": null,
-            "vcmp_polarity": 0.2751,
-            "vcmp_subjectivity": 0.8779,
-            "vcmp_emotion": "caring",
-            "vcmp_sentiment": "neutral",
-            "vcmp_spellingerrors": 0,
-            "vcmp_spellingquality": 0.8922
+            "vcmp_polarity": 0.0,
+            "vcmp_subjectivity": 0.4000000000000001,
+            "vcmp_emotion": "admiration",
+            "vcmp_sentiment": "positive",
+            "vcmp_spellingerrors": 4,
+            "vcmp_spellingquality": 0.9
         }
     ]
 }
