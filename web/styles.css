@@ -294,3 +294,28 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.defs-container {
+    background-color: #181818; 
+    color: #eeeeee;
+
+    border: 0.25rem solid transparent;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    padding: 1rem;
+}
+
+.defs-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.defs-table td:first-child{
+    font-weight: bold;
+    vertical-align: top;
+}
+
+.defs-table {
+    border-spacing: 20px;
+    text-align: left;
+}

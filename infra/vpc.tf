@@ -28,6 +28,7 @@ resource "aws_subnet" "public_subnet_2" {
   vpc_id     = aws_vpc.main_vpc.id
   cidr_block = "10.0.3.0/24"
   availability_zone = "ca-central-1b"
+  map_public_ip_on_launch = true
   tags = {
     Name    = "${var.app_prefix}-public-subnet-2"
     Project = var.app_name
@@ -108,15 +109,28 @@ resource "aws_route_table_association" "public_route_table_assoc_2" {
   route_table_id = aws_route_table.public_route_table.id
 }
 
-# Route Table for Private Subnets
-resource "aws_route_table" "private_route_table" {
+# Route Table for Private Subnet
+resource "aws_route_table" "private_route_table_1" {
   vpc_id = aws_vpc.main_vpc.id
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat_gateway.id
   }
   tags = {
-    Name    = "${var.app_prefix}-private-route-table"
+    Name    = "${var.app_prefix}-private-route-table-1"
+    Project = var.app_name
+  }
+}
+
+# Route Table for Private Subnets
+resource "aws_route_table" "private_route_table_2" {
+  vpc_id = aws_vpc.main_vpc.id
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_gateway.id
+  }
+  tags = {
+    Name    = "${var.app_prefix}-private-route-table-2"
     Project = var.app_name
   }
 }
@@ -124,13 +138,13 @@ resource "aws_route_table" "private_route_table" {
 # Route Table Association for Private Subnets
 resource "aws_route_table_association" "private_route_table_assoc_1" {
   subnet_id      = aws_subnet.private_subnet_1.id
-  route_table_id = aws_route_table.private_route_table.id
+  route_table_id = aws_route_table.private_route_table_1.id
 }
 
 # Route Table Association for Private Subnets
 resource "aws_route_table_association" "private_route_table_assoc_2" {
   subnet_id      = aws_subnet.private_subnet_2.id
-  route_table_id = aws_route_table.private_route_table.id
+  route_table_id = aws_route_table.private_route_table_2.id
 }
 
 # Subnet Group for RDS
