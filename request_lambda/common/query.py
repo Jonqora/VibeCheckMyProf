@@ -1,5 +1,6 @@
 # flake8: noqa
 import mysql.connector
+from typing import Optional
 
 from request_lambda.common.config import Config
 from request_lambda.common.payload import Professor, Rating, Sentiment
@@ -65,7 +66,7 @@ class QueryRunner:
         """ Removes stale reviews from ratings and sentiments tables. """
         self.cursor.execute("""DELETE FROM ratings WHERE prof_id = %s""", (prof.prof_id,))
 
-    def get_course_record(self, course_name: str, school_id: int) -> tuple or None:
+    def get_course_record(self, course_name: str, school_id: int) -> Optional[tuple]:
         """ Returns course id from the course table, or None if course doesn't exist. """
         query = """
             SELECT course_id 
@@ -115,7 +116,7 @@ class QueryRunner:
             if command.strip():
                 self.cursor.execute(command)
 
-    def get_prof_request(self, professor_id: int) -> tuple or None:
+    def get_prof_request(self, professor_id: int) -> Optional[tuple]:
         """ Returns request record for given professor, or none if prof hasn't been processed. """
         query = """
             SELECT * 
