@@ -31,13 +31,10 @@ def lambda_handler(event, context):
                 )
     }
 
-        # Process data and have sentiment analysis added to it
-        database.log_request(professor_id, analysis=True)
         professor_json = sentiment.analyze(professor_json)
 
         # Send data and sentiment to be stored in backend database
         database.write_data(professor_json)
-        # database.log_request(professor_id, write=True)
 
         # Return a 200 OK response with the data
         return {
