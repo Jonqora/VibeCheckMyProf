@@ -24,6 +24,12 @@ terraform.*
 # Environment configuration for local database connection
 infra/config.env
 
+# Ignore .Rhistory files
+.Rhistory
+
+# Ignore .DS_Store files
+.DS_Store
+
 # Node.js modules
 node_modules/
 
