@@ -36,6 +36,7 @@ def lambda_handler(event, context):
     # Get the professor id
     professor_id = int(url.split('/')[-1])
     prof_status = database.get_prof_status(professor_id)
+    print(f"Received request for professor {professor_id}")
 
     # Case: valid data is in the database
     if prof_status == "complete":

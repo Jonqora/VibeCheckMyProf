@@ -66,7 +66,7 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof-l
 1. Create a new Lambda and choose Container image option
 2. Name it and choose the `vibe-check-my-prof-lambda2` container image
 3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function. Click Deploy
-4. Under the `Configuration` tab, select `General configuration` and set the **memory** to 3008MB and the **timeout** to 3 minutes. 
+4. Under the `Configuration` tab, select `General configuration` and set the **memory** to 3008MB and the **timeout** to 5 minutes. 
 5. Under the `Configuration` tab, select `Environment variables` and add all the variables from the project's `infra/config.env` file.
 6. Do `Connect to RDS database`folowing instructions above for the previous lambda
 7. Edit the VPC and subnets following instructions above for the previous lambda
