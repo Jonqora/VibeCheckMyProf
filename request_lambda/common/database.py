@@ -11,64 +11,14 @@ from request_lambda.common.config import Config
 from request_lambda.common.payload import Professor, Rating, Sentiment
 from request_lambda.common.query import QueryConnector, QueryRunner
 
-# SECONDS_RECENT_ANALYSIS = 300
-# SECONDS_RECENT_DATA = 604800
-#
-#
-# def has_recent_request_entry(professor_id: int, analysis=False) -> bool:
-#     """Returns True if a prof has a request within recent time limit"""
-#     config = Config().from_env()
-#     qc = QueryConnector(config)
-#     qr = QueryRunner(qc.connection)
-#     current_time_utc = datetime.now(timezone.utc)
-#
-#     recency_cutoff = current_time_utc - timedelta(
-#         seconds=SECONDS_RECENT_ANALYSIS if analysis else SECONDS_RECENT_DATA  # config.rec_int_sec
-#     )
-#     try:
-#         if analysis:
-#             last_prof_write = qr.get_prof_request(professor_id, analysis=True)
-#         else:
-#             last_prof_write = qr.get_prof_request(professor_id, write=True)
-#         print("last_prof_write", last_prof_write)
-#         if last_prof_write is None:
-#             response = False
-#         elif (last_prof_write[0].replace(tzinfo=timezone.utc)
-#               <= recency_cutoff):
-#             response = False
-#         else:
-#             response = True
-#     except mysql.connector.Error as err:
-#         print(f"An error occurred: {err}")
-#         response = False
-#     except ValueError as ve:
-#         print(f"An error occurred: {ve}")
-#         response = False
-#     finally:
-#         qr.cursor.close()
-#         qc.connection.close()
-#     return response
-#
-#
-# def log_request(professor_id: int, write = False, analysis = False):
-#     """Logs a request, optionally if resulted in write or analysis request"""
-#     config = Config().from_env()
-#     qc = QueryConnector(config)
-#     qr = QueryRunner(qc.connection)
-#     try:
-#         qr.insert_request(professor_id, write, analysis)
-#         qc.connection.commit()
-#         print(f"Logged request with write={write} and analysis={analysis}.")
-#     except mysql.connector.Error as err:
-#         print(f"An error occurred: {err}")
-#     finally:
-#         qr.cursor.close()
-#         qc.connection.close()
+SECONDS_RECENT_ANALYSIS = 300
+
 
 def get_prof_status(professor_id: int) -> str:
     config = Config().from_env()
     status = get_status_from_db(professor_id, config)
     return status
+
 
 def get_status_from_db(professor_id: int, config: Config) -> str:
     """ Returns status of professor data: not-started: analysis required
@@ -79,6 +29,8 @@ def get_status_from_db(professor_id: int, config: Config) -> str:
     current_time_utc = datetime.now(timezone.utc)
     staleness_cutoff = (current_time_utc
                         - timedelta(seconds=config.rec_int_sec))
+    recency_cutoff = (current_time_utc
+                      - timedelta(seconds=SECONDS_RECENT_ANALYSIS))
     try:
         last_prof_write = qr.get_prof_request(professor_id)
         if last_prof_write is None:
@@ -86,10 +38,18 @@ def get_status_from_db(professor_id: int, config: Config) -> str:
             qr.insert_request(professor_id, 0)
             qc.connection.commit()
             status = "not-started"
-        elif last_prof_write[0][1] == 0:
-            # Prof data not analyzed yet -> return in progress
-            status = "in-progress"
-        elif last_prof_write[0][2].replace(tzinfo=timezone.utc) < staleness_cutoff:
+        elif last_prof_write[1] == 0:
+            if last_prof_write[2].replace(tzinfo=timezone.utc) < \
+                    recency_cutoff:
+                # Recorded analysis of prof was not recent: restart analysis
+                qr.insert_request(professor_id, 0)
+                qc.connection.commit()
+                status = "not-started"
+            else:
+                # Prof data started analysis recently -> return in progress
+                status = "in-progress"
+        elif last_prof_write[2].replace(tzinfo=timezone.utc) < \
+                staleness_cutoff:
             # Prof data stale -> return not started and update request
             qr.insert_request(professor_id, 0)
             qc.connection.commit()
@@ -116,6 +76,7 @@ def get_prof_data(professor_id: int) -> Dict[str, Any]:
     get_data_time = stop_time - start_time
     print(f"Time to get recent data from DB: {(get_data_time):.4f} seconds.")
     return payload
+
 
 def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
     """ Returns formatted dict of recently analyzed professor reviews. """
@@ -224,7 +185,7 @@ def insert_data_from_dict(professor_dict: Dict[str, Any],
 
         # Mark prof data request status as complete
         qr.insert_request(prof.prof_id, 1)
-        print(f"Updated request status to complete.")
+        print("Updated request status to complete.")
 
         qc.connection.commit()
         print("Data insertion complete.")

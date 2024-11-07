@@ -14,22 +14,22 @@ def lambda_handler(event, context):
     try:
         # Payload contains an 'id' field
         professor_json = event.get('data')
-        
+
         if not isinstance(professor_json, dict) or not professor_json:
             return {
                 'statusCode': 400,
                 'body': json.dumps({"error": "No professor data provided"})
             }
-        
+
         try:
-            professor_id = professor_json["professor_id"]
+            professor_id = professor_json["professor_id"]  # noqa: F841
         except KeyError:
             return {
                 'statusCode': 400,
                 'body': json.dumps(
                     {"error": "'professor_id' is missing from the data"}
                 )
-    }
+            }
 
         professor_json = sentiment.analyze(professor_json)
 
@@ -41,7 +41,7 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': json.dumps(professor_json)
         }
-        
+
     except Exception as e:
         return {
             'statusCode': 500,

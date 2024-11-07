@@ -103,24 +103,20 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
 
     for i, review in enumerate(professor_json["reviews"]):
         comment = review["comment"]
-        print(f"Analyzing review {i+1}/{len(professor_json['reviews'])}")
         time1 = time.perf_counter()
         tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(
             comment)
         time2 = time.perf_counter()
         TextBlob_time += time2 - time1
-        print(f"TextBlob analysis took {time2 - time1:.4f} seconds.")
         emotion = emotions[i]
         time3 = time.perf_counter()
         GoEmotions_time += time3 - time2
         comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(
             comment)
-        print(f"Comprehend sentiment: {comprehend_sentiment}")
         time4 = time.perf_counter()
         Comprehend_time += time4 - time3
         spelling_quality, spelling_errors = sentiment_analyzer.analyze_spelling_and_grammar(
             comment)
-        print(f"Spelling quality: {spelling_quality}, errors: {spelling_errors}")
         time5 = time.perf_counter()
         Spelling_time += time5 - time4
 

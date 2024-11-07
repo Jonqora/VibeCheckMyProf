@@ -63,7 +63,7 @@ def lambda_handler(event, context):
     # Case: request exists, but data is still being processed
     if prof_status == "in-progress":
         # Send a response to inform analysis is underway
-        print(f"Analysis in progress for professor.")
+        print("Analysis in progress for professor.")
         response = {
             "STATUS": "ANALYSIS_IN_PROGRESS",
             "PROF_NAME": professor_name,
@@ -84,7 +84,7 @@ def lambda_handler(event, context):
             InvocationType='Event',  # Asynchronous
             Payload=json.dumps({"data": professor_data})
         )
-        print(f"No recent data and no recent analysis request")
+        print("No recent data and no recent analysis request")
         print(f"Invoked lambda {LAMBDA2_FUNCTION_NAME} for {professor_id}")
         response = {
             "STATUS": "ANALYSIS_REQUESTED",
@@ -100,6 +100,3 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps(response)
     }
-
-
-

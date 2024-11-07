@@ -121,6 +121,8 @@ class QueryRunner:
             SELECT * 
             FROM requests 
             WHERE prof_id = %s
+            ORDER BY write_date DESC
+            LIMIT 1
         """
         self.cursor.execute(query,(professor_id,))
         query_result = self.cursor.fetchone()
