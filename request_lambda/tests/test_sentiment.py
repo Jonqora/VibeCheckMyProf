@@ -9,7 +9,7 @@
 
 import json
 import os
-from request_lambda.app import sentiment
+from request_lambda.lambda2 import sentiment
 
 
 def dummy_prof_data():
