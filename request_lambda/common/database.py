@@ -88,6 +88,7 @@ def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
         if not data:
             raise ValueError(f"""Failed query for {professor_id}.""")
         payload = get_formatted_as_dict(data)
+
     except mysql.connector.Error as err:
         print(f"An error occurred: {err}")
         payload = {}
