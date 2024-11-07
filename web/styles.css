@@ -47,6 +47,7 @@ body {
 .instructions {
     margin-bottom: 10px;
     font-size: 18px;
+    color: #f9c5d1;
 }
 
 .input-group {
@@ -84,13 +85,15 @@ body {
     background-color: #f9c5d1;
 }
 
-.error-message {
-    color: #ff6b6b;
+.message-para {
+    /* color: #ff6b6b; */
+    color: #eeeeee;
     font-size: 14px;
     margin-bottom: 10px;
 }
 
 .response-field {
+    display: none;  /*TOGGLE TO DEBUG*/
     width: 100%;
     max-width: 800px;
     height: 200px;

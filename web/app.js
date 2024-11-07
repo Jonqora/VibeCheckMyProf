@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const urlInput = document.getElementById('urlInput');
-    const errorElement = document.getElementById('error');
+    const messageElement = document.getElementById('message');
     const responseField = document.getElementById('responseField');
     const vibeCheckButton = document.getElementById('vibeCheckButton');
 
@@ -14,17 +14,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function displayError(message) {
-        errorElement.textContent = message;
+        messageElement.textContent = message;
     }
 
     function clearError() {
-        errorElement.textContent = '';
+        messageElement.textContent = '';
     }
 
     // Function to send API request to the API Gateway endpoint
     function sendApiRequest(professorUrl) {
         const loadingOverlay = document.getElementById('loading');
         loadingOverlay.style.display = 'flex';
+        document.getElementById('response-prof').style.display = 'none';
+        document.getElementById('response-courses').style.display = 'none';
 
         // The API URL is loaded from config.js
         // eslint-disable-next-line no-undef
@@ -41,13 +43,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadingOverlay.style.display = 'none';
                 // Display the API response in the text area
                 responseField.value = `Response: ${JSON.stringify(data, null, 2)}`;
+                const responseCode = JSON.parse(data.statusCode);
                 const responseData = JSON.parse(data.body);
-                renderResponse(responseData);
+                if (responseCode) {
+                    if (responseCode == '200') {
+                        if (responseData.STATUS == 'DATA_RETRIEVED') {
+                            messageElement.textContent = '';
+                            renderResponse(responseData.DATA);
+                        } else if (responseData.STATUS == 'ANALYSIS_REQUESTED') {
+                            messageElement.textContent = responseData.STATUS;
+                        } else if (responseData.STATUS == 'ANALYSIS_IN_PROGRESS') {
+                            messageElement.textContent = responseData.STATUS;
+                        } else {
+                            messageElement.textContent = 'UNKNOWN RESPONSE';
+                        }
+                    } else {
+                        messageElement.textContent = responseData.error;
+                    }
+                } else {
+                    messageElement.textContent = JSON.stringify(data);
+                }
             })
             .catch(error => {
                 loadingOverlay.style.display = 'none';
                 // Display error message if the request fails
                 responseField.value = `Error: ${error.message}`;
+                messageElement.textContent = `Error: ${error.message}`;
             });
     }
 
@@ -145,6 +166,7 @@ function renderResponse(data) {
 
     const coursesComponent = document.getElementById('response-courses');
     coursesComponent.innerHTML = '';
+    coursesComponent.style.display = 'block'; // Undo display:none
     for (const course of data.courses) {
         coursesComponent.insertAdjacentHTML('beforeend', renderCourse(course));
     }
