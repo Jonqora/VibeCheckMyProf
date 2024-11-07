@@ -27,9 +27,9 @@ def has_recent_request_entry(professor_id: int, analysis=False) -> bool:
     )
     try:
         if analysis:
-            last_prof_write = qr.get_prof_request_date(professor_id, analysis=True)
+            last_prof_write = qr.get_prof_request(professor_id, analysis=True)
         else:
-            last_prof_write = qr.get_prof_request_date(professor_id, write=True)
+            last_prof_write = qr.get_prof_request(professor_id, write=True)
         print("last_prof_write", last_prof_write)
         if last_prof_write is None:
             response = False
@@ -65,30 +65,68 @@ def log_request(professor_id: int, write = False, analysis = False):
         qr.cursor.close()
         qc.connection.close()
 
+def get_prof_status(professor_id: int) -> str:
+    config = Config().from_env()
+    status = get_status_from_db(professor_id, config)
+    return status
 
-def get_recent_data(professor_id: int) -> Dict[str, Any]:
+def get_status_from_db(professor_id: int, config: Config) -> str:
+    """ Returns status of professor data: not-started: analysis required
+                                          in-progress: analysis underway
+                                          complete: data available. """
+    qc = QueryConnector(config)
+    qr = QueryRunner(qc.connection)
+    current_time_utc = datetime.now(timezone.utc)
+    staleness_cutoff = (current_time_utc
+                        - timedelta(seconds=config.rec_int_sec))
+    try:
+        last_prof_write = qr.get_prof_request(professor_id)
+        if last_prof_write is None:
+            # Prof not requested yet -> return not started and insert request
+            qr.insert_request(professor_id, 0)
+            qc.connection.commit()
+            status = "not-started"
+        elif last_prof_write[0][1] == 0:
+            # Prof data not analyzed yet -> return in progress
+            status = "in-progress"
+        elif last_prof_write[0][2].replace(tzinfo=timezone.utc) < staleness_cutoff:
+            # Prof data stale -> return not started and update request
+            qr.insert_request(professor_id, 0)
+            qc.connection.commit()
+            status = "not-started"
+        else:
+            # Prof data is valid -> return analysis complete
+            status = "complete"
+    except mysql.connector.Error as err:
+        print(f"An error occurred: {err}")
+        status = "SQL error"
+    finally:
+        qr.cursor.close()
+        qc.connection.close()
+    return status
+
+
+def get_prof_data(professor_id: int) -> Dict[str, Any]:
     """ Returns dict of recently analyzed professor reviews,
         given that recent data exists. """
-
     start_time = time.perf_counter()
     config = Config().from_env()
     payload = get_data_from_db(professor_id, config)
     stop_time = time.perf_counter()
-
     get_data_time = stop_time - start_time
     print(f"Time to get recent data from DB: {(get_data_time):.4f} seconds.")
     return payload
 
-
 def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
+    """ Returns formatted dict of recently analyzed professor reviews. """
     qc = QueryConnector(config)
     qr = QueryRunner(qc.connection)
-    
+
     try:
-        recent_data = qr.get_prof_records(professor_id)
-        if not recent_data:
+        data = qr.get_prof_records(professor_id)
+        if not data:
             raise ValueError(f"""Failed query for {professor_id}.""")
-        payload = get_formatted_as_dict(recent_data)
+        payload = get_formatted_as_dict(data)
     except mysql.connector.Error as err:
         print(f"An error occurred: {err}")
         payload = {}
@@ -96,13 +134,13 @@ def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
         print(f"An error occurred: {ve}")
         payload = {}
     finally:
-        qr.cursor.close()   
+        qr.cursor.close()
         qc.connection.close()
     return payload
 
 
 def get_formatted_as_dict(rows: list) -> Dict[str, Any]:
-    """ Returns dictionary of rows formatted for frontend. """
+    """" Returns dictionary of rows formatted for app. """
     result = {
         "professor_id": rows[0][0],
         "name": rows[0][1],
@@ -162,7 +200,7 @@ def insert_data_from_dict(professor_dict: Dict[str, Any],
         prof = Professor(professor_dict)
         qr.insert_school(prof)
         qr.insert_professor(prof)
-        qr.insert_request(prof.prof_id, True, False)  # TODO edit this one
+        # qr.insert_request(prof.prof_id, True, False)  # TODO edit this one
         print(f"Logged request with write={True} and analysis={False}.")
         qr.delete_prof_reviews(prof)
 

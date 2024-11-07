@@ -51,14 +51,15 @@ class QueryRunner:
         self.cursor.execute(query,(prof.prof_id, prof.prof_name, prof.dept, prof.avg_diff,
                                    prof.avg_rating, prof.would_retake_rate, prof.rating_count, prof.school_id))
 
-    def insert_request(self, prof_id: int, resulted_in_write: bool, requested_analysis: bool) -> None:
-        """ Adds user request to requests table. """
+    def insert_request(self, prof_id: int, status: int) -> None:
+        """ Adds/updates user request for prof data to requests table, where
+                status 0 = in-progress,
+                status 1 = complete. """
         query = """
-            INSERT INTO requests (prof_id, resulted_in_write, requested_analysis) 
-            VALUES (%s, %s, %s)
-            ON DUPLICATE KEY UPDATE request_date = CURRENT_TIME
-        """
-        self.cursor.execute(query,(prof_id, int(resulted_in_write), int(requested_analysis)))
+        INSERT INTO requests (prof_id, status) 
+        VALUES (%s, %s)
+        ON DUPLICATE KEY UPDATE write_date=CURRENT_TIMESTAMP, status=VALUES(status)"""
+        self.cursor.execute(query,(prof_id, status))
 
     def delete_prof_reviews(self, prof: Professor) -> None:
         """ Removes stale reviews from ratings and sentiments tables. """
@@ -114,14 +115,14 @@ class QueryRunner:
             if command.strip():
                 self.cursor.execute(command)
 
-    def get_prof_request_date(self, professor_id: int, write=False, analysis=False) -> tuple or None:
-        """ Returns date professor record was written to the database. """
+    def get_prof_request(self, professor_id: int) -> tuple or None:
+        """ Returns request record for given professor, or none if prof hasn't been processed. """
         query = """
-            SELECT request_date 
+            SELECT * 
             FROM requests 
-            WHERE prof_id = %s AND resulted_in_write = %s AND requested_analysis = %s
+            WHERE prof_id = %s
         """
-        self.cursor.execute(query,(professor_id, write, analysis))
+        self.cursor.execute(query,(professor_id,))
         query_result = self.cursor.fetchone()
         return query_result
 
