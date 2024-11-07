@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             messageElement.textContent = '';
                             renderResponse(responseData.DATA);
                         } else if (responseData.STATUS == 'ANALYSIS_REQUESTED') {
-                            messageElement.textContent = responseData.STATUS;
+                            messageElement.textContent = 'New data! Processing takes a while. Try again in a couple minutes.';
                         } else if (responseData.STATUS == 'ANALYSIS_IN_PROGRESS') {
-                            messageElement.textContent = responseData.STATUS;
+                            messageElement.textContent = 'Processing is in progress! Please try again in a couple minutes.';
                         } else {
                             messageElement.textContent = 'UNKNOWN RESPONSE';
                         }
