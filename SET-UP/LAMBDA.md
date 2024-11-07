@@ -46,10 +46,24 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
    - Select `Create`.
    - Wait for AWS to create the necessary security groups and update the lambda function.
 7. Under the `Configuration` tab, select `VPC` and `Edit`.
-   - In the `Security groups` dropdown, select the one named `vcmp-lambda-sg`.
+   - Under `Subnets` select all available subnets (there should be four)
+   - In the `Security groups` dropdown, add the one named `vcmp-lambda-sg`.
    - Select `Save`.
    - Wait for the lambda function to finish updating.
-8. You can test the Lambda with the following test events:
+
+## Add Amazon Comprehend Permissions
+
+### Steps to Add Permissions to the IAM Role:
+1. Open the IAM console in AWS.
+2. Select **Roles** from the sidebar on the left.
+3. In the search bar, type the name of the Lambda function you just created.
+4. Click on the role name to open it.
+5. On the new page, go to the **Permissions** tab, click **Add permissions**, and select **Attach policies**.
+6. In the search bar, type `ComprehendReadOnly`, check the box next to it, and click **Add permissions**.
+7. The permission is now added to the role, allowing the Lambda function to call Amazon Comprehend.
+
+## Testing the Lambda
+You can test the Lambda with the following test events:
 
 ```
 {
@@ -66,17 +80,6 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:l
   "url": "https://www.NOTratemyprof.com/professor/1835982"
 }
 ```
-
-## Add Amazon Comprehend Permissions
-
-### Steps to Add Permissions to the IAM Role:
-1. Open the IAM console in AWS.
-2. Select **Roles** from the sidebar on the left.
-3. In the search bar, type the name of the Lambda function you just created.
-4. Click on the role name to open it.
-5. On the new page, go to the **Permissions** tab, click **Add permissions**, and select **Attach policies**.
-6. In the search bar, type `ComprehendReadOnly`, check the box next to it, and click **Add permissions**.
-7. The permission is now added to the role, allowing the Lambda function to call Amazon Comprehend.
 
 ## API Gateway
 
