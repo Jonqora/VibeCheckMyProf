@@ -119,7 +119,7 @@ function renderResponse(data) {
             <div class="stats-prof">Prof:</div>
             <div class="flex-row stats-1">
                 <div class="flex-col quality stats-box" 
-                     style="background-color: ${toGradient(rating, 0, 5)}">
+                     style="background-color: ${toGradient(rating, 1, 5)}">
                     <div class="quality-stat stats-stat flex-row">
                         <div class="stats-num">${rating}</div>
                         <div class="stats-den">/5</div>
@@ -127,7 +127,7 @@ function renderResponse(data) {
                     <div class="quality-text stats-text">quality</div>
                 </div>
                 <div class="flex-col difficulty stats-box"
-                     style="background-color: ${toGradient(difficulty, 0, 5)}">
+                     style="background-color: ${toGradient(difficulty, 1, 5)}">
                     <div class="difficulty-stat stats-stat flex-row">
                         <div class="stats-num">${difficulty}</div>
                         <div class="stats-den">/5</div>
@@ -140,7 +140,7 @@ function renderResponse(data) {
             <div class="stats-reviews">Reviews:</div>
             <div class="flex-row stats-2">
                 <div class="flex-col polarity stats-box"
-                     style="background-color: ${toGradient(polarity, 0, 5)}">
+                     style="background-color: ${toGradient(polarity, 1, 5)}">
                     <div class="polarity-stat stats-stat flex-row">
                         <div class="stats-num">${polarity}</div>
                         <div class="stats-den">/5</div>
@@ -148,7 +148,7 @@ function renderResponse(data) {
                     <div class="polarity-text stats-text">positivity</div>
                 </div>
                 <div class="flex-col subjectivity stats-box"
-                     style="background-color: ${toGradient(subjectivity, 0, 5)}">
+                     style="background-color: ${toGradient(subjectivity, 1, 5)}">
                     <div class="subjectivity-stat stats-stat flex-row">
                         <div class="stats-num">${subjectivity}</div>
                         <div class="stats-den">/5</div>
@@ -156,7 +156,7 @@ function renderResponse(data) {
                     <div class="subjectivity-text stats-text">subjectivity</div>
                 </div>
                 <div class="flex-col spelling stats-box"
-                     style="background-color: ${toGradient(spellingquality, 90, 100)}">
+                     style="background-color: ${toGradient(spellingquality, 85, 100)}">
                     <div class="spelling-stat stats-stat">${spellingquality}%</div>
                     <div class="spelling-text stats-text">spelling</div>
                 </div>
@@ -308,16 +308,16 @@ function renderEmojis(reviewsData) {
 }
 
 function transformPolarity(num) {
-    // Standardize -1-1 to 0-5
-    let transformed = num * 2.5 + 2.5;
-    transformed = Math.min(5, Math.max(0, transformed));
+    // Standardize -1-1 to 1-5
+    let transformed = num * 2 + 2;
+    transformed = Math.min(5, Math.max(1, transformed));
     return transformed.toFixed(1);
 }
 
 function transformSubjectivity(num) {
-    // Standardize 0-1 to 0-5
-    let transformed = num * 5;
-    transformed = Math.min(5, Math.max(0, transformed));
+    // Standardize 0-1 to 1-5
+    let transformed = num * 4 + 1;
+    transformed = Math.min(5, Math.max(1, transformed));
     return transformed.toFixed(1);
 }
 
