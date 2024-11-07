@@ -72,6 +72,8 @@ of how to use the environment file.
 Run the script `database/populate_db.py` to bootstrap the AWS RDS database. The script will create the application tables, and
 load a small sample of data into the tables. From the project directory you can use 
 
+**IMPORTANT:** if you are rebuilding from a previous app version, use `cleanup_db` first
+
 ```
 python -m request_lambda.database_init.populate_db
 ```
