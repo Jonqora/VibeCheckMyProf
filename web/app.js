@@ -1,5 +1,14 @@
 // app.js
 
+const PROPORTIONAL_FONT_SIZES = new Map();
+// (proportion of reviews exceeded, font-size)
+PROPORTIONAL_FONT_SIZES.set(0.5, 1.5);
+PROPORTIONAL_FONT_SIZES.set(0.4, 1.4);
+PROPORTIONAL_FONT_SIZES.set(0.3, 1.3);
+PROPORTIONAL_FONT_SIZES.set(0.2, 1.2);
+PROPORTIONAL_FONT_SIZES.set(0.1, 1.1);
+PROPORTIONAL_FONT_SIZES.set(0, 1);
+
 document.addEventListener('DOMContentLoaded', function() {
     const urlInput = document.getElementById('urlInput');
     const errorElement = document.getElementById('error');
@@ -245,15 +254,16 @@ function renderVibes(vibesData, numRatings) {
     const emotion1 = vibesData[0];
     const emotion2 = vibesData.length > 1 ? vibesData[1] : null;
     const emotion3 = vibesData.length > 2 ? vibesData[2] : null;
+
     let content = `
     <div class="vibes-text">Vibes:</div>
-    <div class="vibes">${toEmoji(emotion1[0])} ${emotion1[0]} (${emotion1[1]})</div>
+    <div class="vibes" style="font-size:${getProportionalFontSize(emotion1[1] / numRatings)}rem">${toEmoji(emotion1[0])} ${emotion1[0]} (${emotion1[1]})</div>
     `;
     if (emotion2 !== null) {
-        content += `<div class="vibes">${toEmoji(emotion2[0])} ${emotion2[0]} (${emotion2[1]})</div>`;
+        content += `<div class="vibes" style="font-size:${getProportionalFontSize(emotion2[1] / numRatings)}rem">${toEmoji(emotion2[0])} ${emotion2[0]} (${emotion2[1]})</div>`;
     }
     if (emotion3 !== null) {
-        content += `<div class="vibes">${toEmoji(emotion3[0])} ${emotion3[0]} (${emotion3[1]})</div>`;
+        content += `<div class="vibes" style="font-size:${getProportionalFontSize(emotion3[1] / numRatings)}rem">${toEmoji(emotion3[0])} ${emotion3[0]} (${emotion3[1]})</div>`;
     }
     return content;
 }
@@ -261,10 +271,10 @@ function renderVibes(vibesData, numRatings) {
 function renderFeels(feelsData, numRatings) {
     return `
         <div class="feels-text">Feels:</div>
-        <div class="feels-positive feels">⬆️ positive (${feelsData.positive})</div>
-        <div class="feels-negative feels">⬇️ negative (${feelsData.negative})</div>
-        <div class="feels-neutral feels">⏺️ neutral (${feelsData.neutral})</div>
-        <div class="feels-mixed feels">🔀 mixed (${feelsData.mixed})</div>
+        <div class="feels-positive feels" style="font-size:${getProportionalFontSize(feelsData.positive / numRatings)}rem">⬆️ positive (${feelsData.positive})</div>
+        <div class="feels-negative feels" style="font-size:${getProportionalFontSize(feelsData.negative / numRatings)}rem">⬇️ negative (${feelsData.negative})</div>
+        <div class="feels-neutral feels" style="font-size:${getProportionalFontSize(feelsData.neutral / numRatings)}rem">⏺️ neutral (${feelsData.neutral})</div>
+        <div class="feels-mixed feels" style="font-size:${getProportionalFontSize(feelsData.mixed / numRatings)}rem">🔀 mixed (${feelsData.mixed})</div>
     `;
 }
 
@@ -283,6 +293,15 @@ function renderEmojis(reviewsData) {
         emojisHTML += reviewHTML;
     }
     return emojisHTML;
+}
+
+function getProportionalFontSize(proportion) {
+    // Get font size for the proportion threshold passed, in rem
+    for(let [threshold, fontSize] of PROPORTIONAL_FONT_SIZES) {
+        if(proportion > threshold) {
+            return fontSize; 
+        }
+    }
 }
 
 function transformPolarity(num) {
