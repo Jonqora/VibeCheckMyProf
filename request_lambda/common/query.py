@@ -1,8 +1,9 @@
 # flake8: noqa
 import mysql.connector
+from typing import Optional
 
-from request_lambda.app.config import Config
-from request_lambda.app.payload import Professor, Rating, Sentiment
+from request_lambda.common.config import Config
+from request_lambda.common.payload import Professor, Rating, Sentiment
 from mysql.connector.connection import MySQLConnection, MySQLCursor
 
 class QueryConnector:
@@ -51,20 +52,21 @@ class QueryRunner:
         self.cursor.execute(query,(prof.prof_id, prof.prof_name, prof.dept, prof.avg_diff,
                                    prof.avg_rating, prof.would_retake_rate, prof.rating_count, prof.school_id))
 
-    def insert_request(self, prof: Professor) -> None:
-        """ Adds user request to requests table. """
+    def insert_request(self, prof_id: int, status: int) -> None:
+        """ Adds/updates user request for prof data to requests table, where
+                status 0 = in-progress,
+                status 1 = complete. """
         query = """
-            INSERT INTO requests (prof_id, resulted_in_write) 
-            VALUES (%s, %s)
-            ON DUPLICATE KEY UPDATE request_date = CURRENT_TIME
-        """
-        self.cursor.execute(query,(prof.prof_id, 1))
+        INSERT INTO requests (prof_id, status) 
+        VALUES (%s, %s)
+        ON DUPLICATE KEY UPDATE write_date=CURRENT_TIMESTAMP, status=VALUES(status)"""
+        self.cursor.execute(query,(prof_id, status))
 
     def delete_prof_reviews(self, prof: Professor) -> None:
         """ Removes stale reviews from ratings and sentiments tables. """
         self.cursor.execute("""DELETE FROM ratings WHERE prof_id = %s""", (prof.prof_id,))
 
-    def get_course_record(self, course_name: str, school_id: int) -> tuple or None:
+    def get_course_record(self, course_name: str, school_id: int) -> Optional[tuple]:
         """ Returns course id from the course table, or None if course doesn't exist. """
         query = """
             SELECT course_id 
@@ -114,14 +116,16 @@ class QueryRunner:
             if command.strip():
                 self.cursor.execute(command)
 
-    def get_prof_request_date(self, professor_id: int) -> tuple or None:
-        """ Returns date professor record was written to the database. """
+    def get_prof_request(self, professor_id: int) -> Optional[tuple]:
+        """ Returns request record for given professor, or none if prof hasn't been processed. """
         query = """
-            SELECT request_date 
+            SELECT * 
             FROM requests 
-            WHERE prof_id = %s AND resulted_in_write = %s
+            WHERE prof_id = %s
+            ORDER BY write_date DESC
+            LIMIT 1
         """
-        self.cursor.execute(query,(professor_id, 1))
+        self.cursor.execute(query,(professor_id,))
         query_result = self.cursor.fetchone()
         return query_result
 

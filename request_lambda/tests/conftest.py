@@ -1,5 +1,5 @@
 import pytest
-from request_lambda.app.config import Config, TSuiteConfig
+from request_lambda.common.config import Config, TSuiteConfig
 
 
 @pytest.fixture(scope="session")

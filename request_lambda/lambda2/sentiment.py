@@ -95,7 +95,9 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     comments = []
     for review in professor_json["reviews"]:
         comments.append(review["comment"])
+    print(f"Comments extracted: {len(comments)}")
     emotions = sentiment_analyzer.analyze_emotion_goemotions(comments)
+    print(f"Emotion analysis complete")
     goemotion_end = time.perf_counter()
     GoEmotions_time += goemotion_end - goemotion_start
 

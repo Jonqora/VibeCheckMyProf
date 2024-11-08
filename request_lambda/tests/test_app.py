@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------------#
 
 import json
-from app import app
+from request_lambda.lambda1 import app
 
 
 def test_lambda_handler_valid_url():

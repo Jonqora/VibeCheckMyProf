@@ -19,11 +19,11 @@
 | school_id         | INT (FK)     | Foreign key linking to `schools` table               |
 
 ## requests
-| Column            | Data Type | Description                                      |
-|-------------------|-----------|--------------------------------------------------|
-| prof_id           | INT (FK)  | Foreign key linking to `professors` table        |
-| request_date      | TIMESTAMP | Date the user request came in                    | 
-| resulted_in_write | BOOLEAN   | Whether the request resulted in a database write |
+| Column             | Data Type | Description                                                      |
+|--------------------|-----------|------------------------------------------------------------------|
+| prof_id            | INT (FK)  | Foreign key linking to `professors` table                        |
+| status             | BOOLEAN   | Status of professor data in database (0 in progress, 1 complete) |
+| write_date         | TIMESTAMP | Date record was last modified                                    |
 
 ## courses
 | Column      | Data Type   | Description                                       |

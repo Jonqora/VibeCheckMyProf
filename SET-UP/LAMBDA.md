@@ -9,61 +9,100 @@ The following steps ensure correct setup of the containerized lambda that serves
 ## Containerized Lambda
 
 ### Download model
+
+**IMPORTANT:** If you are rebuilding from a previous app version, you can move the previously downloaded models from `request_lambda/app/models` to `request_lambda/lambda2/models`.
+
 1. Make sure you are on the main branch and have pulled recent changes.
 2. Navigate to the `/request_lambda` directory and find the `download_model.py` script
-3. Run the script to download the model (the most recent model has been used in `jitesh/emotion-english`).
-4. The model will be saved in the `/request_lambda/app` directory.
+3. Run the script to download the model (the most recent model we are using is `monologg/bert-base-cased-goemotions-original`).
+4. The models will be saved in the `/request_lambda/lambda2` directory.
 
 ### Build Container
 
-1. Make sure you are on main branch and have pulled recent changes.
-2. Navigate to the `/request_lambda` directory and make sure Docker is running
-3. Build the container
+1. Create ECR repositories for `vibe-check-my-prof-lambda1` and `vibe-check-my-prof-lambda2`.
+2. Make sure you are on main branch and have pulled recent changes.
+3. From the project root directory, build containers for lambda 1 and lambda 2:
 ```
-docker build -t vibe-check-my-prof .
+docker build -t vibe-check-my-prof-lambda1 -f request_lambda/lambda1/Dockerfile request_lambda 
+```
+```
+docker build -t vibe-check-my-prof-lambda2 -f request_lambda/lambda2/Dockerfile request_lambda 
 ```
 
 ### Store in ECR
-1. Navigate to ECR console and create a repository called `vibe-check-my-prof` with default settings.
-2. Use the URI from the repository, tag your container and push. E.g.
+1. Use the Push Commands from each repository to authenticate, tag your containers and push. E.g.
 ```
-docker tag vibe-check-my-prof 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:latest
+docker tag vibe-check-my-prof-lambda1 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof-lambda1:latest
 
-docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof:latest
+docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof-lambda1:latest
 ```
-3. You may need to set an access token and/or run the authentication token from "View push commands" before pushing the image.
+3. Tag and push to both repositories
 
-### Create Lambda
+### Create Lambda1
 1. Create a new Lambda and choose Container image option
-2. Name it and choose the container image you just uploaded
-3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function.
-3. Deploy
-4. Under the `Configuration` tab, select `General configuration` and set the **memory** to 3008MB and the **timeout** to 2 minutes. 
+
+**IMPORTANT:** If rebuilding from a previous version, you can reuse your old lambda that is connected to the API Gateway
+
+2. Name it and choose the `vibe-check-my-prof-lambda1` container image you just uploaded (or upload a new container image)
+3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function. Click Deploy
+4. Under the `Configuration` tab, select `General configuration` and set the **memory** to 128MB and the **timeout** to 30 seconds. 
 5. Under the `Configuration` tab, select `Environment variables` and add all the variables from the project's `infra/config.env` file.
 6. Under the `Configuration` tab, select `RDS databases` and `Connect to RDS database`.
    - Use an existing database.
    - In the `RDS database` dropdown, select our project's database (i.e. `vibecheckmyprofdb`).
    - Select `Create`.
    - Wait for AWS to create the necessary security groups and update the lambda function.
+
+**IMPORTANT** If you get an error about "request violates the limit on number of VPC security groups associated with a DB instance" then: 1) remove all security groups from the DB, 2) Attach the Lambda to the DB, 3) re-run `terraform apply`
+
 7. Under the `Configuration` tab, select `VPC` and `Edit`.
-   - Under `Subnets` select all available subnets (there should be four)
+   - Under `Subnets` select all available **PRIVATE** subnets 
+   - Make sure each subnet has a 0.0.0.0/0 route to a NAT gateway
+   - Remove any subnets that are **PUBLIC**
    - In the `Security groups` dropdown, add the one named `vcmp-lambda-sg`.
-   - Select `Save`.
-   - Wait for the lambda function to finish updating.
+   - Select `Save` and wait for the lambda function to finish updating.
 
-## Add Amazon Comprehend Permissions
+### Create Lambda2
+1. Create a new Lambda **IMPORTANT: name it `vibe-check-my-prof-lambda2`**
+2. Choose container image option and choose the `vibe-check-my-prof-lambda2` container image
+3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function. Click Deploy
+4. Under the `Configuration` tab, select `General configuration` and set the **memory** to 3008MB and the **timeout** to 5 minutes. 
+5. Under the `Configuration` tab, select `Environment variables` and add all the variables from the project's `infra/config.env` file.
+6. Do `Connect to RDS database`folowing instructions above for the previous lambda
+7. Edit the VPC and subnets following instructions above for the previous lambda
 
-### Steps to Add Permissions to the IAM Role:
+#### Add Amazon Comprehend Permissions
 1. Open the IAM console in AWS.
 2. Select **Roles** from the sidebar on the left.
-3. In the search bar, type the name of the Lambda function you just created.
-4. Click on the role name to open it.
+3. In the search bar, type the name of the Lambda2 function you just created. Click on the role name to open it.
 5. On the new page, go to the **Permissions** tab, click **Add permissions**, and select **Attach policies**.
 6. In the search bar, type `ComprehendReadOnly`, check the box next to it, and click **Add permissions**.
 7. The permission is now added to the role, allowing the Lambda function to call Amazon Comprehend.
 
-## Testing the Lambda
-You can test the Lambda with the following test events:
+#### Add Lambda invoke permissions
+1. Navigate to IAM, roles
+2. search for vibe-check-my-prof-lambda1-role (or the name of your first lambda function)
+3. Add permissions, create inline policy
+4. Select lambda
+5. Search for InvokeFunction
+6. Resource: specific, add arns
+7. Enter ca-central-1 in region and vibe-check-my-prof-lambda2 (or your second function name) in the function name
+8. Click Add ARNs and click Next
+9. Name the policy and click create policy
+10. Note the `arn` for your vibe-check-my-prof-lambda1 Role (e.g. `arn:aws:iam::183631308178:role/service-role/vibe-check-my-prof-role`)
+
+#### Add Resource-based policy statement
+1. Navigate to the second lambda function (`vibe-check-my-prof-lambda2`)
+2. Under `Configuration` select `Permissions`
+3. Scroll down to `Resource-based policy statements`
+4. Select `Add permissions`
+5. Under `Statement ID`, give a unique name for this permission (e.g. lambda1-invoke-lambda2)
+6. Under `Principal`, enter the `arn` for the IAM role noted above
+7. Under `Action`, select `lambda:InvokeFunction`
+8. Select `Save`
+
+## Testing the Lambdas
+You can test the first Lambda1 with the following test events. Lambda1 will trigger Lambda2, so you can check CloudWatch logs for Lambda2.
 
 ```
 {
@@ -80,6 +119,7 @@ You can test the Lambda with the following test events:
   "url": "https://www.NOTratemyprof.com/professor/1835982"
 }
 ```
+Try other professors to see different responses.
 
 ## API Gateway
 

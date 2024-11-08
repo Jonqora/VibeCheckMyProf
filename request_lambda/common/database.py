@@ -1,53 +1,94 @@
 # database.py
 # Interacts with backend database
+# noqa: E501
 import json
 import mysql.connector
 import time
 
 from typing import Dict, Any
 from datetime import datetime, timezone, timedelta
-from request_lambda.app.config import Config
-from request_lambda.app.payload import Professor, Rating, Sentiment
-from request_lambda.app.query import QueryConnector, QueryRunner
+from request_lambda.common.config import Config
+from request_lambda.common.payload import Professor, Rating, Sentiment
+from request_lambda.common.query import QueryConnector, QueryRunner
+
+SECONDS_RECENT_ANALYSIS = 300
 
 
-def get_recent_data(professor_id: int) -> Dict[str, Any]:
+def get_prof_status(professor_id: int) -> str:
+    config = Config().from_env()
+    status = get_status_from_db(professor_id, config)
+    return status
+
+
+def get_status_from_db(professor_id: int, config: Config) -> str:
+    """ Returns status of professor data: not-started: analysis required
+                                          in-progress: analysis underway
+                                          complete: data available. """
+    qc = QueryConnector(config)
+    qr = QueryRunner(qc.connection)
+    current_time_utc = datetime.now(timezone.utc)
+    staleness_cutoff = (current_time_utc
+                        - timedelta(seconds=config.rec_int_sec))
+    recency_cutoff = (current_time_utc
+                      - timedelta(seconds=SECONDS_RECENT_ANALYSIS))
+    try:
+        last_prof_write = qr.get_prof_request(professor_id)
+        if last_prof_write is None:
+            # Prof not requested yet -> return not started and insert request
+            qr.insert_request(professor_id, 0)
+            qc.connection.commit()
+            status = "not-started"
+        elif last_prof_write[1] == 0:
+            if last_prof_write[2].replace(tzinfo=timezone.utc) < \
+                    recency_cutoff:
+                # Recorded analysis of prof was not recent: restart analysis
+                qr.insert_request(professor_id, 0)
+                qc.connection.commit()
+                status = "not-started"
+            else:
+                # Prof data started analysis recently -> return in progress
+                status = "in-progress"
+        elif last_prof_write[2].replace(tzinfo=timezone.utc) < \
+                staleness_cutoff:
+            # Prof data stale -> return not started and update request
+            qr.insert_request(professor_id, 0)
+            qc.connection.commit()
+            status = "not-started"
+        else:
+            # Prof data is valid -> return analysis complete
+            status = "complete"
+    except mysql.connector.Error as err:
+        print(f"An error occurred: {err}")
+        status = "SQL error"
+    finally:
+        qr.cursor.close()
+        qc.connection.close()
+    return status
+
+
+def get_prof_data(professor_id: int) -> Dict[str, Any]:
     """ Returns dict of recently analyzed professor reviews,
-        empty if ratings are stale. """
+        given that recent data exists. """
     start_time = time.perf_counter()
     config = Config().from_env()
     payload = get_data_from_db(professor_id, config)
     stop_time = time.perf_counter()
-
     get_data_time = stop_time - start_time
     print(f"Time to get recent data from DB: {(get_data_time):.4f} seconds.")
     return payload
 
 
 def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
+    """ Returns formatted dict of recently analyzed professor reviews. """
     qc = QueryConnector(config)
     qr = QueryRunner(qc.connection)
-    current_time_utc = datetime.now(timezone.utc)
-    # Calculate "interval seconds ago" date
-    staleness_cutoff = (current_time_utc
-                        - timedelta(seconds=config.rec_int_sec))
 
     try:
-        last_prof_write = qr.get_prof_request_date(professor_id)
-        if last_prof_write is None:
-            # We haven't processed this prof yet, return none
-            payload = {}
-        # Check if request date came before the cutoff
-        elif (last_prof_write[0].replace(tzinfo=timezone.utc)
-              < staleness_cutoff):
-            # The data is stale, return none
-            payload = {}
-        else:
-            # Prof data is still valid, return it
-            recent_data = qr.get_prof_records(professor_id)
-            if not recent_data:
-                raise ValueError(f"""Failed query for {professor_id}.""")
-            payload = get_formatted_as_dict(recent_data)
+        data = qr.get_prof_records(professor_id)
+        if not data:
+            raise ValueError(f"""Failed query for {professor_id}.""")
+        payload = get_formatted_as_dict(data)
+
     except mysql.connector.Error as err:
         print(f"An error occurred: {err}")
         payload = {}
@@ -61,7 +102,7 @@ def get_data_from_db(professor_id: int, config: Config) -> Dict[str, Any]:
 
 
 def get_formatted_as_dict(rows: list) -> Dict[str, Any]:
-    """ Returns dictionary of rows formatted for frontend. """
+    """" Returns dictionary of rows formatted for app. """
     result = {
         "professor_id": rows[0][0],
         "name": rows[0][1],
@@ -121,7 +162,6 @@ def insert_data_from_dict(professor_dict: Dict[str, Any],
         prof = Professor(professor_dict)
         qr.insert_school(prof)
         qr.insert_professor(prof)
-        qr.insert_request(prof)
         qr.delete_prof_reviews(prof)
 
         for review in prof.reviews:
@@ -143,6 +183,10 @@ def insert_data_from_dict(professor_dict: Dict[str, Any],
 
             sentiment = Sentiment(review, rating.rating_id)
             qr.insert_sentiment_analysis(sentiment)
+
+        # Mark prof data request status as complete
+        qr.insert_request(prof.prof_id, 1)
+        print("Updated request status to complete.")
 
         qc.connection.commit()
         print("Data insertion complete.")
