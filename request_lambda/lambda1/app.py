@@ -10,7 +10,7 @@ from ..common import database
 from . import frontend
 from ..common import rmp_api
 
-LAMBDA2_FUNCTION_NAME = "vcmp-main-lambda"
+LAMBDA2_FUNCTION_NAME = "vibe-check-my-prof-lambda2"
 
 client = boto3.client('lambda')
 
