@@ -14,7 +14,7 @@ The following steps ensure correct setup of the containerized lambda that serves
 
 1. Make sure you are on the main branch and have pulled recent changes.
 2. Navigate to the `/request_lambda` directory and find the `download_model.py` script
-3. Run the script to download the model (the most recent model we are using is `jitesh/emotion-english`).
+3. Run the script to download the model (the most recent model we are using is `monologg/bert-base-cased-goemotions-original`).
 4. The models will be saved in the `/request_lambda/lambda2` directory.
 
 ### Build Container
@@ -63,8 +63,8 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof-l
    - Select `Save` and wait for the lambda function to finish updating.
 
 ### Create Lambda2
-1. Create a new Lambda and choose Container image option
-2. Name it and choose the `vibe-check-my-prof-lambda2` container image
+1. Create a new Lambda **IMPORTANT: name it `vibe-check-my-prof-lambda2`**
+2. Choose container image option and choose the `vibe-check-my-prof-lambda2` container image
 3. **IMPORTANT** choose arm64 if you are using a mac. Otherwise, leave it on x86_64. Now create the function. Click Deploy
 4. Under the `Configuration` tab, select `General configuration` and set the **memory** to 3008MB and the **timeout** to 5 minutes. 
 5. Under the `Configuration` tab, select `Environment variables` and add all the variables from the project's `infra/config.env` file.
