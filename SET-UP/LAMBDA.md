@@ -89,6 +89,17 @@ docker push 345594593730.dkr.ecr.ca-central-1.amazonaws.com/vibe-check-my-prof-l
 7. Enter ca-central-1 in region and vibe-check-my-prof-lambda2 (or your second function name) in the function name
 8. Click Add ARNs and click Next
 9. Name the policy and click create policy
+10. Note the `arn` for your vibe-check-my-prof-lambda1 Role (e.g. `arn:aws:iam::183631308178:role/service-role/vibe-check-my-prof-role`)
+
+#### Add Resource-based policy statement
+1. Navigate to the second lambda function (`vibe-check-my-prof-lambda2`)
+2. Under `Configuration` select `Permissions`
+3. Scroll down to `Resource-based policy statements`
+4. Select `Add permissions`
+5. Under `Statement ID`, give a unique name for this permission (e.g. lambda1-invoke-lambda2)
+6. Under `Principal`, enter the `arn` for the IAM role noted above
+7. Under `Action`, select `lambda:InvokeFunction`
+8. Select `Save`
 
 ## Testing the Lambdas
 You can test the first Lambda1 with the following test events. Lambda1 will trigger Lambda2, so you can check CloudWatch logs for Lambda2.
