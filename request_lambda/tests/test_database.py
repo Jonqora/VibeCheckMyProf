@@ -4,8 +4,8 @@ import mysql.connector
 
 from request_lambda.common.config import TSuiteConfig
 from request_lambda.common.database import (insert_data_from_json_file,
-                                         get_data_from_db,
-                                         run_sql_file)
+                                            get_data_from_db,
+                                            run_sql_file)
 
 
 class TestDatabaseFunctions:

@@ -9,7 +9,7 @@
 import unittest
 from collections import defaultdict
 
-from app import frontend
+from request_lambda.lambda1 import frontend
 
 
 class TestFrontend(unittest.TestCase):
