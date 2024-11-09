@@ -294,7 +294,11 @@ function renderEmojis(reviewsData) {
     let emojisHTML = '';
     for (const review of reviewsData) {
         let displayType = 'block';
-        if (review.comment == null || review.comment == '' || review.comment == 'No comments') {
+        if (
+            review.comment == null ||
+            review.comment.trim() === '' ||
+            review.comment.trim().toLowerCase() === 'no comments'
+        ) {
             displayType = 'none';
         }
         const reviewHTML = `
