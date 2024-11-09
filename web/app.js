@@ -313,7 +313,7 @@ function renderEmojis(reviewsData) {
 
 function transformPolarity(num) {
     // Standardize -1-1 to 1-5
-    let transformed = num * 2 + 2;
+    let transformed = num * 2 + 3;
     transformed = Math.min(5, Math.max(1, transformed));
     return transformed.toFixed(1);
 }
