@@ -96,6 +96,7 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
         comment = review["comment"]
         if comment and comment.strip() and comment.lower() != "no comments":
             comments.append(comment)
+    comments.reverse()  # so we can pop from the end in order
     print(f"Comments extracted: {len(comments)}")
     goemotion_start = time.perf_counter()
     emotions = sentiment_analyzer.analyze_emotion_goemotions(comments)
@@ -117,7 +118,7 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
             tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(comment)
             time2 = time.perf_counter()
             TextBlob_time += time2 - time1
-            emotion = emotions.pop(0)
+            emotion = emotions.pop()
             time3 = time.perf_counter()
             GoEmotions_time += time3 - time2
             comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(comment)
