@@ -18,6 +18,8 @@ client = boto3.client('lambda')
 def lambda_handler(event, context):
     # Parse the incoming request and return an error if invalid
     url = event.get('url')
+    count = event.get('count')
+
     if not url:
         # Return a 400 Bad Request if URL is missing
         return {
@@ -71,30 +73,36 @@ def lambda_handler(event, context):
         }
     # Case: request does not exist, or data is stale
     elif prof_status == "not-started":
-        # Start analysis and
-        # Send a response to inform analysis has begun
-        try:
-            professor_name = rmp_api.get_prof_name(professor_id)
-        except ValueError:
-            return {
-                'statusCode': 400,
-                'body': json.dumps({"error": f"ID {professor_id} not found."})
+        if count > 0:  # Request has timed out
+            response = {
+                "STATUS": "ANALYSIS_FAILED",
+                "PROF_NAME": professor_name
             }
-        client.invoke(
-            FunctionName=LAMBDA2_FUNCTION_NAME,  # Lambda function to invoke
-            InvocationType='Event',  # Asynchronous
-            Payload=json.dumps({"id": professor_id})
-        )
-        print("No recent data and no recent analysis request")
-        print(f"Invoked lambda {LAMBDA2_FUNCTION_NAME} for {professor_id}")
-        response = {
-            "STATUS": "ANALYSIS_REQUESTED",
-            "PROF_NAME": professor_name
-        }
+        else:
+            # Start analysis and send a response to inform analysis has begun
+            try:
+                professor_name = rmp_api.get_prof_name(professor_id)
+            except ValueError:
+                return {
+                    'statusCode': 400,
+                    'body': json.dumps({"error": f"ID {professor_id} \
+                                        not found."})
+                }
+            client.invoke(
+                FunctionName=LAMBDA2_FUNCTION_NAME,  # Lambda fn to invoke
+                InvocationType='Event',  # Asynchronous
+                Payload=json.dumps({"id": professor_id})
+            )
+            print("No recent data and no recent analysis request")
+            print(f"Invoked lambda {LAMBDA2_FUNCTION_NAME} for {professor_id}")
+            response = {
+                "STATUS": "ANALYSIS_REQUESTED",
+                "PROF_NAME": professor_name
+            }
     # Case: colleen's code fucked up or something
     else:
-        # TODO: do some error handling for prof_status == "error"
         print("Status = 'error'")
+        response = {"error": "Unknown error with prof status"}
 
     # Return a 200 OK response
     return {
