@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearInterval(pollingInterval);
 
         let count = 0; // Initialize poll count
+        let prof_name = null;
 
         const checkStatus = async () => {
             // Send the request with the current count
@@ -85,9 +86,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderResponse(data.DATA);
                     responseField.value = `Response: ${JSON.stringify(data, null, 2)}`;
                 } else if (data.STATUS === 'ANALYSIS_REQUESTED') {
+                    prof_name = data.PROF_NAME;
                     messageElement.textContent = 'New data! Processing takes a while.';
                 } else if (data.STATUS === 'ANALYSIS_IN_PROGRESS') {
-                    messageElement.textContent = 'Data processing is in progress.';
+                    if (prof_name) {
+                        messageElement.textContent = `Data processing for ${prof_name} is in progress.`;
+                    } else {
+                        messageElement.textContent = 'Data processing is in progress.';
+                    }
                 } else if (data.STATUS === 'ANALYSIS_FAILED') {
                     messageElement.textContent = 'Analysis failed for unknown reasons.';
                     clearRequestInProgress(); // Stop polling if analysis failed

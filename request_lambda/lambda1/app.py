@@ -53,39 +53,28 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': json.dumps(response)
         }
-
-    # Get the professor name from RMP API for responses
-    try:
-        professor_name = rmp_api.get_prof_name(professor_id)
-    except ValueError:
-        return {
-            'statusCode': 400,
-            'body': json.dumps({"error": f"ID {professor_id} not found."})
-        }
-
     # Case: request exists, but data is still being processed
-    if prof_status == "in-progress":
+    elif prof_status == "in-progress":
         # Send a response to inform analysis is underway
         print("Analysis in progress for professor.")
         response = {
-            "STATUS": "ANALYSIS_IN_PROGRESS",
-            "PROF_NAME": professor_name,
+            "STATUS": "ANALYSIS_IN_PROGRESS"
         }
     # Case: request does not exist, or data is stale
     elif prof_status == "not-started":
         if count > 0:  # Request has timed out
             response = {
-                "STATUS": "ANALYSIS_FAILED",
-                "PROF_NAME": professor_name
+                "STATUS": "ANALYSIS_FAILED"
             }
         else:
             # Start analysis and send a response to inform analysis has begun
             try:
                 professor_name = rmp_api.get_prof_name(professor_id)
             except ValueError:
+                print(f"ID {professor_id} not found.")
                 return {
                     'statusCode': 400,
-                    'body': json.dumps({"error": f"ID {professor_id} \
+                    'body': json.dumps({"error": f"ID {professor_id} was\
                                         not found."})
                 }
             client.invoke(
@@ -99,7 +88,7 @@ def lambda_handler(event, context):
                 "STATUS": "ANALYSIS_REQUESTED",
                 "PROF_NAME": professor_name
             }
-    # Case: colleen's code fucked up or something
+    # Case: database gave error message
     else:
         print("Status = 'error'")
         response = {"error": "Unknown error with prof status"}
