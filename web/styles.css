@@ -319,3 +319,8 @@ body {
     border-spacing: 20px;
     text-align: left;
 }
+
+.data-viz-button {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
