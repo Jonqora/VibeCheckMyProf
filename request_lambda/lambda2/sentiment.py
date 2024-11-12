@@ -91,11 +91,14 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
     Comprehend_time = 0
     Spelling_time = 0
 
-    goemotion_start = time.perf_counter()
     comments = []
     for review in professor_json["reviews"]:
-        comments.append(review["comment"])
+        comment = review["comment"]
+        if comment and comment.strip() and comment.lower() != "no comments":
+            comments.append(comment)
+    comments.reverse()  # so we can pop from the end in order
     print(f"Comments extracted: {len(comments)}")
+    goemotion_start = time.perf_counter()
     emotions = sentiment_analyzer.analyze_emotion_goemotions(comments)
     print(f"Emotion analysis complete")
     goemotion_end = time.perf_counter()
@@ -103,22 +106,27 @@ def analyze(professor_json: Dict[str, Any]) -> Dict[str, Any]:
 
     for i, review in enumerate(professor_json["reviews"]):
         comment = review["comment"]
-        time1 = time.perf_counter()
-        tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(
-            comment)
-        time2 = time.perf_counter()
-        TextBlob_time += time2 - time1
-        emotion = emotions[i]
-        time3 = time.perf_counter()
-        GoEmotions_time += time3 - time2
-        comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(
-            comment)
-        time4 = time.perf_counter()
-        Comprehend_time += time4 - time3
-        spelling_quality, spelling_errors = sentiment_analyzer.analyze_spelling_and_grammar(
-            comment)
-        time5 = time.perf_counter()
-        Spelling_time += time5 - time4
+        if comment is None or comment.strip() == "" or comment.lower() == "no comments":
+            tb_polarity = 0
+            tb_subjectivity = 0.5
+            emotion = "neutral"
+            comprehend_sentiment = "neutral"
+            spelling_quality = 1
+            spelling_errors = 0
+        else:
+            time1 = time.perf_counter()
+            tb_polarity, tb_subjectivity = sentiment_analyzer.analyze_sentiment_textblob(comment)
+            time2 = time.perf_counter()
+            TextBlob_time += time2 - time1
+            emotion = emotions.pop()
+            time3 = time.perf_counter()
+            GoEmotions_time += time3 - time2
+            comprehend_sentiment = sentiment_analyzer.analyze_sentiment_comprehend(comment)
+            time4 = time.perf_counter()
+            Comprehend_time += time4 - time3
+            spelling_quality, spelling_errors = sentiment_analyzer.analyze_spelling_and_grammar(comment)
+            time5 = time.perf_counter()
+            Spelling_time += time5 - time4
 
         review["vcmp_polarity"] = tb_polarity
         review["vcmp_subjectivity"] = tb_subjectivity
