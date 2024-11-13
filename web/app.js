@@ -95,6 +95,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function updateCoursesView(courseSelection) {
+    courses = document.getElementById('response-courses');
+    selection = document.getElementById("response-course-options").value;
+    for(const child of courses.children) {
+        if(child.id == selection || selection == "all") {
+            child.style.display = "block";
+        } else {
+            child.style.display = "none";
+        }
+    }
+}
+
 function renderResponse(data) {
     const rating = data.rating.toFixed(1);
     const difficulty = data.difficulty.toFixed(1);
@@ -171,6 +183,11 @@ function renderResponse(data) {
         coursesComponent.insertAdjacentHTML('beforeend', renderCourse(course));
     }
 
+    const coursesDropdown = document.getElementById('response-course-dropdown');
+    const coursesOptions = document.getElementById('response-course-options');
+    coursesOptions.addEventListener('change', updateCoursesView);
+    coursesDropdown.style.display = 'block'; // Undo display:none
+
     const emojiTooltipContainers = document.querySelectorAll('.emoji-container');
 
     emojiTooltipContainers.forEach(container => {
@@ -197,7 +214,7 @@ function renderCourse(courseData) {
     const subjectivity = transformSubjectivity(courseData.vcmp_subjectivity);
     const spellingquality = transformSpelling(courseData.vcmp_spellingquality);
     const html = `
-    <div class="course">
+    <div class="course" id="${courseData.course_name}">
         <div class="course-name">${courseData.course_name}</div>
         <div class="flex-row vibes-row">
             ${renderVibes(courseData.vcmp_emotion, courseData.num_ratings)}
@@ -259,6 +276,11 @@ function renderCourse(courseData) {
         </div>
     </div>
     `;
+
+    // Add course to course dropdown
+    courseDropdown = document.getElementById('response-course-options');
+    courseDropdown.options[courseDropdown.options.length] = new Option(courseData.course_name, courseData.course_name);
+
     return html;
 }
 
