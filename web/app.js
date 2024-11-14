@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to send API request to the API Gateway endpoint
-    async function sendApiRequest(professorUrl, count) {
+    async function sendApiRequest(professorUrl, timestamp, count) {
         document.getElementById('response-prof').style.display = 'none';
         document.getElementById('response-courses').style.display = 'none';
 
@@ -42,7 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json'
                 },
                 // The URL entered by the user is sent in the request body
-                body: JSON.stringify({ url: professorUrl, count: count })
+                body: JSON.stringify({ 
+                    url: professorUrl, 
+                    timestamp: timestamp, 
+                    count: count 
+                })
             });
 
             const data = await response.json();
@@ -70,17 +74,33 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('response-prof').style.display = 'none';
         document.getElementById('response-courses').style.display = 'none';
         clearInterval(pollingInterval);
-
+        
+        let timestamp = Date.now().toString();
         let count = 0; // Initialize poll count
         let prof_name = null;
+        let count_limit = null;
 
         const checkStatus = async () => {
             // Send the request with the current count
-            const data = await sendApiRequest(professorUrl, count);
+            console.log('Polling with count: ', count);
+            console.log('Count limit: ', count_limit);
+            const data = await sendApiRequest(professorUrl, timestamp, count);
 
             if (data) {
+                if (data.TIMESTAMP && data.TIMESTAMP != timestamp) {
+                    console.log('data.TIMESTAMP: ', data.TIMESTAMP);
+                    console.log('timestamp: ', timestamp);
+                    clearRequestInProgress();
+                    return;
+                } else if (count_limit != null && data.COUNT != null && data.COUNT > count_limit) {
+                    console.log('data.COUNT: ', data.COUNT);
+                    console.log('count_limit: ', count_limit);
+                    clearRequestInProgress();
+                    return;
+                }
                 // Handle the different statuses
                 if (data.STATUS === 'DATA_RETRIEVED') {
+                    count_limit = data.COUNT;
                     clearRequestInProgress(); // Stop polling on success
                     clearError();
                     renderResponse(data.DATA);
@@ -96,9 +116,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else if (data.STATUS === 'ANALYSIS_FAILED') {
                     messageElement.textContent = 'Analysis failed for unknown reasons.';
+                    count_limit = data.COUNT;
                     clearRequestInProgress(); // Stop polling if analysis failed
                 } else {
                     messageElement.textContent = 'Unknown error response';
+                    count_limit = data.COUNT;
                     clearRequestInProgress(); // Stop polling if status is unknown
                 }
             }

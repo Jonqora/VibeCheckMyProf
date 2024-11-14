@@ -18,6 +18,7 @@ client = boto3.client('lambda')
 def lambda_handler(event, context):
     # Parse the incoming request and return an error if invalid
     url = event.get('url')
+    timestamp = event.get('timestamp')
     count = event.get('count')
 
     if not url:
@@ -47,7 +48,9 @@ def lambda_handler(event, context):
         professor_json = database.get_prof_data(professor_id)
         response = {
             "STATUS": "DATA_RETRIEVED",
-            "DATA": frontend.format(professor_json)
+            "DATA": frontend.format(professor_json),
+            "TIMESTAMP": timestamp,
+            "COUNT": count
         }
         return {
             'statusCode': 200,
@@ -58,13 +61,17 @@ def lambda_handler(event, context):
         # Send a response to inform analysis is underway
         print("Analysis in progress for professor.")
         response = {
-            "STATUS": "ANALYSIS_IN_PROGRESS"
+            "STATUS": "ANALYSIS_IN_PROGRESS",
+            "TIMESTAMP": timestamp,
+            "COUNT": count
         }
     # Case: request does not exist, or data is stale
     elif prof_status == "not-started":
         if count > 0:  # Request has timed out
             response = {
-                "STATUS": "ANALYSIS_FAILED"
+                "STATUS": "ANALYSIS_FAILED",
+                "TIMESTAMP": timestamp,
+                "COUNT": count
             }
         else:
             # Start analysis and send a response to inform analysis has begun
@@ -86,12 +93,18 @@ def lambda_handler(event, context):
             print(f"Invoked lambda {LAMBDA2_FUNCTION_NAME} for {professor_id}")
             response = {
                 "STATUS": "ANALYSIS_REQUESTED",
-                "PROF_NAME": professor_name
+                "PROF_NAME": professor_name,
+                "TIMESTAMP": timestamp,
+                "COUNT": count
             }
     # Case: database gave error message
     else:
         print("Status = 'error'")
-        response = {"error": "Unknown error with prof status"}
+        response = {
+            "error": "Unknown error with prof status",
+            "TIMESTAMP": timestamp,
+            "COUNT": count
+            }
 
     # Return a 200 OK response
     return {
