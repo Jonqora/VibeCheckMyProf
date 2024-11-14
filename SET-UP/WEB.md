@@ -69,4 +69,54 @@ http://your-bucket-name.s3-website-region.amazonaws.com
 
 ## CloudFront
 
-TODO (Allison to write)
+To add additional security to our S3 bucket and provide quicker and more cost-efficient service to users, we will be using Cloudfront.
+
+1. Open up the CloudFront console in AWS and click "Create distribution"
+2. Create your distribution with the following settings:
+- **Origin**
+  - Origin domain: \<your S3 bucket>
+    - After selecting, a yellow popup should show. Select "Use website endpoint"
+  - Enable Origin Shield: Yes
+    - Origin Shield Region: US West (Oregon)
+      - *This provides an additional caching layer for our files that reduces the load on our bucket and can provide faster request responses for users*
+- **Web Application Firewall (WAF)**
+  - For testing: Do not enable security protections
+  - For production: Enable security protections 
+    - **NOTE:** This incurs additional charges. Do not enable if you are only creating for testing purposes
+    - *This adds additional security such as rules to block traffic from detected bots and requests commonly used to find system vulnerabilities*
+- **Settings**
+  - Price class: Use only North America and Europe
+  - Default root object: index.html
+- Leave the rest of the settings as default
+3. Click "Create distribution" at the bottom of the page
+4. Click to open the details of the newly created distribution. Copy the "ARN" *(e.g. arn:aws:cloudfront::897729115325:distribution/E22K8ZT7YIJADM)*
+5. Go to the settings of the S3 bucket you created earlier and go to the Permissions tab.
+6. To ensure access to the website only through CloudFront and not through the S3 bucket directly, edit the Bucket Policy and set it as follows, making sure to replace `your-cf-dist-arn` with the distribution domain name we retrieved in Step 4, and `your-bucket-name` with the name of your S3 bucket:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowCloudFrontServicePrincipalReadOnly",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::your-bucket-name/*",
+            "Condition": {
+                "StringEquals": {
+                    "AWS:SourceArn": "your-cf-dist-arn"
+                }
+            }
+        }
+    ]
+}
+```
+
+7. Go to the URL of your S3 bucket website resources and ensure you do not have access to it and its files anymore. *(i.e. your-bucket-name.s3-website.ca-central-1.amazonaws.com)*
+- It may take 10-15 minutes for the new bucket policy to take effect
+8. Go to the URL of the cloudfront distribution (You will find it under the "Distribution domain name" field. It will look something like *https://d270q56do57o5x.cloudfront.net*) and ensure you can connect and interact with the website as expected.
+
+### Your website is now ready for viewing!🎉 
+
