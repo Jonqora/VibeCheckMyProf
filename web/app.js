@@ -298,7 +298,7 @@ function renderEmojis(reviewsData) {
 function getProportionalFontSize(proportion) {
     // Get font size for the proportion threshold passed, in rem
     for(let [threshold, fontSize] of PROPORTIONAL_FONT_SIZES) {
-        if(proportion > threshold) {
+        if(proportion >= threshold) {
             return fontSize; 
         }
     }
