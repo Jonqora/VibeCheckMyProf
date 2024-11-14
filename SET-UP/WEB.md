@@ -115,7 +115,7 @@ To add additional security to our S3 bucket and provide quicker and more cost-ef
 ```
 
 7. Go to the URL of your S3 bucket website resources and ensure you do not have access to it and its files anymore. *(i.e. your-bucket-name.s3-website.ca-central-1.amazonaws.com)*
-- It may take a minute for the new bucket policy to take effect
+- It may take 10-15 minutes for the new bucket policy to take effect
 8. Go to the URL of the cloudfront distribution (You will find it under the "Distribution domain name" field. It will look something like *https://d270q56do57o5x.cloudfront.net*) and ensure you can connect and interact with the website as expected.
 
 ### Your website is now ready for viewing!🎉 
