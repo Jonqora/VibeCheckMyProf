@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingOverlay.style.display = 'flex';
         document.getElementById('response-prof').style.display = 'none';
         document.getElementById('response-courses').style.display = 'none';
+        document.getElementById('response-course-dropdown').style.display = 'none';
 
         // The API URL is loaded from config.js
         // eslint-disable-next-line no-undef
@@ -176,6 +177,10 @@ function renderResponse(data) {
         </div>
     </div>`;
 
+    // Clear old dropdown options
+    const coursesOptions = document.getElementById('response-course-options');
+    coursesOptions.innerHTML = `<option value="all">All</option>`;
+
     const coursesComponent = document.getElementById('response-courses');
     coursesComponent.innerHTML = '';
     coursesComponent.style.display = 'block'; // Undo display:none
@@ -184,7 +189,6 @@ function renderResponse(data) {
     }
 
     const coursesDropdown = document.getElementById('response-course-dropdown');
-    const coursesOptions = document.getElementById('response-course-options');
     coursesOptions.addEventListener('change', updateCoursesView);
     coursesDropdown.style.display = 'block'; // Undo display:none
 
