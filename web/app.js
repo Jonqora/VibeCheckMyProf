@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageElement = document.getElementById('message');
     const responseField = document.getElementById('responseField');
     const vibeCheckButton = document.getElementById('vibeCheckButton');
+    const loadingOverlay = document.getElementById('loading');
+    let pollingInterval;
 
     // Function to validate if the input URL matches 'https://www.ratemyprofessors.com/professor/<id>' pattern
     function validateUrl(url) {
@@ -21,55 +23,91 @@ document.addEventListener('DOMContentLoaded', function() {
         messageElement.textContent = '';
     }
 
+    function clearRequestInProgress() {
+        clearInterval(pollingInterval);
+        loadingOverlay.style.display = 'none';
+    }
+
     // Function to send API request to the API Gateway endpoint
-    function sendApiRequest(professorUrl) {
-        const loadingOverlay = document.getElementById('loading');
-        loadingOverlay.style.display = 'flex';
+    async function sendApiRequest(professorUrl, count) {
         document.getElementById('response-prof').style.display = 'none';
         document.getElementById('response-courses').style.display = 'none';
 
         // The API URL is loaded from config.js
         // eslint-disable-next-line no-undef
-        fetch(config.apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            // The URL entered by the user is sent in the request body
-            body: JSON.stringify({ url: professorUrl })
-        })
-            .then(response => response.json())
-            .then(data => {
-                loadingOverlay.style.display = 'none';
-                // Display the API response in the text area
-                responseField.value = `Response: ${JSON.stringify(data, null, 2)}`;
-                const responseCode = JSON.parse(data.statusCode);
-                const responseData = JSON.parse(data.body);
-                if (responseCode) {
-                    if (responseCode == '200') {
-                        if (responseData.STATUS == 'DATA_RETRIEVED') {
-                            messageElement.textContent = '';
-                            renderResponse(responseData.DATA);
-                        } else if (responseData.STATUS == 'ANALYSIS_REQUESTED') {
-                            messageElement.textContent = 'New data! Processing takes a while. Try again in a couple minutes.';
-                        } else if (responseData.STATUS == 'ANALYSIS_IN_PROGRESS') {
-                            messageElement.textContent = 'Processing is in progress! Please try again in a couple minutes.';
-                        } else {
-                            messageElement.textContent = 'UNKNOWN RESPONSE';
-                        }
-                    } else {
-                        messageElement.textContent = responseData.error;
-                    }
-                } else {
-                    messageElement.textContent = JSON.stringify(data);
-                }
-            })
-            .catch(error => {
-                loadingOverlay.style.display = 'none';
-                // Display error message if the request fails
-                responseField.value = `Error: ${error.message}`;
-                messageElement.textContent = `Error: ${error.message}`;
+        try {
+            const response = await fetch(config.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // The URL entered by the user is sent in the request body
+                body: JSON.stringify({ url: professorUrl, count: count })
             });
+
+            const data = await response.json();
+            const responseCode = JSON.parse(data.statusCode);
+            const responseData = JSON.parse(data.body);
+
+            if (responseCode === 200) {
+                return responseData;
+            } else {
+                displayError(responseData.error || 'Unexpected error');
+                clearRequestInProgress();
+            }
+
+        } catch (error) {
+            displayError(`Error: ${error.message}`);
+        }
+        return null;
+    }
+
+    // Function to handle the polling logic
+    async function startPolling(professorUrl) {
+        loadingOverlay.style.display = 'flex';
+        responseField.value = '';
+        clearError();
+        document.getElementById('response-prof').style.display = 'none';
+        document.getElementById('response-courses').style.display = 'none';
+        clearInterval(pollingInterval);
+
+        let count = 0; // Initialize poll count
+        let prof_name = null;
+
+        const checkStatus = async () => {
+            // Send the request with the current count
+            const data = await sendApiRequest(professorUrl, count);
+
+            if (data) {
+                // Handle the different statuses
+                if (data.STATUS === 'DATA_RETRIEVED') {
+                    clearRequestInProgress(); // Stop polling on success
+                    clearError();
+                    renderResponse(data.DATA);
+                    responseField.value = `Response: ${JSON.stringify(data, null, 2)}`;
+                } else if (data.STATUS === 'ANALYSIS_REQUESTED') {
+                    prof_name = data.PROF_NAME;
+                    messageElement.textContent = 'New data! Processing takes a while.';
+                } else if (data.STATUS === 'ANALYSIS_IN_PROGRESS') {
+                    if (prof_name) {
+                        messageElement.textContent = `Data processing for ${prof_name} is in progress.`;
+                    } else {
+                        messageElement.textContent = 'Data processing is in progress.';
+                    }
+                } else if (data.STATUS === 'ANALYSIS_FAILED') {
+                    messageElement.textContent = 'Analysis failed for unknown reasons.';
+                    clearRequestInProgress(); // Stop polling if analysis failed
+                } else {
+                    messageElement.textContent = 'Unknown error response';
+                    clearRequestInProgress(); // Stop polling if status is unknown
+                }
+            }
+            count++; // Increment for the next poll
+        };
+
+        // Initial request + polling every 15 seconds
+        await checkStatus(); // Run first check immediately
+        pollingInterval = setInterval(checkStatus, 15000);
     }
 
     // Event listener for VibeCheck button click
@@ -80,9 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!validateUrl(professorUrl)) {
             displayError('URL format is wrong. Must match https://ratemyprofessors.com/professor/<id>');
         } else {
+            // Send API request
             clearError();
-            // Send the professor URL to the API Gateway endpoint
-            sendApiRequest(professorUrl);
+            startPolling(professorUrl);
         }
     });
 
