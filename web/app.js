@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const responseField = document.getElementById('responseField');
     const vibeCheckButton = document.getElementById('vibeCheckButton');
     const loadingOverlay = document.getElementById('loading');
-    let pollingInterval;
 
     // Function to validate if the input URL matches 'https://www.ratemyprofessors.com/professor/<id>' pattern
     function validateUrl(url) {
@@ -24,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function clearRequestInProgress() {
-        clearInterval(pollingInterval);
         loadingOverlay.style.display = 'none';
     }
 
@@ -66,6 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return null;
     }
 
+    let currentPollTimeout = null;
+
     // Function to handle the polling logic
     async function startPolling(professorUrl) {
         loadingOverlay.style.display = 'flex';
@@ -73,63 +73,78 @@ document.addEventListener('DOMContentLoaded', function() {
         clearError();
         document.getElementById('response-prof').style.display = 'none';
         document.getElementById('response-courses').style.display = 'none';
-        clearInterval(pollingInterval);
-        
+
         let timestamp = Date.now().toString();
         let count = 0; // Initialize poll count
         let prof_name = null;
         let count_limit = null;
+        let stopPolling = false;
 
         const checkStatus = async () => {
-            // Send the request with the current count
-            console.log('Polling with count: ', count);
-            console.log('Count limit: ', count_limit);
-            const data = await sendApiRequest(professorUrl, timestamp, count);
+            try {
+                // Send the request with the current count
+                const data = await sendApiRequest(professorUrl, timestamp, count);
 
-            if (data) {
-                if (data.TIMESTAMP && data.TIMESTAMP != timestamp) {
-                    console.log('data.TIMESTAMP: ', data.TIMESTAMP);
-                    console.log('timestamp: ', timestamp);
-                    clearRequestInProgress();
-                    return;
-                } else if (count_limit != null && data.COUNT != null && data.COUNT > count_limit) {
-                    console.log('data.COUNT: ', data.COUNT);
-                    console.log('count_limit: ', count_limit);
-                    clearRequestInProgress();
-                    return;
-                }
-                // Handle the different statuses
-                if (data.STATUS === 'DATA_RETRIEVED') {
-                    count_limit = data.COUNT;
-                    clearRequestInProgress(); // Stop polling on success
-                    clearError();
-                    renderResponse(data.DATA);
-                    responseField.value = `Response: ${JSON.stringify(data, null, 2)}`;
-                } else if (data.STATUS === 'ANALYSIS_REQUESTED') {
-                    prof_name = data.PROF_NAME;
-                    messageElement.textContent = 'New data! Processing takes a while.';
-                } else if (data.STATUS === 'ANALYSIS_IN_PROGRESS') {
-                    if (prof_name) {
-                        messageElement.textContent = `Data processing for ${prof_name} is in progress.`;
-                    } else {
-                        messageElement.textContent = 'Data processing is in progress.';
+                if (data) {
+                    if (data.TIMESTAMP && data.TIMESTAMP != timestamp) {
+                        clearRequestInProgress();
+                        return;
+                    } else if (count_limit != null && data.COUNT != null && data.COUNT > count_limit) {
+                        clearRequestInProgress();
+                        return;
                     }
-                } else if (data.STATUS === 'ANALYSIS_FAILED') {
-                    messageElement.textContent = 'Analysis failed for unknown reasons.';
-                    count_limit = data.COUNT;
-                    clearRequestInProgress(); // Stop polling if analysis failed
-                } else {
-                    messageElement.textContent = 'Unknown error response';
-                    count_limit = data.COUNT;
-                    clearRequestInProgress(); // Stop polling if status is unknown
+                    // Handle the different statuses
+                    if (data.STATUS === 'DATA_RETRIEVED') {
+                        count_limit = data.COUNT;
+                        stopPolling = true;
+                        clearRequestInProgress(); // Stop polling on success
+                        clearError();
+                        renderResponse(data.DATA);
+                        responseField.value = `Response: ${JSON.stringify(data, null, 2)}`;
+                    } else if (data.STATUS === 'ANALYSIS_REQUESTED') {
+                        prof_name = data.PROF_NAME;
+                        messageElement.textContent = 'New data! Processing takes a while.';
+                    } else if (data.STATUS === 'ANALYSIS_IN_PROGRESS') {
+                        if (prof_name) {
+                            messageElement.textContent = `Data processing for ${prof_name} is in progress.`;
+                        } else {
+                            messageElement.textContent = 'Data processing is in progress.';
+                        }
+                    } else if (data.STATUS === 'ANALYSIS_FAILED') {
+                        messageElement.textContent = 'Analysis failed for unknown reasons.';
+                        count_limit = data.COUNT;
+                        clearRequestInProgress(); // Stop polling if analysis failed
+                        stopPolling = true;
+                    } else {
+                        messageElement.textContent = 'Unknown error response';
+                        count_limit = data.COUNT;
+                        clearRequestInProgress(); // Stop polling if status is unknown
+                        stopPolling = true;
+                    }
+                }
+                count++; // Increment for the next poll
+
+                // If not stopping, clear the previous timeout and set a new one
+                if (!stopPolling) {
+                    if (currentPollTimeout) {
+                        clearTimeout(currentPollTimeout);  // Cancel the previous poll
+                    }
+                    currentPollTimeout = setTimeout(async () => {
+                        await checkStatus(); // Call the function again after the delay
+                    }, 15000); // 15 seconds delay before the next poll
+                }
+            } catch (error) {
+                console.error('Error during polling:', error);
+                clearRequestInProgress();  // Stop polling if error
+                stopPolling = true;
+                if (currentPollTimeout) {
+                    clearTimeout(currentPollTimeout);  // Cancel any remaining timeouts
                 }
             }
-            count++; // Increment for the next poll
         };
 
         // Initial request + polling every 15 seconds
         await checkStatus(); // Run first check immediately
-        pollingInterval = setInterval(checkStatus, 15000);
     }
 
     // Event listener for VibeCheck button click
