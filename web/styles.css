@@ -156,6 +156,27 @@ body {
     color: #000;
 }
 
+.response-course-dropdown {
+    margin-top: 1rem;
+    text-align:left;
+    margin-left: 2rem;
+    display: none;
+    color: white;
+    font-weight: bold;
+}
+
+.response-course-options {
+    background-color: #f9c5d1;
+    color: black;
+    font-weight: 550;
+    border-width: 0cap;
+    border-radius: 0.4rem;
+}
+
+.response-course-options .select-items div:hover, .same-as-selected {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 .course {
     background-color: #f9c5d1;
     margin-left: 1rem;

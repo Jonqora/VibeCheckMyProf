@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function sendApiRequest(professorUrl, count) {
         document.getElementById('response-prof').style.display = 'none';
         document.getElementById('response-courses').style.display = 'none';
+        document.getElementById('response-course-dropdown').style.display = 'none';
 
         // The API URL is loaded from config.js
         // eslint-disable-next-line no-undef
@@ -133,6 +134,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function updateCoursesView(courseSelection) {
+    courses = document.getElementById('response-courses');
+    selection = document.getElementById("response-course-options").value;
+    for(const child of courses.children) {
+        if(child.id == selection || selection == "all") {
+            child.style.display = "block";
+        } else {
+            child.style.display = "none";
+        }
+    }
+}
+
 function renderResponse(data) {
     const rating = data.rating.toFixed(1);
     const difficulty = data.difficulty.toFixed(1);
@@ -202,12 +215,20 @@ function renderResponse(data) {
         </div>
     </div>`;
 
+    // Clear old dropdown options
+    const coursesOptions = document.getElementById('response-course-options');
+    coursesOptions.innerHTML = `<option value="all">All</option>`;
+
     const coursesComponent = document.getElementById('response-courses');
     coursesComponent.innerHTML = '';
     coursesComponent.style.display = 'block'; // Undo display:none
     for (const course of data.courses) {
         coursesComponent.insertAdjacentHTML('beforeend', renderCourse(course));
     }
+
+    const coursesDropdown = document.getElementById('response-course-dropdown');
+    coursesOptions.addEventListener('change', updateCoursesView);
+    coursesDropdown.style.display = 'block'; // Undo display:none
 
     const emojiTooltipContainers = document.querySelectorAll('.emoji-container');
 
@@ -235,7 +256,7 @@ function renderCourse(courseData) {
     const subjectivity = transformSubjectivity(courseData.vcmp_subjectivity);
     const spellingquality = transformSpelling(courseData.vcmp_spellingquality);
     const html = `
-    <div class="course">
+    <div class="course" id="${courseData.course_name}">
         <div class="course-name">${courseData.course_name}</div>
         <div class="flex-row vibes-row">
             ${renderVibes(courseData.vcmp_emotion, courseData.num_ratings)}
@@ -297,6 +318,11 @@ function renderCourse(courseData) {
         </div>
     </div>
     `;
+
+    // Add course to course dropdown
+    courseDropdown = document.getElementById('response-course-options');
+    courseDropdown.options[courseDropdown.options.length] = new Option(courseData.course_name, courseData.course_name);
+
     return html;
 }
 
