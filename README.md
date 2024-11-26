@@ -65,6 +65,7 @@ Before you begin, ensure of the following:
     * Instructions for setting up and deploying the backend AWS Lambda function.
 3. Host frontend web files: See [**WEB.md**](/SET-UP/WEB.md)
     * Instructions on how to set up and host the frontend web files.
+4. Create Dashboard: Refer to [**VISUALIZATION.md**](/SET-UP/VISUALIZATION.md)
 
 
 After successfully following the set-up steps outlined, you will have a fully-functioning copy of the application. We encourage you to explore VibeCheckMyProf, understand its features, and utilize its insights to enhance your own academic experience.
