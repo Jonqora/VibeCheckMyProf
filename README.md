@@ -12,7 +12,7 @@
 
 
 ## User Guide
-[**WebGuide.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/doc-update/SET-UP/WebGuide.md): This visual guide features images to walk you through using the application once it has been set up. For setup instructions from scratch, scroll down to [VibeCheckMyProf Setup](#vibecheckmyprof-setup).
+[**WebGuide.md**](https://github.com/Jonqora/VibeCheckMyProf/blob/main/SET-UP/WebGuide.md): This visual guide features images to walk you through using the application once it has been set up. For setup instructions from scratch, scroll down to [VibeCheckMyProf Setup](#vibecheckmyprof-setup).
 
 
 ## Team Members
@@ -53,8 +53,9 @@ This section provides step-by-step instructions to setting up VibeCheckMyProf. I
 ## Prerequisites
 Before you begin, ensure of the following:
 - You will require an AWS account
-- Access to the following AWS Services: RDS, Lambda, ECR, API Gateway, S3, CloudFront, ...
-- A minimum budget of $ $ ... to cover AWS costs  
+- Access to the following AWS Services: RDS, Lambda, ECR, API Gateway, S3, CloudFront
+- A budget of $50.00 to cover AWS costs, which will be more than enough for setting up a functioning copy of the application. 
+    * Note: If we were to launch our app publicly and receive an average of 1M requests/month, estimated costs come to $88.35/month or approximately $1,060/year.
 
 
 ## Steps
