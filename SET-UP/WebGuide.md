@@ -4,7 +4,6 @@ Welcome to the visual guide for the VibeCheckMyProf web application. This guide 
 
 If you encounter any problems with these steps to navigate the application, reach out to `Sadia` with questions. 
 
-<br>
 
 ## WebPage Overview
 
@@ -86,6 +85,6 @@ Hover: joy             |  Hover: disgust
 
 ![Dashboard](img/Dashboard.png)
 
-- Under the dashboard title, it says 'Monitoring Dashboard'. This text panel links another dashboard which tracks the performance and state of the AWS RDS database. The visualizations included are number of requests per day, tables sizes, tables summary, and stats per schema.
+- Under the dashboard title, it says 'Monitoring Dashboard'. This text panel links another dashboard which tracks the performance and state of the AWS RDS database. The visualizations included show the number of requests per day, tables sizes, tables summary, and buffer stats per schema.
 
 ![MonitoringDashboard](img/MonitoringDashboard.png)
