@@ -1,6 +1,8 @@
 <h2 align="center">VibeCheckMyProf Guide</h2>
 
-Welcome to the visual guide for the VibeCheckMyProf web application. This guide is designed to help you navigate the different components of our final project, ensuring you can effectively use it. If you encounter any problems with these steps, reach out to `Sadia` with questions. 
+Welcome to the visual guide for the VibeCheckMyProf web application. This guide is designed to help you navigate the different components of our final project, ensuring you can effectively use it. 
+
+If you encounter any problems with these steps to navigate the application, reach out to `Sadia` with questions. 
 
 <br>
 
