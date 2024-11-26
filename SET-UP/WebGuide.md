@@ -4,6 +4,7 @@ Welcome to the visual guide for the VibeCheckMyProf web application. This guide 
 
 If you encounter any problems with these steps to navigate the application, reach out to `Sadia` with questions. 
 
+<br>
 
 ## WebPage Overview
 
