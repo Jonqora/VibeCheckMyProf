@@ -2,7 +2,7 @@
     <img src="https://github.com/Jonqora/VibeCheckMyProf/blob/main/scratch/image_files/RDS.png" width="50" height="50" />
 </p> 
 
-##  Database and Security
+##  Database and VPC Setup
 
 If you encounter any problems with the steps in this document, reach out to `Colleen` with questions. 
 
@@ -46,7 +46,7 @@ You can see what Terraform will do _before_ making changes by running:
 ```bash
 terraform plan
 ```
-This will output all the actions Terraform will take to create the RDS instance. **Upon execution, you will be prompted to 
+This will output all the actions Terraform will take to create the VPC and RDS instance. **Upon execution, you will be prompted to 
 provide values for the following variables:**
 - `cidr_block`: Your IP address so your local machine can communicate with the created database. 
   - e.g. `38.13.78.95/32`
@@ -115,49 +115,3 @@ Try clearing the plugin cache and forcing Terraform to download the specified ve
 ```bash
 terraform init -upgrade
 ```
-
-## Security
-### Secrets Manager
-Our application leverages [AWS Secrets Manager](https://ca-central-1.console.aws.amazon.com/secretsmanager/landing?region=ca-central-1)
-to encrypt and securely store the password for authentication to the RDS database. 
-
-Terraform will create a username and password, which our application services can fetch 
-for authenticating to the rds database. This prevents us from having to hard-code secret values in the application code. 
-
-Below is sample code you can add to your function to fetch and use the database password from the secret manager:
-```python
-import boto3
-from botocore.exceptions import ClientError
-
-
-def get_secret():
-
-    secret_name = "vcmp-db-secret" # Replace with the secret name
-    region_name = "ca-central-1"
-
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
-
-    secret = get_secret_value_response['SecretString']
-
-    # The rest of your code goes here.
-```
-### IAM Roles
-IAM roles are defined and assigned to policies throughout our application. They define how different resources are 
-allowed to interact with each other (e.g. such as reading from the database, writing, etc.). 
-- `lambda-rds-access-role`: IAM role for lambda function to access RDS database.
-
-The appropriate role should be applied to your portion of the application service.
